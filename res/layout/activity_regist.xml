@@ -23,11 +23,19 @@
                 tools:layout="@layout/fragment_inputcell_simpleted" />
 
             <fragment
+                android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="inputcells.SimpleTextInputcellFragment"
+                tools:layout="@layout/fragment_inputcell_simpleted" />
+
+            <fragment
                 android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 class="inputcells.SimpleTextInputcellFragment"
                 tools:layout="@layout/fragment_inputcell_simpleted" />
+
             <fragment
                 android:id="@+id/input_repeat_password"
                 android:layout_width="match_parent"
@@ -64,10 +72,10 @@
                 tools:layout="@layout/fragment_inputcell_picture" />
 
             <Button
+                android:id="@+id/submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="注册" />
-
         </LinearLayout>
     </ScrollView>
 
