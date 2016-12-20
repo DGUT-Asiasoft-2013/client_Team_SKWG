@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <EditText
+    <fragment
         android:id="@+id/input_account"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="18dp"
-        android:hint="用户名" />
+        android:layout_height="wrap_content"
+        class="inputcells.SimpleTextInputcellFragment"
+        tools:layout="@layout/fragment_inputcell_simpleted" />
 
-    <EditText
+    <fragment
         android:id="@+id/input_password"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="18dp"
-        android:hint="密码" />
+        android:layout_height="wrap_content"
+        class="inputcells.SimpleTextInputcellFragment"
+        tools:layout="@layout/fragment_inputcell_simpleted" />
 
     <Button
         android:id="@+id/btn_log"
@@ -24,10 +25,11 @@
         android:layout_height="50dp"
         android:layout_margin="18dp"
         android:text="登陆" />
-    
-    <TextView 
+
+    <TextView
+        android:id="@+id/btn_fotpassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="忘记密码？"/>
+        android:text="忘记密码？" />
 
 </LinearLayout>

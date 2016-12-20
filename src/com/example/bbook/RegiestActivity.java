@@ -3,6 +3,8 @@ package com.example.bbook;
 import java.io.IOException;
 import java.util.concurrent.RunnableFuture;
 
+import com.example.bbook.api.Server;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -56,31 +58,31 @@ public class RegiestActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 
-		fragAccount.setLabelText("ÓÃ»§Ãû:");
-		fragAccount.setHintText("ÇëÊäÈëÓÃ»§Ãû");
-		fragName.setLabelText("êÇ³Æ");
-		fragName.setHintText("ÇëÊäÈëêÇ³Æ");
-		fragPassword.setLabelText("ÃÜÂë:");
-		fragPassword.setHintText("ÇëÊäÈëÃÜÂë");
+		fragAccount.setLabelText("ç”¨æˆ·å:");
+		fragAccount.setHintText("è¯·è¾“å…¥ç”¨æˆ·å");
+		fragName.setLabelText("æ˜µç§°");
+		fragName.setHintText("è¯·è¾“å…¥æ˜µç§°");
+		fragPassword.setLabelText("å¯†ç :");
+		fragPassword.setHintText("è¯·è¾“å…¥å¯†ç ");
 		fragPassword.setEditText(true);
-		fragRepeatPassword.setLabelText("ÖØ¸´ÃÜÂë:");
-		fragRepeatPassword.setHintText("ÇëÖØ¸´ÊäÈëÃÜÂë");
+		fragRepeatPassword.setLabelText("é‡å¤å¯†ç :");
+		fragRepeatPassword.setHintText("è¯·é‡å¤è¾“å…¥å¯†ç ");
 		fragRepeatPassword.setEditText(true);
-		fragEmail.setLabelText("ÓÊÏä:");
-		fragEmail.setHintText("ÇëÊäÈëÓÊÏä");
-		fragAddress.setLabelText("µØÖ·:");
-		fragAddress.setHintText("ÇëÊäÈëÄúµÄµØÖ·");
-		fragPhoneNum.setLabelText("ÁªÏµµç»°:");
-		fragPhoneNum.setHintText("ÇëÊäÈëÄúµÄÁªÏµµç»°");
-		fragImg.setLabelText("Í¼Æ¬");
-		fragImg.setHintText("ÇëÑ¡ÔñÍ¼Æ¬");
+		fragEmail.setLabelText("é‚®ç®±:");
+		fragEmail.setHintText("è¯·è¾“å…¥é‚®ç®±");
+		fragAddress.setLabelText("åœ°å€:");
+		fragAddress.setHintText("è¯·è¾“å…¥æ‚¨çš„åœ°å€");
+		fragPhoneNum.setLabelText("è”ç³»ç”µè¯:");
+		fragPhoneNum.setHintText("è¯·è¾“å…¥æ‚¨çš„è”ç³»ç”µè¯");
+		fragImg.setLabelText("å›¾ç‰‡");
+		fragImg.setHintText("è¯·é€‰æ‹©å›¾ç‰‡");
 	}
 
 	void submit() {
 		String password = fragPassword.getText();
 		String passwordrepeat = fragRepeatPassword.getText();
 		if (!password.equals(passwordrepeat)) {
-			Toast.makeText(RegiestActivity.this, "Á½´ÎÃÜÂëÊäÈë²»Ò»ÖÂ", Toast.LENGTH_LONG).show();
+			Toast.makeText(RegiestActivity.this, "ä¸¤æ¬¡å¯†ç è¾“å…¥ä¸ä¸€è‡´", Toast.LENGTH_LONG).show();
 			return;
 		}
 		password = MD5.getMD5(password);
@@ -91,8 +93,8 @@ public class RegiestActivity extends Activity {
 		String address = fragAddress.getText();
 		String phoneNum = fragPhoneNum.getText();
 
-		OkHttpClient client = new OkHttpClient();
-		// ¹¹Ôì·¢ËÍÄÚÈİ
+		OkHttpClient client = Server.getSharedClient();
+		// æ„é€ å‘é€å†…å®¹
 		MultipartBody.Builder requestbody = new MultipartBody.Builder().addFormDataPart("account", account)
 				.addFormDataPart("name", name).addFormDataPart("email", email).addFormDataPart("address", address)
 				.addFormDataPart("phoneNum", phoneNum).addFormDataPart("passwordHash", password);
@@ -101,12 +103,12 @@ public class RegiestActivity extends Activity {
 			requestbody.addFormDataPart("avatar", "avatar",
 					RequestBody.create(MediaType.parse("image/png"), fragImg.getPngData()));
 		}
-		// ·¢ËÍÇëÇóµ½·şÎñÆ÷
+		// å‘é€è¯·æ±‚åˆ°æœåŠ¡å™¨
 		Request request = new Request.Builder().url("http://172.27.0.46:8080/membercenter/api/register")
 				.method("post", null).post(requestbody.build()).build();
 
 		final ProgressDialog progressDialog = new ProgressDialog(RegiestActivity.this);
-		progressDialog.setMessage("ÇëÉÔºî");
+		progressDialog.setMessage("è¯·ç¨ä¾¯");
 		progressDialog.setCancelable(false);
 		progressDialog.setCanceledOnTouchOutside(false);
 		progressDialog.show();
@@ -157,8 +159,8 @@ public class RegiestActivity extends Activity {
 	}
 
 	protected void onResponse(Call arg0, String responseBody) {
-		new AlertDialog.Builder(this).setTitle("×¢²á³É¹¦").setMessage(responseBody)
-				.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+		new AlertDialog.Builder(this).setTitle("æ³¨å†ŒæˆåŠŸ").setMessage(responseBody)
+				.setPositiveButton("ç¡®å®š", new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -169,7 +171,7 @@ public class RegiestActivity extends Activity {
 	}
 
 	protected void onFailure(Call arg0, Exception arg1) {
-		new AlertDialog.Builder(this).setTitle("×¢²áÊ§°Ü").setMessage(arg1.getLocalizedMessage())
-				.setNegativeButton("È·¶¨", null).show();
+		new AlertDialog.Builder(this).setTitle("æ³¨å†Œå¤±è´¥").setMessage(arg1.getLocalizedMessage())
+				.setNegativeButton("ç¡®å®š", null).show();
 	}
 }
