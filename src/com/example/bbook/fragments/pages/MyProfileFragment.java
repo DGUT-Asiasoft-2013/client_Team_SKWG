@@ -2,6 +2,7 @@ package com.example.bbook.fragments.pages;
 
 import java.io.IOException;
 
+import com.example.bbook.OpenStoreActivity;
 import com.example.bbook.R;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.User;
@@ -10,9 +11,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.R.color;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import okhttp3.Call;
@@ -35,6 +38,19 @@ public class MyProfileFragment extends Fragment {
 			txName = (TextView) view.findViewById(R.id.showName);
 			avatar = (AvatarView) view.findViewById(R.id.avatar);
 		}
+		
+		view.findViewById(R.id.btn_openStore).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent itnt = new Intent(getActivity(), OpenStoreActivity.class);
+				startActivity(itnt);
+				
+			}
+		});
+		
+		
+		
 		return view;
 	}
 	@Override

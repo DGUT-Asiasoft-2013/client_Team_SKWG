@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <fragment
+        android:id="@+id/input_storename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="inputcells.SimpleTextInputcellFragment"
+        tools:layout="@layout/fragment_inputcell_simpleted" />
+
+    <fragment
+        android:id="@+id/input_storeimg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="inputcells.PictureInputCellFragment"
+        tools:layout="@layout/fragment_inputcell_picture" />
+
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="店铺详情:"/>
+    <EditText
+        android:id="@+id/input_storeintroduce"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:hint="来介绍一下你的店铺吧"
+        tools:layout="@layout/fragment_inputcell_simpleted" />
+
+    <Button 
+        android:id="@+id/creatstore"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="开店!"/>
+</LinearLayout>

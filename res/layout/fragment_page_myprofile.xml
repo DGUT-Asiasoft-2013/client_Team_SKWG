@@ -48,12 +48,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:orientation="vertical" >
 
-        <TextView
+        <Button 
+            android:id="@+id/btn_openStore"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="dasldjasl" />
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="我要开店"/>
+        <Button 
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="修改密码"/>
+        <Button 
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="我的订单"/>
+        <Button 
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="注销"/>
     </LinearLayout>
 
 </LinearLayout>

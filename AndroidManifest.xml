@@ -27,6 +27,7 @@
         <activity android:name="com.example.bbook.HelloWorldActivity" />
         <activity android:name="com.example.bbook.RegiestActivity" />
         <activity android:name="com.example.bbook.AddGoodsActivity" />
+        <activity android:name="com.example.bbook.OpenStoreActivity" />
     </application>
 
 </manifest>
