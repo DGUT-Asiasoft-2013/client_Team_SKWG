@@ -1,7 +1,7 @@
 package inputcells;
 /**
- * @author ÁõÊÀ½Ü
- * Ìí¼ÓÍ¼Æ¬µÄµÄ»ù´¡¿Ø¼ş
+ * @author ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ÄµÄ»ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½
  */
 
 import java.io.ByteArrayOutputStream;
@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 public class PictureInputCellFragment extends BaseInputCellFragment {
 
-	// ÏÈ¶¨Òå¿ÕÊÓÍ¼
+	// ï¿½È¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
 	private static final int REQUESTCODE_ALBUM = 1;
 	private static final int REQUESTCODE_CAMERA = 2;
 	ImageView imageView;
@@ -37,7 +37,7 @@ public class PictureInputCellFragment extends BaseInputCellFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_inputcell_picture, container);
 
-		// È»ºóÔÚ´Ë´¦Ö¸ÏòlayoutÖĞµÄ¿Ø¼ş
+		// È»ï¿½ï¿½ï¿½Ú´Ë´ï¿½Ö¸ï¿½ï¿½layoutï¿½ĞµÄ¿Ø¼ï¿½
 		imageView = (ImageView) view.findViewById(R.id.image);
 		labelText = (TextView) view.findViewById(R.id.label);
 		hintText = (TextView) view.findViewById(R.id.hint);
@@ -51,9 +51,9 @@ public class PictureInputCellFragment extends BaseInputCellFragment {
 		return view;
 	}
 
-	// ÊµÏÖµã»÷ÊÂ¼ş
+	// Êµï¿½Öµï¿½ï¿½ï¿½Â¼ï¿½
 	void onImagevViewClick() {
-		String[] items = { "ÅÄÕÕ", "Ïà²á" };
+		String[] items = { "æ‹ç…§", "ç›¸å†Œ" };
 		new AlertDialog.Builder(getActivity()).setTitle(labelText.getText()).setItems(items, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -70,11 +70,11 @@ public class PictureInputCellFragment extends BaseInputCellFragment {
 					break;
 				}
 			}
-		}).setNegativeButton("È¡Ïû", null).show();
+		}).setNegativeButton("å–æ¶ˆ", null).show();
 
 	}
 
-	// ÏÂÃæÎªÉÏÃæËùÓÃµ½µÄ·½·¨µÄ¶¨Òå
+	// ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½
 	void pickFrmCamera() {
 		Intent itnt = new Intent(Intent.ACTION_GET_CONTENT);
 		itnt.setType("image/*");
