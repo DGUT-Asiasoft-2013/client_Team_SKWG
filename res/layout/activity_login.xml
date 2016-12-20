@@ -5,12 +5,14 @@
     android:orientation="vertical" >
 
     <EditText
+        android:id="@+id/input_account"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="18dp"
         android:hint="用户名" />
 
     <EditText
+        android:id="@+id/input_password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="18dp"

@@ -1,62 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="用户名:" />
-
-    <EditText
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="请输入用户名" />
+        android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="密码:" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请输入密码" />
+            <fragment
+                android:id="@+id/input_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="inputcells.SimpleTextInputcellFragment"
+                tools:layout="@layout/fragment_inputcell_simpleted" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="邮箱:" />
+            <fragment
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="inputcells.SimpleTextInputcellFragment"
+                tools:layout="@layout/fragment_inputcell_simpleted" />
+            <fragment
+                android:id="@+id/input_repeat_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="inputcells.SimpleTextInputcellFragment"
+                tools:layout="@layout/fragment_inputcell_simpleted" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请输入邮箱" />
+            <fragment
+                android:id="@+id/input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="inputcells.SimpleTextInputcellFragment"
+                tools:layout="@layout/fragment_inputcell_simpleted" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="地址:" />
+            <fragment
+                android:id="@+id/input_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="inputcells.SimpleTextInputcellFragment"
+                tools:layout="@layout/fragment_inputcell_simpleted" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请输入地址" />
+            <fragment
+                android:id="@+id/input_phoneNum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="inputcells.SimpleTextInputcellFragment"
+                tools:layout="@layout/fragment_inputcell_simpleted" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="联系电话:" />
+            <fragment
+                android:id="@+id/input_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="inputcells.PictureInputCellFragment"
+                tools:layout="@layout/fragment_inputcell_picture" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请输入联系电话" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="注册" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="注册" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
