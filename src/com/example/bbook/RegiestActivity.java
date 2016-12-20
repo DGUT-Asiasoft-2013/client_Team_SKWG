@@ -104,7 +104,7 @@ public class RegiestActivity extends Activity {
 					RequestBody.create(MediaType.parse("image/png"), fragImg.getPngData()));
 		}
 		// 发送请求到服务器
-		Request request = new Request.Builder().url("http://172.27.0.46:8080/membercenter/api/register")
+		Request request = new Request.Builder().url("http://172.27.0.47:8080/membercenter/api/register")
 				.method("post", null).post(requestbody.build()).build();
 
 		final ProgressDialog progressDialog = new ProgressDialog(RegiestActivity.this);
