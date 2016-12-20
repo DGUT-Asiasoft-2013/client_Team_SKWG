@@ -2,6 +2,12 @@ package com.example.bbook;
 
 
 import com.example.bbook.api.widgets.MainTabbarFragment;
+import com.example.bbook.api.widgets.MainTabbarFragment.OnTabSelectedListener;
+import com.example.bbook.fragments.pages.ForumFragment;
+import com.example.bbook.fragments.pages.HomepageFragment;
+import com.example.bbook.fragments.pages.MyProfileFragment;
+import com.example.bbook.fragments.pages.ShoppingCarFragment;
+import com.example.bbook.fragments.pages.SortFragment;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -10,6 +16,11 @@ import android.os.Bundle;
 
 public class HelloWorldActivity extends Activity {
 
+	HomepageFragment contentHomepage = new HomepageFragment();
+	SortFragment contentSort = new SortFragment();
+	ForumFragment contentForum= new ForumFragment();
+	ShoppingCarFragment contentShopping = new ShoppingCarFragment();
+	MyProfileFragment contentMyProfile = new MyProfileFragment();
 	MainTabbarFragment tabbar;
 
 	@Override
@@ -18,7 +29,14 @@ public class HelloWorldActivity extends Activity {
 		setContentView(R.layout.activity_helloworld);
 
 		tabbar = (MainTabbarFragment) getFragmentManager().findFragmentById(R.id.frag_tabbar);
-		
+		tabbar.setOnTabSelectedListener(new OnTabSelectedListener() {
+
+			@Override
+			public void OnTabSelected(int index) {
+				changeContentFragment(index);
+
+			}
+		}); 
 	}
 
 	@Override
@@ -30,26 +48,26 @@ public class HelloWorldActivity extends Activity {
 
 	}
 
-	
-	void changeContent(int index) {
-		Fragment newFrag = new Fragment();
+
+	void changeContentFragment(int index) {
+		Fragment newFrag = null;
+		
 		switch (index) {
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		case 3:
-			break;
+		case 0:newFrag = contentHomepage;break;
+		case 1:newFrag = contentSort;break;
+		case 2:newFrag = contentForum;break;
+		case 3:newFrag = contentShopping;break;
+		case 4:newFrag = contentMyProfile;break;
+		
 		default:
 			break;
 		}
-
-		if (newFrag == null) {
-			return;
-		}
-		getFragmentManager().beginTransaction().replace(R.id.contain, newFrag).commit();
+		if(newFrag==null) return;
+		
+		getFragmentManager()
+		.beginTransaction()
+		.replace(R.id.contain, newFrag)
+		.commit();
 	}
 
 }
