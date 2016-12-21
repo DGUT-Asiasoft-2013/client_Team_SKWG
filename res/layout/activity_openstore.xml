@@ -31,7 +31,7 @@
         tools:layout="@layout/fragment_inputcell_simpleted" />
 
     <Button 
-        android:id="@+id/creatstore"
+        android:id="@+id/createstore"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="开店!"/>

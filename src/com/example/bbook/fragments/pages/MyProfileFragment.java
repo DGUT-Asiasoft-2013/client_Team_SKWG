@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -29,6 +30,7 @@ public class MyProfileFragment extends Fragment {
 	View view;
 	TextView txAccount,txName;
 	AvatarView avatar;
+	Button creatStore,myStore;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,6 +39,8 @@ public class MyProfileFragment extends Fragment {
 			txAccount = (TextView) view.findViewById(R.id.showAccount);
 			txName = (TextView) view.findViewById(R.id.showName);
 			avatar = (AvatarView) view.findViewById(R.id.avatar);
+			creatStore = (Button) view.findViewById(R.id.btn_openStore);
+			myStore = (Button) view.findViewById(R.id.btn_myStore);
 		}
 		
 		view.findViewById(R.id.btn_openStore).setOnClickListener(new OnClickListener() {
@@ -56,6 +60,8 @@ public class MyProfileFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		creatStore.setVisibility(View.GONE);
+		myStore.setVisibility(View.GONE);
 		OkHttpClient client = Server.getSharedClient();
 		Request request = Server.requestBuilderWithApi("me")
 				.method("get", null).build();
@@ -93,6 +99,9 @@ public class MyProfileFragment extends Fragment {
 		txAccount.setText("用户:"+user.getAccount());
 		txName.setText("你好:"+user.getName());
 		avatar.load(user);
+		if(user.getIsStore().equals("0")){
+			creatStore.setVisibility(View.VISIBLE);
+		}else myStore.setVisibility(View.VISIBLE);
 	}
 	void onFailure(Call arg0,Exception ex){
 		txAccount.setVisibility(View.VISIBLE);
