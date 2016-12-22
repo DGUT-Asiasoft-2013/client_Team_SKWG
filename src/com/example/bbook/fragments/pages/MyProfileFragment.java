@@ -2,11 +2,13 @@ package com.example.bbook.fragments.pages;
 
 import java.io.IOException;
 
+import com.example.bbook.MystoreActivity;
 import com.example.bbook.OpenStoreActivity;
 import com.example.bbook.R;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.User;
 import com.example.bbook.api.widgets.AvatarView;
+import com.example.bbook.fragments.pages.PasswordRecoverStep1Fragment.OnGoNextListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.R.color;
@@ -50,6 +52,15 @@ public class MyProfileFragment extends Fragment {
 				Intent itnt = new Intent(getActivity(), OpenStoreActivity.class);
 				startActivity(itnt);
 				
+			}
+		});
+		view.findViewById(R.id.btn_myStore).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent itnt = new Intent(getActivity(), MystoreActivity.class);
+				startActivity(itnt);
 			}
 		});
 		

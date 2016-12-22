@@ -32,6 +32,7 @@
         <activity android:name="com.example.bbook.BookDetailActivity" />
         <activity android:name="com.example.bbook.PasswordRecoverActivity" />
         <activity android:name="com.example.bbook.BuyActivity" />
+        <activity android:name="com.example.bbook.MystoreActivity" />
     </application>
 
 </manifest>
