@@ -3,16 +3,8 @@ package com.example.bbook.api;
 import java.io.Serializable;
 
 public class Shop implements Serializable {
-	
-	Integer id;
-	
-	public Integer getId() {
-		return id;
-	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	Integer id;
 
 	String shopName; // 店铺名称
 	String description; // 简介
@@ -49,5 +41,13 @@ public class Shop implements Serializable {
 
 	public void setShopImage(String shopImage) {
 		this.shopImage = shopImage;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

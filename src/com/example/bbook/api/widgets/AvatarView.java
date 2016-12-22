@@ -3,6 +3,7 @@ package com.example.bbook.api.widgets;
 import java.io.IOException;
 
 import com.example.bbook.api.Server;
+import com.example.bbook.api.Shop;
 import com.example.bbook.api.User;
 
 import android.content.Context;
@@ -97,6 +98,13 @@ public class AvatarView extends View{
 	
 	public void load(User user) {
 		load(Server.serverAdress + user.getAvatar());
+	}
+	
+	public void load(Shop shop){
+		if(shop.getShopImage()==null){
+			load(Server.serverAdress+shop.getOwner().getAvatar());
+		}
+		else load(Server.serverAdress + shop.getShopImage());
 	}
 	@Override
 	public void draw(Canvas canvas) {

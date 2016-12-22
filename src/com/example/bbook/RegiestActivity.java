@@ -124,7 +124,6 @@ public class RegiestActivity extends Activity {
 						@Override
 						
 						public void run() {
-							
 								progressDialog.dismiss();
 								RegiestActivity.this.onResponse(arg0, responseString);
 							
