@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -21,98 +22,138 @@
         android:layout_height="1dp"
         android:background="@android:color/darker_gray" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/darker_gray"
-        android:orientation="vertical" >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="添加地址" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="商家名称" />
+        android:layout_height="match_parent" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:orientation="horizontal" >
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.25"
-                android:padding="5dp" >
-
-                <ImageView
-                    android:id="@+id/goods_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="71dp"
-                    android:background="@drawable/ic_launcher" />
-            </FrameLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.75"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray"
                 android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="商品名称" />
+                    android:gravity="center"
+                    android:text="添加地址" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="商品分类" />
-
-                <TextView
-                    android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="￥00.00" />
+                    android:padding="4dp"
+                    android:text="商家名称" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal" >
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.25"
+                        android:padding="5dp" >
+
+                        <ImageView
+                            android:id="@+id/goods_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="71dp"
+                            android:background="@drawable/ic_launcher" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.75"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="商品名称" />
+
+                        <TextView
+                            android:id="@+id/type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="商品分类" />
+
+                        <TextView
+                            android:id="@+id/price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="￥00.00" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="购买数量:" />
+
+                <EditText
+                    android:id="@+id/count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:hint="0" />
+            </LinearLayout>
+
+            <fragment
+                android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="inputcells.SimpleTextInputcellFragment"
+                tools:layout="@layout/fragment_inputcell_simpleted" />
+
+            <fragment
+                android:id="@+id/input_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="inputcells.SimpleTextInputcellFragment"
+                tools:layout="@layout/fragment_inputcell_simpleted" />
+
+            <fragment
+                android:id="@+id/input_tel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="inputcells.SimpleTextInputcellFragment"
+                tools:layout="@layout/fragment_inputcell_simpleted" />
+
+            <fragment
+                android:id="@+id/input_postcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="inputcells.SimpleTextInputcellFragment"
+                tools:layout="@layout/fragment_inputcell_simpleted" />
+
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="提交订单" />
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="购买数量:" />
-
-        <EditText
-            android:id="@+id/count"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:hint="0" />
-    </LinearLayout>
-    
-    <Button android:id="@+id/submit"
-        android:text="提交订单"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    </ScrollView>
 
 </LinearLayout>

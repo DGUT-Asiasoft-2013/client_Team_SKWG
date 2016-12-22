@@ -38,7 +38,7 @@
         <activity android:name="com.example.bbook.MyArticleActivity" />
         <activity android:name="com.example.bbook.ModifyArticleActivity" />
         <activity android:name="com.example.bbook.SearchArticleActivity" />
-
+        <activity android:name="com.example.bbook.PreOrderActivity" />
     </application>
 
 </manifest>

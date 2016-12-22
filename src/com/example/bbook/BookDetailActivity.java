@@ -50,11 +50,9 @@ public class BookDetailActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				selectedIndex=0;
 				
 				changeFragmentContent(selectedIndex);
-			//	Log.d("111", goods.getId()+"");
 			}
 		});
 
@@ -63,25 +61,48 @@ public class BookDetailActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
 				selectedIndex=1;
 				String string=goods.getGoodsName();
-				
-		//		Log.d("111", goods.getId()+"");
-//				Bundle bundle=new Bundle();
-//				bundle.putInt("goodsId", goods.getId());
 				Intent intent=new Intent(BookDetailActivity.this,BookCommentFragment.class);
 				intent.putExtra("goods", goods);
 				changeFragmentContent(selectedIndex);
 			}
 		});
+		
+		findViewById(R.id.buy).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				goBuy();
+			}
+		});
+		
+		findViewById(R.id.btn_preorder).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				goPreorder();
+			}
+		});
+	}
+
+
+	protected void goPreorder() {
+		Intent itnt = new Intent(BookDetailActivity.this, PreOrderActivity.class);
+		itnt.putExtra("goods", goods);
+		startActivity(itnt);
+	}
+
+
+	protected void goBuy() {
+		Intent itnt = new Intent(BookDetailActivity.this, BuyActivity.class);
+		itnt.putExtra("goods", goods);
+		startActivity(itnt);
 	}
 
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		changeFragmentContent(selectedIndex);
 
@@ -95,7 +116,6 @@ public class BookDetailActivity extends Activity {
 			break;
 		case 1:
 			newFrag=bookCommentFragment;
-			//	newFrag=mainPageFragment;
 			break;
 		default:
 			break;
