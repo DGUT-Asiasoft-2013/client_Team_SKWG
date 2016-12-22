@@ -48,7 +48,6 @@ public class LoginActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				goFotpassword();
-				
 			}
 		});
 	}
@@ -143,6 +142,7 @@ public class LoginActivity extends Activity {
 	
 	
 	void goFotpassword(){
-		
+		Intent itnt = new Intent(this, PasswordRecoverActivity.class);
+		startActivity(itnt);
 	}
 }

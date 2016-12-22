@@ -29,6 +29,7 @@
         <activity android:name="com.example.bbook.AddGoodsActivity" />
         <activity android:name="com.example.bbook.OpenStoreActivity" />
         <activity android:name="com.example.bbook.BookDetailActivity" />
+        <activity android:name="com.example.bbook.PasswordRecoverActivity" />
 
     </application>
 
