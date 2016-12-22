@@ -23,7 +23,7 @@ public class Server {
             return client;
     }
     
-    public static String serverAdress = "http://172.27.0.47:8080/membercenter/";
+    public static String serverAdress = "http://172.27.0.48:8080/membercenter/";
     
     public static Request.Builder requestBuilderWithApi(String api){
             return new Request.Builder()

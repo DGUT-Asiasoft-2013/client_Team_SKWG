@@ -12,7 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="论坛"
+            android:text="我的帖子"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
@@ -23,27 +23,10 @@
             android:background="@android:color/darker_gray" />
 
         <Button
-            android:id="@+id/btn_addnote"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="发帖" />
-        
-        <Button
-            android:id="@+id/btn_myart"
+            android:id="@+id/btn_return"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:text="我的" />
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="60dp"
-            android:src="@drawable/icon_search_article" />
+            android:text="返回" />
 
     </FrameLayout>
 
