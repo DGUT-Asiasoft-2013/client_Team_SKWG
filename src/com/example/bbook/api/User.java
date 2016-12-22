@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 	Integer id;
-	boolean isStore;
+	String isStore;
 
 	String account;
 	String name;
@@ -19,10 +19,11 @@ public class User implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public boolean isStore() {
+
+	public String getIsStore() {
 		return isStore;
 	}
-	public void setStore(boolean isStore) {
+	public void setIsStore(String isStore) {
 		this.isStore = isStore;
 	}
 	public String getAccount() {

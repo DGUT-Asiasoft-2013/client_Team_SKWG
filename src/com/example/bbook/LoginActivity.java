@@ -34,12 +34,21 @@ public class LoginActivity extends Activity {
 		
 		fragAccount = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_account );
 		fragPassword = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_password);
-		
+		//登陆按钮
 		findViewById(R.id.btn_log).setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				goHello();
+			}
+		});
+		//忘记密码按钮
+		findViewById(R.id.btn_fotpassword).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				goFotpassword();
+				
 			}
 		});
 	}
@@ -130,5 +139,10 @@ public class LoginActivity extends Activity {
 			}
 		})
 		.show();
+	}
+	
+	
+	void goFotpassword(){
+		
 	}
 }
