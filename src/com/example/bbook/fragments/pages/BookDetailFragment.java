@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-//�鱾����Fragment
+//书籍详情Fragment
 public class BookDetailFragment extends Fragment {
 
 	@Override

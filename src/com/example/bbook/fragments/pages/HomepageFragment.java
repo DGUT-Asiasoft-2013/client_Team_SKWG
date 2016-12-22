@@ -9,6 +9,7 @@ import com.example.bbook.R;
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
+import com.example.bbook.api.widgets.AvatarView;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -40,11 +41,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class HomepageFragment extends Fragment {
-// ÈºÆ’π æ°¢À—À˜“≥√Ê
+//‰π¶Á±çÂ±ïÁ§∫È°µÈù¢
 
 	//AvatarAndNameFragment[]  ava=new AvatarAndNameFragment[6];
 	GridView bookView;
-	ImageView imageView;
+	//ImageView imageView;
+	AvatarView avatar;
 	TextView textview;
 	
 	Goods goods;
@@ -78,7 +80,7 @@ public class HomepageFragment extends Fragment {
 	BaseAdapter bookAdapter=new BaseAdapter() {
 		@SuppressLint("InflateParams")
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			View view = null;
 
 			if(convertView==null){
@@ -88,17 +90,19 @@ public class HomepageFragment extends Fragment {
 				view = convertView;
 			}
 			textview=(TextView) view.findViewById(R.id.id);
-			imageView=(ImageView) view.findViewById(R.id.picture);
+//			imageView=(ImageView) view.findViewById(R.id.picture);
+			avatar=(AvatarView) view.findViewById(R.id.picture);
 			
-			 goods=data.get(position);
+			goods=data.get(position);
 			textview.setText(goods.getAuthor());
+			avatar.load(Server.serverAdress+goods.getGoodsImage());
 			
-			imageView.setOnClickListener(new OnClickListener() {				
+			avatar.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 				//	Toast.makeText(getActivity(), "picture",Toast.LENGTH_SHORT).show();
-					goBookDetailActivity();
+					goBookDetailActivity( position);
 				}
 			});
 			textview.setOnClickListener(new OnClickListener() {
@@ -131,10 +135,10 @@ public class HomepageFragment extends Fragment {
 			return data==null?0:data.size();
 //			return 6;
 		}
-//		@Override
-//		public boolean isEnabled(int position){
-//			return false;
-//		}
+		@Override
+		public boolean isEnabled(int position){
+			return false;
+		}
 	};
 	
 	@Override
@@ -204,7 +208,7 @@ public class HomepageFragment extends Fragment {
 		
 		OkHttpClient client=Server.getSharedClient();
 		
-		Request request=Server.requestBuilderWithApi("goods/b/30")
+		Request request=Server.requestBuilderWithApi("goods/s")
 				.get().build();
 		
 		client.newCall(request).enqueue(new Callback() {
@@ -213,6 +217,8 @@ public class HomepageFragment extends Fragment {
 			public void onResponse(Call arg0, final Response arg1) throws IOException {
 				// TODO Auto-generated method stub
 				final String responseStr=arg1.body().string();
+				
+				
 				getActivity().runOnUiThread(new Runnable() {
 					
 					@Override
@@ -224,6 +230,7 @@ public class HomepageFragment extends Fragment {
 								});
 							//Log.d("aaa",data.toString());
 							HomepageFragment.this.data=data.getContent();
+							
 							HomepageFragment.this.page=data.getNumber();
 							bookAdapter.notifyDataSetInvalidated();
 						} catch (Exception e) {
@@ -247,8 +254,8 @@ public class HomepageFragment extends Fragment {
 		
 	}
 	//
-	public void goBookDetailActivity(){
-		
+	public void goBookDetailActivity(int position){
+		goods=data.get(position);
 		Intent intent=new Intent(getActivity(),BookDetailActivity.class);
 		intent.putExtra("goods", goods);
 		startActivity(intent);

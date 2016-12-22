@@ -2,12 +2,15 @@ package com.example.bbook.api;
 
 
 import java.io.Serializable;
+import java.util.Date;
 
-import util.DateRecord;
 
-public class Goods  extends DateRecord implements Serializable {
+public class Goods   implements Serializable {
 
 	
+	Integer id;
+    Date createDate;
+    Date editDate;
 	String goodsName;
 	String goodsType;
 	String goodsPrice;
@@ -17,10 +20,28 @@ public class Goods  extends DateRecord implements Serializable {
 	String author;
 	String pubDate;
 	String pritime;
-	User seller;
-	User buyer;
+//	User seller;
+//	User buyer;
 	
-	
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	public Date getEditDate() {
+		return editDate;
+	}
+	public void setEditDate(Date editDate) {
+		this.editDate = editDate;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public String getGoodsName() {
 		return goodsName;
 	}
@@ -75,16 +96,16 @@ public class Goods  extends DateRecord implements Serializable {
 	public void setPritime(String pritime) {
 		this.pritime = pritime;
 	}
-	public User getSeller() {
-		return seller;
-	}
-	public void setSeller(User seller) {
-		this.seller = seller;
-	}
-	public User getBuyer() {
-		return buyer;
-	}
-	public void setBuyer(User buyer) {
-		this.buyer = buyer;
-	}
+//	public User getSeller() {
+//		return seller;
+//	}
+//	public void setSeller(User seller) {
+//		this.seller = seller;
+//	}
+//	public User getBuyer() {
+//		return buyer;
+//	}
+//	public void setBuyer(User buyer) {
+//		this.buyer = buyer;
+//	}
 }

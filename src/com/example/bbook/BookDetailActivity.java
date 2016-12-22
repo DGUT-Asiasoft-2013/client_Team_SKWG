@@ -7,10 +7,12 @@ import com.example.bbook.fragments.pages.HomepageFragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-// ÈºÆœÍ«ÈActivity
+//‰π¶Á±çËØ¶ÊÉÖActivity
 import android.widget.TextView;
 public class BookDetailActivity extends Activity {
 
@@ -34,13 +36,15 @@ public class BookDetailActivity extends Activity {
 		commentLabel=(TextView) findViewById(R.id.book_comment);
 
 		TextView bookName=(TextView) findViewById(R.id.book_name);
-		bookName.setText(" È√˚:"+goods.getGoodsName());
+		bookName.setText("‰π¶Âêç:"+goods.getGoodsName());
 		TextView bookAuthor=(TextView) findViewById(R.id.book_author);
-		bookAuthor.setText("◊˜’ﬂ:"+goods.getAuthor());
+		bookAuthor.setText("‰ΩúËÄÖ:"+goods.getAuthor());
 		TextView bookPublisher=(TextView) findViewById(R.id.book_publisher);
-		bookPublisher.setText("≥ˆ∞Ê…Á:"+goods.getPublisher());
+		bookPublisher.setText("Âá∫ÁâàÁ§æ:"+goods.getPublisher());
 		TextView bookPrice=(TextView) findViewById(R.id.book_price);
-		bookPrice.setText("º€∏Ò:"+goods.getGoodsPrice());
+		bookPrice.setText("‰ª∑Ê†º:"+goods.getGoodsPrice());
+
+		
 		
 		detailLabel.setOnClickListener(new OnClickListener() {
 
@@ -48,7 +52,9 @@ public class BookDetailActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				selectedIndex=0;
+				
 				changeFragmentContent(selectedIndex);
+			//	Log.d("111", goods.getId()+"");
 			}
 		});
 
@@ -58,7 +64,15 @@ public class BookDetailActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+
 				selectedIndex=1;
+				String string=goods.getGoodsName();
+				
+		//		Log.d("111", goods.getId()+"");
+//				Bundle bundle=new Bundle();
+//				bundle.putInt("goodsId", goods.getId());
+				Intent intent=new Intent(BookDetailActivity.this,BookCommentFragment.class);
+				intent.putExtra("goods", goods);
 				changeFragmentContent(selectedIndex);
 			}
 		});
@@ -91,4 +105,6 @@ public class BookDetailActivity extends Activity {
 		getFragmentManager().beginTransaction().replace(R.id.content, newFrag).commit();
 
 	}
+	
+	
 }
