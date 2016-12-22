@@ -20,9 +20,17 @@ public class Goods   implements Serializable {
 	String author;
 	String pubDate;
 	String pritime;
+	Shop shop;
+	
 //	User seller;
 //	User buyer;
 	
+	public Shop getShop() {
+		return shop;
+	}
+	public void setShop(Shop shop) {
+		this.shop = shop;
+	}
 	public Date getCreateDate() {
 		return createDate;
 	}

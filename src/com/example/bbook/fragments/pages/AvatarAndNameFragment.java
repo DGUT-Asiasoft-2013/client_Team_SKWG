@@ -19,7 +19,7 @@ public class AvatarAndNameFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		View view =inflater.inflate(R.layout.fragment_avatar_name,null);
+		View view =inflater.inflate(R.layout.fragment_picture_name,null);
 		
 //		pictureView=(ImageView) view.findViewById(R.id.picture);
 //		idView=(TextView) view.findViewById(R.id.id);

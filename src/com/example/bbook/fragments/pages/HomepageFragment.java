@@ -10,6 +10,7 @@ import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.widgets.AvatarView;
+import com.example.bbook.api.widgets.GoodsPicture;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -41,42 +42,118 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class HomepageFragment extends Fragment {
-//书籍展示页面
+	//书籍展示页面
 
 	//AvatarAndNameFragment[]  ava=new AvatarAndNameFragment[6];
 	GridView bookView;
 	//ImageView imageView;
 	AvatarView avatar;
+	GoodsPicture goodsPicture;
 	TextView textview;
-	
+	TextView goodsPrice;
+	String sortStyle;
+	boolean sortState=false;
+
 	Goods goods;
 	EditText editKeyword;
 	Button btnSearch;
-	
+	Button sortByName;
 	List<Goods> data;
 	int page=0;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		View view=inflater.inflate(R.layout.fragment_book_search_page, null);
-		
+		View view=inflater.inflate(R.layout.fragment_home_page, null);
+
 		btnSearch=(Button) view.findViewById(R.id.btn_search);
 		editKeyword=(EditText) view.findViewById(R.id.edit_keyword);
 		bookView=(GridView) view.findViewById(R.id.book_gridView);
 		bookView.setAdapter(bookAdapter);
-		
-		btnSearch.setOnClickListener(new OnClickListener() {
+
+		sortByName=(Button) view.findViewById(R.id.sort_book_name);
+		sortByName.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				sortStyle="goodsName";
+				SortStyle(sortStyle);
+			}
+		});
+		view.findViewById(R.id.sort_book_price).setOnClickListener(new OnClickListener() {
 			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				sortStyle="goodsPrice";
+				SortStyle(sortStyle);
+			}
+		});
+		btnSearch.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				SearchBooksByKeyword();
 			}
 		});
+		
 		return view;		
 	}
-	
-	
+
+	public void SortStyle(String sortStyle){
+		String keyword=editKeyword.getText().toString();
+		OkHttpClient client=Server.getSharedClient();
+
+		Request request=Server.requestBuilderWithApi("goods/sort/"+keyword+"/"+sortStyle)
+				.get().build();
+
+		client.newCall(request).enqueue(new Callback() {
+
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				// TODO Auto-generated method stub
+				final String responseStr=arg1.body().string();
+
+				getActivity().runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+
+						// TODO Auto-generated method stub
+
+						// TODO Auto-generated method stub
+						try {
+							Page<Goods> data=new ObjectMapper()
+									.readValue(responseStr, new TypeReference<Page<Goods>>() {
+									});
+							//Log.d("aaa",data.toString());
+							HomepageFragment.this.data=data.getContent();
+							HomepageFragment.this.page=data.getNumber();
+							bookAdapter.notifyDataSetInvalidated();
+							sortState=true;
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+
+
+
+
+
+					}
+				});
+
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				// TODO Auto-generated method stub
+
+			}
+		});		
+	}
 	BaseAdapter bookAdapter=new BaseAdapter() {
 		@SuppressLint("InflateParams")
 		@Override
@@ -85,28 +162,31 @@ public class HomepageFragment extends Fragment {
 
 			if(convertView==null){
 				LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-				view = inflater.inflate(R.layout.fragment_avatar_name, null);	
+				view = inflater.inflate(R.layout.fragment_picture_name, null);	
 			}else{
 				view = convertView;
 			}
 			textview=(TextView) view.findViewById(R.id.id);
-//			imageView=(ImageView) view.findViewById(R.id.picture);
-			avatar=(AvatarView) view.findViewById(R.id.picture);
-			
+			goodsPrice=(TextView) view.findViewById(R.id.price);
+			//			imageView=(ImageView) view.findViewById(R.id.picture);
+		//	avatar=(AvatarView) view.findViewById(R.id.picture);
+goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
+
 			goods=data.get(position);
-			textview.setText(goods.getAuthor());
-			avatar.load(Server.serverAdress+goods.getGoodsImage());
-			
-			avatar.setOnClickListener(new OnClickListener() {				
+			textview.setText("商家:"+goods.getShop().getShopName());
+			goodsPrice.setText("价格："+goods.getGoodsPrice());
+			goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
+
+			goodsPicture.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-				//	Toast.makeText(getActivity(), "picture",Toast.LENGTH_SHORT).show();
+					//	Toast.makeText(getActivity(), "picture",Toast.LENGTH_SHORT).show();
 					goBookDetailActivity( position);
 				}
 			});
 			textview.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
@@ -115,58 +195,61 @@ public class HomepageFragment extends Fragment {
 			});
 			return view;
 		}
-		
+
 		@Override
 		public long getItemId(int position) {
 			// TODO Auto-generated method stub
 			return position;
 		}
-		
+
 		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
 			return data.get(position);
-//			return null;
+			//			return null;
 		}
-		
+
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
 			return data==null?0:data.size();
-//			return 6;
+			//			return 6;
 		}
 		@Override
 		public boolean isEnabled(int position){
 			return false;
 		}
 	};
-	
+
 	@Override
-		public void onResume() {
-			// TODO Auto-generated method stub
-			super.onResume();
-			
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		if(!sortState){
 			bookLoad();
-			
 		}
-	
+		else {
+			SortStyle(sortStyle);
+		}
+	}
+
 	public void SearchBooksByKeyword(){
 		String keyword=editKeyword.getText().toString();
 		//Log.d("aaa", keyword);
 		OkHttpClient client=Server.getSharedClient();
-		
+
 		Request request=Server.requestBuilderWithApi("goods/search/"+keyword)
 				.get().build();
-		
+
 		client.newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				// TODO Auto-generated method stub
 				final String responseStr=arg1.body().string();
 				Log.d("aaa", responseStr);
 				getActivity().runOnUiThread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
@@ -174,8 +257,8 @@ public class HomepageFragment extends Fragment {
 						// TODO Auto-generated method stub
 						try {
 							Page<Goods> data=new ObjectMapper()
-								.readValue(responseStr, new TypeReference<Page<Goods>>() {
-								});
+									.readValue(responseStr, new TypeReference<Page<Goods>>() {
+									});
 							//Log.d("aaa",data.toString());
 							HomepageFragment.this.data=data.getContent();
 							HomepageFragment.this.page=data.getNumber();
@@ -184,74 +267,69 @@ public class HomepageFragment extends Fragment {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
-						
-						
-								
-					
 					}
 				});
-				
+
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
+
 	}
-	
-	
+
+
 	public void bookLoad(){
-		
+
 		OkHttpClient client=Server.getSharedClient();
-		
+
 		Request request=Server.requestBuilderWithApi("goods/s")
 				.get().build();
-		
+
 		client.newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(Call arg0, final Response arg1) throws IOException {
 				// TODO Auto-generated method stub
 				final String responseStr=arg1.body().string();
-				
-				
+
+
 				getActivity().runOnUiThread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
 						try {
 							Page<Goods> data=new ObjectMapper()
-								.readValue(responseStr, new TypeReference<Page<Goods>>() {
-								});
+									.readValue(responseStr, new TypeReference<Page<Goods>>() {
+									});
 							//Log.d("aaa",data.toString());
 							HomepageFragment.this.data=data.getContent();
-							
+
 							HomepageFragment.this.page=data.getNumber();
 							bookAdapter.notifyDataSetInvalidated();
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
-						
-						
-								
+
+
+
+
 					}
 				});
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
+
 	}
 	//
 	public void goBookDetailActivity(int position){
