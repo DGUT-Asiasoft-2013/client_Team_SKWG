@@ -7,7 +7,8 @@
     <uses-sdk
         android:minSdkVersion="19"
         android:targetSdkVersion="19" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -29,7 +30,7 @@
         <activity android:name="com.example.bbook.AddGoodsActivity" />
         <activity android:name="com.example.bbook.OpenStoreActivity" />
         <activity android:name="com.example.bbook.BookDetailActivity" />
-
+        <activity android:name="com.example.bbook.BuyActivity" />
     </application>
 
 </manifest>
