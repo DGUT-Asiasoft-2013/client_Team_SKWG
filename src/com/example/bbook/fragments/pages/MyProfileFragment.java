@@ -2,6 +2,7 @@ package com.example.bbook.fragments.pages;
 
 import java.io.IOException;
 
+import com.example.bbook.ChangePasswordActivity;
 import com.example.bbook.MystoreActivity;
 import com.example.bbook.OpenStoreActivity;
 import com.example.bbook.R;
@@ -60,6 +61,14 @@ public class MyProfileFragment extends Fragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Intent itnt = new Intent(getActivity(), MystoreActivity.class);
+				startActivity(itnt);
+			}
+		});
+		view.findViewById(R.id.changePassWord).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent itnt = new Intent(getActivity(), ChangePasswordActivity.class);
 				startActivity(itnt);
 			}
 		});
