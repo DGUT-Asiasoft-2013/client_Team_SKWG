@@ -78,9 +78,7 @@ public class MyProfileFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent itnt = new Intent(getActivity(), LoginActivity.class);
-				itnt.setFlags(itnt.FLAG_ACTIVITY_CLEAR_TASK | itnt.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(itnt);
+				exit();
 			}
 		});
 		
@@ -142,4 +140,29 @@ public class MyProfileFragment extends Fragment {
 		txName.setText(ex.getMessage());
 	}
 	
+	
+	void exit(){
+		
+		OkHttpClient client = Server.getSharedClient();
+		Request request = Server.requestBuilderWithApi("exit")
+				.build();
+		client.newCall(request).enqueue(new Callback() {
+			
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				// TODO Auto-generated method stub
+				Intent itnt = new Intent(getActivity(), LoginActivity.class);
+				itnt.setFlags(itnt.FLAG_ACTIVITY_CLEAR_TASK | itnt.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(itnt);
+			}
+			
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+
+	}
 }
