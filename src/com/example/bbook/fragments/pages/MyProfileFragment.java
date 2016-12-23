@@ -3,6 +3,7 @@ package com.example.bbook.fragments.pages;
 import java.io.IOException;
 
 import com.example.bbook.ChangePasswordActivity;
+import com.example.bbook.LoginActivity;
 import com.example.bbook.MystoreActivity;
 import com.example.bbook.OpenStoreActivity;
 import com.example.bbook.R;
@@ -72,7 +73,14 @@ public class MyProfileFragment extends Fragment {
 				startActivity(itnt);
 			}
 		});
-		
+		view.findViewById(R.id.btn_exit).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				exit();
+			}
+		});
 		
 		
 		return view;
@@ -132,4 +140,29 @@ public class MyProfileFragment extends Fragment {
 		txName.setText(ex.getMessage());
 	}
 	
+	
+	void exit(){
+		
+		OkHttpClient client = Server.getSharedClient();
+		Request request = Server.requestBuilderWithApi("exit")
+				.build();
+		client.newCall(request).enqueue(new Callback() {
+			
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				// TODO Auto-generated method stub
+				Intent itnt = new Intent(getActivity(), LoginActivity.class);
+				itnt.setFlags(itnt.FLAG_ACTIVITY_CLEAR_TASK | itnt.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(itnt);
+			}
+			
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+
+	}
 }
