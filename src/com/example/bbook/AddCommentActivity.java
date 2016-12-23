@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
@@ -26,7 +27,7 @@ public class AddCommentActivity extends Activity {
 	EditText commentText;
 	Article article;
 	
-	Button btn_commit;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +37,14 @@ public class AddCommentActivity extends Activity {
 		article= (Article)getIntent().getSerializableExtra("data");
 		
 		commentText=(EditText)findViewById(R.id.editText1);
-		btn_commit=(Button)findViewById(R.id.btn_addcomment);
-		btn_commit.setOnClickListener(new OnClickListener() {
+		ImageView img_addcomment=(ImageView)findViewById(R.id.img_send);
+		img_addcomment.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				addcomment();
 			}
 		});
-		findViewById(R.id.btn_return).setOnClickListener(new OnClickListener() {
+		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				finish();

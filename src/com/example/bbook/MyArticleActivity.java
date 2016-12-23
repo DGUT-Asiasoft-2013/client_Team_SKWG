@@ -51,7 +51,7 @@ public class MyArticleActivity extends Activity {
 		listView.addFooterView(btnLoadMore);
 		listView.setAdapter(listAdapter);
 
-		findViewById(R.id.btn_return).setOnClickListener(new OnClickListener() {
+		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {

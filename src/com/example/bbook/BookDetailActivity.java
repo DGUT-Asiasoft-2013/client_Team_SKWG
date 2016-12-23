@@ -11,9 +11,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 //书籍详情Activity
 import android.widget.TextView;
 public class BookDetailActivity extends Activity {
@@ -24,6 +27,7 @@ public class BookDetailActivity extends Activity {
 	Goods goods;
 	GoodsPicture goodsPicture;
 	int selectedIndex=0;
+	int num=0;
 
 	TextView detailLabel;
 	TextView commentLabel;
@@ -39,22 +43,50 @@ public class BookDetailActivity extends Activity {
 
 		TextView bookName=(TextView) findViewById(R.id.book_name);
 		bookName.setText("书名:"+goods.getGoodsName());
-		TextView bookAuthor=(TextView) findViewById(R.id.book_author);
-		bookAuthor.setText("作者:"+goods.getAuthor());
-		TextView bookPublisher=(TextView) findViewById(R.id.book_publisher);
-		bookPublisher.setText("出版社:"+goods.getPublisher());
+
 		TextView bookPrice=(TextView) findViewById(R.id.book_price);
 		bookPrice.setText("价格:"+goods.getGoodsPrice());
+		
+		TextView bookCount=(TextView) findViewById(R.id.book_count);
+		bookCount.setText("库存:"+goods.getGoodsCount());
+		
 		goodsPicture=(GoodsPicture) findViewById(R.id.picture);
 		goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
-		
-		
+
+		final EditText numEdit=(EditText) findViewById(R.id.edit_number);
+		numEdit.setText("0");
+		findViewById(R.id.btn_minus).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(num<=0){
+					return;
+				}
+				num--;
+				numEdit.setText(num+"");
+			}
+		});
+
+		findViewById(R.id.btn_plus).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(num>=Integer.parseInt(goods.getGoodsCount())){
+					return ;
+				}
+				num++;
+				numEdit.setText(num+"");
+			}
+		});
+
 		detailLabel.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				selectedIndex=0;
-				
+				Intent intent=new Intent(BookDetailActivity.this,BookDetailFragment.class);
+				intent.putExtra("goods", goods);
 				changeFragmentContent(selectedIndex);
 			}
 		});
@@ -65,23 +97,27 @@ public class BookDetailActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				selectedIndex=1;
-				String string=goods.getGoodsName();
+				//				String string=goods.getGoodsName();
 				Intent intent=new Intent(BookDetailActivity.this,BookCommentFragment.class);
 				intent.putExtra("goods", goods);
 				changeFragmentContent(selectedIndex);
 			}
 		});
-		
+
 		findViewById(R.id.buy).setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				goBuy();
+				num=Integer.parseInt(numEdit.getText().toString());
+				if(num<=0){
+					return;
+				}
+				goBuy(num);
 			}
 		});
-		
+
 		findViewById(R.id.btn_preorder).setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				goPreorder();
@@ -97,8 +133,10 @@ public class BookDetailActivity extends Activity {
 	}
 
 
-	protected void goBuy() {
+	protected void goBuy(int num) {
 		Intent itnt = new Intent(BookDetailActivity.this, BuyActivity.class);
+		itnt.putExtra("number", num);
+		Log.d("num", num+"");
 		itnt.putExtra("goods", goods);
 		startActivity(itnt);
 	}
@@ -128,6 +166,6 @@ public class BookDetailActivity extends Activity {
 		getFragmentManager().beginTransaction().replace(R.id.content, newFrag).commit();
 
 	}
-	
-	
+
+
 }

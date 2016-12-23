@@ -36,7 +36,6 @@ import okhttp3.Response;
 public class SearchArticleActivity extends Activity {
 
 	EditText searchText;
-	Button btn_search;
 	ListView listView;
 
 	View btnLoadMore;
@@ -56,9 +55,8 @@ public class SearchArticleActivity extends Activity {
 		listView.addFooterView(btnLoadMore);
 		listView.setAdapter(listAdapter);
 
-		btn_search=(Button)findViewById(R.id.btn_search);
 		searchText=(EditText)findViewById(R.id.keyword_txt);
-		findViewById(R.id.btn_return).setOnClickListener(new OnClickListener() {
+		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -66,7 +64,7 @@ public class SearchArticleActivity extends Activity {
 
 			}
 		});
-		btn_search.setOnClickListener(new OnClickListener() {		
+		findViewById(R.id.img_search).setOnClickListener(new OnClickListener() {		
 			@Override
 			public void onClick(View v) {
 				searchKeyword();

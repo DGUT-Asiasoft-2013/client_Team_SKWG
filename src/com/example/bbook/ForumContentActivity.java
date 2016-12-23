@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import okhttp3.Call;
@@ -37,9 +38,10 @@ import okhttp3.Response;
 public class ForumContentActivity extends Activity {
 	Comment comment;
 	Article article;
-	Button btn_reply,btn_like,btn_send;
+	Button btn_like,btn_send;
 	ListView listView;
-	TextView txt_reply;
+	TextView count_like;
+	ImageView img_like,img_comment;
 
 	View btnLoadMore;
 	TextView textLoadMore;
@@ -54,6 +56,8 @@ public class ForumContentActivity extends Activity {
 
 		btnLoadMore=LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
 		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
+		count_like =(TextView)findViewById(R.id.count_like);
+		img_like=(ImageView)findViewById(R.id.img_like);
 
 		listView = (ListView)findViewById(R.id.list_comment);
 		listView.addFooterView(btnLoadMore);
@@ -76,7 +80,7 @@ public class ForumContentActivity extends Activity {
 		//图片不为空显示图片
 		RectangleView articleImage = (RectangleView)findViewById(R.id.articleImage);
 		if(article.getArticlesImage()!=null){
-			articleImage.setVisibility(AvatarView.VISIBLE);
+			articleImage.setVisibility(RectangleView.VISIBLE);
 			articleImage.load(Server.serverAdress+article.getArticlesImage());
 		}
 
@@ -85,8 +89,8 @@ public class ForumContentActivity extends Activity {
 		txt_text.setText(text);           //文章内容
 		txt_date.setText(date);           //文章日期
 
-		btn_reply=(Button)findViewById(R.id.btn_reply);
-		btn_reply.setOnClickListener(new OnClickListener() {	
+		img_comment=(ImageView)findViewById(R.id.img_comment);
+		img_comment.setOnClickListener(new OnClickListener() {	
 			@Override
 			public void onClick(View v) {
 				//发表本帖子的评论
@@ -95,8 +99,8 @@ public class ForumContentActivity extends Activity {
 			}
 		});
 
-		btn_like=(Button)findViewById(R.id.btn_zan);
-		btn_like.setOnClickListener(new OnClickListener() {
+
+		img_like.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -145,14 +149,14 @@ public class ForumContentActivity extends Activity {
 			text3.setText(dateStr);
 			avatar.load(Server.serverAdress + comment.getAuthorAvatar());
 
-			btn_send=(Button)view.findViewById(R.id.btn_reply);
-			btn_send.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					//					goaddreply(comment);
-
-				}
-			});
+//			btn_send=(Button)view.findViewById(R.id.btn_reply);
+//			btn_send.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					//					goaddreply(comment);
+//
+//				}
+//			});
 
 			return view;
 		}
@@ -329,10 +333,14 @@ public class ForumContentActivity extends Activity {
 		});
 	}
 
-	//根据赞按钮是否被选中返回结果改变赞的颜色
+	//根据赞按钮是否被选中返回结果改变赞的图片
 	void onCheckLikedResult(boolean result){
 		isLiked =result;
-		btn_like.setTextColor(result? Color.BLUE:Color.BLACK);
+		if(result==true){
+			img_like.setImageResource(R.drawable.icon_like_red);
+		}else{
+			img_like.setImageResource(R.drawable.icon_like_none);
+		}
 	}
 
 	//提取返回赞的数量
@@ -381,9 +389,10 @@ public class ForumContentActivity extends Activity {
 	//根据返回的赞的数量改变点赞按钮的数量显示
 	void onReloadLikesResult(int count){
 		if(count>0){
-			btn_like.setText("赞("+count+")");
+			count_like.setVisibility(TextView.VISIBLE);
+			count_like.setText(""+count);
 		}else{
-			btn_like.setText("赞");
+			count_like.setVisibility(TextView.GONE);
 		}
 	}
 

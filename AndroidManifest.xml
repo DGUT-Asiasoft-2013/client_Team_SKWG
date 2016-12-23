@@ -42,6 +42,8 @@
         <activity android:name="com.example.bbook.ChangePasswordActivity" />
         <activity android:name="com.example.bbook.PreOrderActivity" />
         <activity android:name="com.example.bbook.ShopActivity" />
+        <activity android:name="com.example.bbook.AddCommomInfoActivity" />
+        <activity android:name="com.example.bbook.ManageCommomInfoActivity" />
     </application>
 
 </manifest>

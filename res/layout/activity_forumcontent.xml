@@ -21,8 +21,9 @@
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="author"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -36,8 +37,9 @@
                 android:id="@+id/textView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="title"
-                android:textSize="15sp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
             <View
@@ -69,24 +71,35 @@
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="187dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_weight="0.56"
             android:gravity="right|bottom"
             android:text="date"
             android:textSize="15sp" />
 
-        <Button
-            android:id="@+id/btn_zan"
+        <ImageView
+            android:id="@+id/img_like"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_gravity="right"
-            android:text="赞" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/icon_like_none" />
 
-        <Button
-            android:id="@+id/btn_reply"
+        <TextView
+            android:id="@+id/count_like"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:text="评论" />
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/img_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/icon_comment_article" />
     </LinearLayout>
 
     <ListView
