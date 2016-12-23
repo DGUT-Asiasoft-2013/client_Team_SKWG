@@ -9,6 +9,8 @@ import com.example.bbook.api.Server;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -96,19 +98,25 @@ public class BuyActivity extends Activity {
 				.addFormDataPart("goodsId", goods.getId() + "")
 				.build();
 		
-		Request request = Server.requestBuilderWithApi("goods/" + goods.getId() + "/orders")
+		Request request = Server.requestBuilderWithApi("orders")
 				.method("post", null).post(body)
 				.build();
 		
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
 			
 			@Override
-			public void onResponse(Call arg0, Response arg1) throws IOException {
+			public void onResponse(final Call arg0, final Response arg1) throws IOException {
 				runOnUiThread(new Runnable() {
 					
 					@Override
 					public void run() {
-						goPay();
+//						goPay();
+						try {
+							BuyActivity.this.onResponse(arg0, arg1.body().string());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				});
 			}
@@ -120,6 +128,10 @@ public class BuyActivity extends Activity {
 		});
 	}
 
+	void onResponse(Call arg0, String responseBody){
+		new AlertDialog.Builder(this).setTitle("成功")
+		.setMessage(responseBody).show();
+	}
 	void goPay() {
 		Toast.makeText(this, "提交订单成功", Toast.LENGTH_SHORT).show();
 		finish();

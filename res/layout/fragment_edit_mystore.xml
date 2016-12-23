@@ -53,10 +53,11 @@
         android:layout_weight="3"
         android:orientation="vertical" >
 
-        <TextView
+        <Button
+            android:id="@+id/add_goods"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="这下面你们搞" />
+            android:text="发布商品" />
     </LinearLayout>
 
 </LinearLayout>

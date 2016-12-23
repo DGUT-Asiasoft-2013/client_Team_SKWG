@@ -9,7 +9,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.R.color;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -31,6 +34,18 @@ public class MystoreActivity extends Activity {
 		shopName = (TextView) findViewById(R.id.show_stopName);
 		shopImageUseBg = (AvatarView) findViewById(R.id.bgshow_img);
 		shopDescription = (TextView) findViewById(R.id.show_stopDescription);
+		findViewById(R.id.add_goods).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				goAdd();
+			}
+		});
+	}
+
+	protected void goAdd() {
+		Intent itnt = new Intent(MystoreActivity.this, AddGoodsActivity.class);
+		startActivity(itnt);
 	}
 
 	@Override
