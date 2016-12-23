@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 public class TitleBarFragment extends Fragment {
 
+        View nullView, splitLine;
         Button  btnNext;
         TextView titleName;
         ImageButton btnBack;
@@ -26,7 +27,9 @@ public class TitleBarFragment extends Fragment {
                 btnBack = (ImageButton) view.findViewById(R.id.btn_back);
                 titleName = (TextView) view.findViewById(R.id.title_name);
                 btnNext = (Button) view.findViewById(R.id.btn_next);
-
+                nullView = view.findViewById(R.id.view_null);
+                splitLine = view.findViewById(R.id.split_line);
+                
                 btnBack.setOnClickListener(new View.OnClickListener() {
 
                         @Override
@@ -49,25 +52,41 @@ public class TitleBarFragment extends Fragment {
         //更改按钮状态，true为不可见，false为课可见
         public void setBtnBackState(boolean is){
                 if(is){
-                        btnBack.setVisibility(View.GONE);
-                }else{
                         btnBack.setVisibility(View.VISIBLE);
+                }else{
+                        btnBack.setVisibility(View.GONE);
                 }
         }
         
         public void setBtnNextState(boolean is){
                 if(is){
-                        btnNext.setVisibility(View.GONE);
-                }else{
                         btnNext.setVisibility(View.VISIBLE);
+                }else{
+                        btnNext.setVisibility(View.GONE);
                 }
         }
         
         public void setTitleState(boolean is){
                 if(is){
-                        titleName.setVisibility(View.GONE);
-                }else{
                         titleName.setVisibility(View.VISIBLE);
+                }else{
+                        titleName.setVisibility(View.GONE);
+                }
+        }
+        
+        public void setSplitLineState(boolean is){
+                if(is){
+                        splitLine.setVisibility(View.VISIBLE);
+                }else{
+                        splitLine.setVisibility(View.GONE);
+                }
+        }
+        
+        public void setNullViewState(boolean is){
+                if(is){
+                        nullView.setVisibility(View.VISIBLE);
+                }else{
+                        nullView.setVisibility(View.GONE);
                 }
         }
 

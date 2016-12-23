@@ -50,7 +50,9 @@ public class RegisterActivity extends Activity {
 		fragImg = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_img);
 		
 		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.register_titlebar);
-		fragTitleBar.setTitleState(true);
+		fragTitleBar.setTitleState(false);
+		fragTitleBar.setNullViewState(true);
+		fragTitleBar.setSplitLineState(false);
 		fragTitleBar.setBtnNextText("注册", 16);
 		fragTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
                 

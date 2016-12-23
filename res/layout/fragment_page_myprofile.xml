@@ -1,94 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp" >
+    android:orientation="vertical" >
 
-    <RelativeLayout
+    <fragment 
+        android:id="@+id/me_titlebar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="4" >
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
 
-        <LinearLayout
-            android:id="@+id/avaloacation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <com.example.bbook.api.widgets.AvatarView
-                android:id="@+id/avatar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:background="@android:color/darker_gray" />
-        </LinearLayout>
+        <com.example.bbook.api.widgets.AvatarView
+            android:id="@+id/avatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@null" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/avaloacation"
-            android:gravity="center"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/showAccount"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/showName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#CCCCCC" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:background="#DDDDDD" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#CCCCCC" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
         android:orientation="vertical" >
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <Button
+            <fragment
                 android:id="@+id/btn_openStore"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:text="我要开店" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                class="com.example.bbook.api.widgets.ItemFragment"
+                tools:layout="@layout/fragment_widget_item" />
 
-            <Button
+            <fragment
                 android:id="@+id/btn_myStore"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:text="我的店铺" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                class="com.example.bbook.api.widgets.ItemFragment"
+                tools:layout="@layout/fragment_widget_item" />
         </FrameLayout>
 
-        <Button
-            android:id="@+id/changePassWord"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:text="修改密码" />
+        <fragment
+            android:id="@+id/btn_change_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            class="com.example.bbook.api.widgets.ItemFragment"
+            tools:layout="@layout/fragment_widget_item" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:text="我的订单" />
+        <fragment
+            android:id="@+id/btn_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            class="com.example.bbook.api.widgets.ItemFragment"
+            tools:layout="@layout/fragment_widget_item" />
 
-        <Button
+        <fragment
             android:id="@+id/btn_exit"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:text="注销" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            class="com.example.bbook.api.widgets.ItemFragment"
+            tools:layout="@layout/fragment_widget_item" />
     </LinearLayout>
 
 </LinearLayout>
