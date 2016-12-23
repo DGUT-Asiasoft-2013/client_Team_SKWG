@@ -24,18 +24,23 @@
             android:layout_gravity="bottom"
             android:background="@android:color/darker_gray" />
 
-        <Button
-            android:id="@+id/btn_addnote"
+       <ImageView
+            android:id="@+id/img_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="发送" />
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/icon_send_article" />
 
-        <Button
-            android:id="@+id/btn_return"
+        <ImageView
+            android:id="@+id/img_return"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="返回" />
+            android:layout_gravity="left"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/icon_return_article" />
 
     </FrameLayout>
 

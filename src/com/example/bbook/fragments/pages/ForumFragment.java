@@ -12,6 +12,7 @@ import com.example.bbook.api.Article;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.widgets.AvatarView;
+import com.example.bbook.api.widgets.RectangleView;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -41,7 +42,6 @@ import okhttp3.Response;
 
 public class ForumFragment extends Fragment {
 
-	Button btn_addnote,btn_myart;
 	int page=0;
 	List<Article>data;
 
@@ -61,9 +61,9 @@ public class ForumFragment extends Fragment {
 			listView.setAdapter(listAdapter);
 			listView.addFooterView(btnLoadMore);
 
-			btn_addnote=(Button)view.findViewById(R.id.btn_addnote);
-			btn_myart=(Button)view.findViewById(R.id.btn_myart);
-			ImageView img_search=(ImageView)view.findViewById(R.id.imageView1);
+			ImageView img_myart=(ImageView)view.findViewById(R.id.img_myart);
+			ImageView img_addnote=(ImageView)view.findViewById(R.id.img_addnote);
+			ImageView img_search=(ImageView)view.findViewById(R.id.img_search);
 
 			img_search.setOnClickListener(new OnClickListener() {
 
@@ -75,7 +75,7 @@ public class ForumFragment extends Fragment {
 				}
 			});
 
-			btn_myart.setOnClickListener(new OnClickListener() {
+			img_myart.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -83,7 +83,7 @@ public class ForumFragment extends Fragment {
 				}
 			});
 
-			btn_addnote.setOnClickListener(new OnClickListener() {
+			img_addnote.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -116,6 +116,64 @@ public class ForumFragment extends Fragment {
 		super.onResume();
 		reload();
 	}
+
+	//适配器为listview填充data文章内容
+	BaseAdapter listAdapter = new BaseAdapter() {
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View view = null;
+			if(convertView==null){
+				LayoutInflater inflater= LayoutInflater.from(parent.getContext());
+				view =inflater.inflate(R.layout.forum_list_item, null);
+			}else{
+				view = convertView;
+			}
+			TextView txt_author = (TextView)view.findViewById(R.id.text1);
+			TextView txt_title = (TextView)view.findViewById(R.id.text2);
+			TextView txt_text = (TextView)view.findViewById(R.id.text3);
+			TextView txt_date = (TextView)view.findViewById(R.id.text4);
+			AvatarView avatar = (AvatarView)view.findViewById(R.id.avatar_fra);
+			RectangleView articleImage = (RectangleView)view.findViewById(R.id.articleImage);
+
+			Article article = data.get(position);
+
+			//图片不为空显示图片
+			if(article.getArticlesImage()!=null){
+				articleImage.setVisibility(RectangleView.VISIBLE);
+				articleImage.load(Server.serverAdress+article.getArticlesImage());
+			}else{
+				articleImage.setVisibility(RectangleView.GONE);
+			}
+
+			avatar.load(Server.serverAdress + article.getAuthorAvatar());
+			txt_author.setText(article.getAuthorName());
+			txt_title.setText(article.getTitle());
+			txt_text.setText(article.getText());
+			String dateStr = DateFormat.format("yyyy-MM-dd hh:mm", article.getCreateDate()).toString();
+			txt_date.setText(dateStr);
+
+			return view;
+		}
+
+		@Override
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return position;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return data.get(position);
+		}
+
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return data==null?0:data.size();
+		}
+	};
 
 	//从服务器端获取解析数据到客户端data
 	void reload(){
@@ -164,6 +222,7 @@ public class ForumFragment extends Fragment {
 		});
 	}
 
+	//加载更多
 	void loadmore(){
 		btnLoadMore.setEnabled(false);
 		textLoadMore.setText("载入中…");
@@ -180,17 +239,17 @@ public class ForumFragment extends Fragment {
 				});
 
 				try{
-					final Page<Article> feeds = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Article>>() {});
-					if(feeds.getNumber()>page){
+					final Page<Article> forums = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Article>>() {});
+					if(forums.getNumber()>page){
 
 						getActivity().runOnUiThread(new Runnable() {
 							public void run() {
 								if(data==null){
-									data = feeds.getContent();
+									data = forums.getContent();
 								}else{
-									data.addAll(feeds.getContent());
+									data.addAll(forums.getContent());
 								}
-								page = feeds.getNumber();
+								page = forums.getNumber();
 								listAdapter.notifyDataSetChanged();
 							}
 						});
@@ -211,55 +270,8 @@ public class ForumFragment extends Fragment {
 			}
 		});
 	}
-	
-	//适配器为listview填充data文章内容
-	BaseAdapter listAdapter = new BaseAdapter() {
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View view = null;
-			if(convertView==null){
-				LayoutInflater inflater= LayoutInflater.from(parent.getContext());
-				view =inflater.inflate(R.layout.forum_list_item, null);
-			}else{
-				view = convertView;
-			}
-			TextView txt_author = (TextView)view.findViewById(R.id.text1);
-			TextView txt_title = (TextView)view.findViewById(R.id.text2);
-			TextView txt_text = (TextView)view.findViewById(R.id.text3);
-			TextView txt_date = (TextView)view.findViewById(R.id.text4);
-			AvatarView avatar = (AvatarView)view.findViewById(R.id.avatar_fra);
 
-			Article article = data.get(position);
-			//			Log.d("111", article.getAuthorAvatar().toString());
-			avatar.load(Server.serverAdress + article.getAuthorAvatar());
-			txt_author.setText(article.getAuthorName());
-			txt_title.setText(article.getTitle());
-			txt_text.setText(article.getText());
-			String dateStr = DateFormat.format("yyyy-MM-dd hh:mm", article.getCreateDate()).toString();
-			txt_date.setText(dateStr);
-
-			return view;
-		}
-
-		@Override
-		public long getItemId(int position) {
-			// TODO Auto-generated method stub
-			return position;
-		}
-
-		@Override
-		public Object getItem(int position) {
-			// TODO Auto-generated method stub
-			return data.get(position);
-		}
-
-		@Override
-		public int getCount() {
-			// TODO Auto-generated method stub
-			return data==null?0:data.size();
-		}
-	};
 
 	//点击listview跳转到这条文章的详情并传参
 	public void onItemClicked( int position){

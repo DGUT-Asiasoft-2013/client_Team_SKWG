@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/text1"
-            android:layout_width="wrap_content"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="author" />
@@ -30,7 +30,7 @@
         <TextView
             android:id="@+id/text2"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:gravity="left"
             android:text="titile"
             android:textSize="25sp"
@@ -43,17 +43,24 @@
             android:text="content"
             android:textSize="15sp" />
 
+        <com.example.bbook.api.widgets.RectangleView
+            android:id="@+id/articleImage"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="right" >
+            android:orientation="horizontal" >
 
             <TextView
                 android:id="@+id/text4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:layout_weight="0.60"
+                android:gravity="left"
                 android:text="date" />
 
             <ImageView
@@ -64,11 +71,12 @@
                 android:layout_marginRight="5dp"
                 android:layout_toLeftOf="@+id/fragment_postbar_listview_reply_Num"
                 android:src="@drawable/icon_replay_times" />
-            
+
             <TextView
                 android:id="@+id/text5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:text="num" />
         </LinearLayout>
     </LinearLayout>

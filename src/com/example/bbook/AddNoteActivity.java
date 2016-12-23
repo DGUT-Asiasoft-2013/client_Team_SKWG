@@ -35,7 +35,7 @@ public class AddNoteActivity extends Activity {
 		articleText= (EditText)findViewById(R.id.editText2);
 		fragArticlesImage = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_articles_image);
 		
-		findViewById(R.id.btn_return).setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.img_return).setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -43,7 +43,7 @@ public class AddNoteActivity extends Activity {
 			}
 		});
 		
-		findViewById(R.id.btn_addnote).setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.img_send).setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

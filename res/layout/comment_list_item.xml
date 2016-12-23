@@ -43,22 +43,19 @@
                 android:id="@+id/text3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
                 android:gravity="right"
                 android:text="date" />
 
             <Button
                 android:id="@+id/btn_reply"
-                android:layout_width="wrap_content"
+                android:layout_width="44dp"
                 android:layout_height="30dp"
+                android:layout_gravity="right|bottom"
                 android:gravity="right"
-                android:text="回复该楼"
+                android:text="回复"
                 android:textSize="10sp" />
         </LinearLayout>
-
-        <ListView
-            android:id="@+id/list_reply"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

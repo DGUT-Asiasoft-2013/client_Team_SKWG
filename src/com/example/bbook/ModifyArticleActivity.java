@@ -33,7 +33,6 @@ public class ModifyArticleActivity extends Activity {
 
 		modify_title=(TextView)findViewById(R.id.editText1);
 		modify_text=(TextView)findViewById(R.id.editText2);
-		Button btn_modify=(Button)findViewById(R.id.btn_modify);
 
 		btn_delete=(Button)findViewById(R.id.btn_delete);
 
@@ -51,7 +50,7 @@ public class ModifyArticleActivity extends Activity {
 			}
 		});
 
-		findViewById(R.id.btn_return).setOnClickListener(new OnClickListener() {
+		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -60,7 +59,7 @@ public class ModifyArticleActivity extends Activity {
 			}
 		});
 
-		btn_modify.setOnClickListener(new OnClickListener() {
+		findViewById(R.id.img_send).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -69,9 +68,47 @@ public class ModifyArticleActivity extends Activity {
 		});
 	}
 
-	//删除帖子
+	//删除包含评论、赞的文章
 	void delete(){
-		Log.d("111", article.getId().toString());
+		deleteLike();
+		deleteComment();
+		deleteArticle();
+	}
+
+	//删除评论
+	void deleteComment(){
+		Request request = Server.requestBuilderWithApi("article/"+article.getId()+"/deletecomment")
+				.method("delete", null)
+				.build();
+
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+
+			@Override
+			public void onResponse(final Call arg0, Response arg1) throws IOException {}
+
+			@Override
+			public void onFailure(final Call arg0, final IOException arg1) {}
+		});
+	}
+
+	//删除赞
+	void deleteLike(){
+		Request request = Server.requestBuilderWithApi("article/"+article.getId()+"/deletelike")
+				.method("delete", null)
+				.build();
+
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+
+			@Override
+			public void onResponse(final Call arg0, Response arg1) throws IOException {}
+
+			@Override
+			public void onFailure(final Call arg0, final IOException arg1) {}
+		});
+	}
+
+	//删除帖子
+	void deleteArticle(){
 		Request request = Server.requestBuilderWithApi("article/"+article.getId()+"/delete")
 				.method("delete", null)
 				.build();
@@ -106,7 +143,9 @@ public class ModifyArticleActivity extends Activity {
 				});
 			}
 		});
+
 	}
+
 	//修改帖子内容
 	void modify(){
 
