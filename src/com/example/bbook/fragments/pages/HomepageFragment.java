@@ -55,7 +55,7 @@ public class HomepageFragment extends Fragment {
 
 	PopupMenu popupMenu;
 	Menu menu;
-	
+
 	//AvatarAndNameFragment[]  ava=new AvatarAndNameFragment[6];
 	GridView bookView;
 	//ImageView imageView;
@@ -85,28 +85,28 @@ public class HomepageFragment extends Fragment {
 		popupMenu=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu));
 		menu=popupMenu.getMenu();
 		getActivity().getMenuInflater().inflate(R.menu.menu_classify, menu);
-		
+
 		popupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
+
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				// TODO Auto-generated method stub
-				
+
 				switch (item.getItemId()) {
 				case R.id.a:
-					
+
 					break;
 				case R.id.b:
-					
+
 					break;
 				case R.id.c:
-					
+
 					break;
 				case R.id.d:
-					
+
 					break;
 				case R.id.e:
-					
+
 					break;
 				default:
 					break;
@@ -114,9 +114,9 @@ public class HomepageFragment extends Fragment {
 				return false;
 			}
 		});
-		
+
 		view.findViewById(R.id.pop_menu).setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -133,7 +133,7 @@ public class HomepageFragment extends Fragment {
 			}
 		});
 		view.findViewById(R.id.sort_book_price).setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -149,7 +149,7 @@ public class HomepageFragment extends Fragment {
 				SearchBooksByKeyword();
 			}
 		});
-		
+
 		return view;		
 	}
 
@@ -216,8 +216,8 @@ public class HomepageFragment extends Fragment {
 			textview=(TextView) view.findViewById(R.id.id);
 			goodsPrice=(TextView) view.findViewById(R.id.price);
 			//			imageView=(ImageView) view.findViewById(R.id.picture);
-		//	avatar=(AvatarView) view.findViewById(R.id.picture);
-goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
+			//	avatar=(AvatarView) view.findViewById(R.id.picture);
+			goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
 
 			goods=data.get(position);
 			textview.setText("商家:"+goods.getShop().getShopName());
@@ -384,13 +384,13 @@ goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
 		intent.putExtra("goods", goods);
 		startActivity(intent);
 	}
-	
+
 	public void goShopActivity(int position){
 		Shop shop=data.get(position).getShop();
 		Intent intent=new Intent(getActivity(),ShopActivity.class);
 		intent.putExtra("shop", shop);
 		startActivity(intent);
 	}
-	
-	
+
+
 }

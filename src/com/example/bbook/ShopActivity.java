@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -128,7 +129,7 @@ public class ShopActivity extends Activity {
 			goodsPicture.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
-			
+					goBookDetailActivity( position);
 				}
 			});
 		
@@ -160,4 +161,11 @@ public class ShopActivity extends Activity {
 		}
 	};
 
+	
+	public void goBookDetailActivity(int position){
+		Goods goods=data.get(position);
+		Intent intent=new Intent(ShopActivity.this,BookDetailActivity.class);
+		intent.putExtra("goods", goods);
+		startActivity(intent);
+	}
 }
