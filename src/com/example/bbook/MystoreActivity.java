@@ -29,7 +29,7 @@ public class MystoreActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fragment_edit_mystore);
+		setContentView(R.layout.activity_edit_mystore);
 
 		shopName = (TextView) findViewById(R.id.show_stopName);
 		shopImageUseBg = (AvatarView) findViewById(R.id.bgshow_img);

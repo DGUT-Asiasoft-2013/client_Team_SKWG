@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item 
+        android:id="@+id/a"
+        android:title="小说"
+        />
+    <item 
+        android:id="@+id/b"
+        android:title="历史"
+        />
+    <item 
+        android:id="@+id/c"
+        android:title="青春文学"
+        />
+    <item 
+        android:id="@+id/d"
+        android:title="计算机"
+        />
+    <item 
+        android:id="@+id/e"
+        android:title="科技"
+        />
+
+</menu>

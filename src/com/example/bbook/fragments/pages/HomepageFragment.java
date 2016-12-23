@@ -27,6 +27,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -36,6 +39,8 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -48,6 +53,9 @@ import okhttp3.Response;
 public class HomepageFragment extends Fragment {
 	//书籍展示页面
 
+	PopupMenu popupMenu;
+	Menu menu;
+	
 	//AvatarAndNameFragment[]  ava=new AvatarAndNameFragment[6];
 	GridView bookView;
 	//ImageView imageView;
@@ -74,6 +82,47 @@ public class HomepageFragment extends Fragment {
 		bookView=(GridView) view.findViewById(R.id.book_gridView);
 		bookView.setAdapter(bookAdapter);
 
+		popupMenu=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu));
+		menu=popupMenu.getMenu();
+		getActivity().getMenuInflater().inflate(R.menu.menu_classify, menu);
+		
+		popupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				// TODO Auto-generated method stub
+				
+				switch (item.getItemId()) {
+				case R.id.a:
+					
+					break;
+				case R.id.b:
+					
+					break;
+				case R.id.c:
+					
+					break;
+				case R.id.d:
+					
+					break;
+				case R.id.e:
+					
+					break;
+				default:
+					break;
+				}
+				return false;
+			}
+		});
+		
+		view.findViewById(R.id.pop_menu).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				popupMenu.show();
+			}
+		});
 		sortByName=(Button) view.findViewById(R.id.sort_book_name);
 		sortByName.setOnClickListener(new OnClickListener() {
 			@Override
@@ -342,4 +391,6 @@ goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
 		intent.putExtra("shop", shop);
 		startActivity(intent);
 	}
+	
+	
 }
