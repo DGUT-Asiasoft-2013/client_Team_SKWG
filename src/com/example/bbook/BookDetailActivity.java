@@ -1,6 +1,8 @@
 package com.example.bbook;
 
 import com.example.bbook.api.Goods;
+import com.example.bbook.api.Server;
+import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.fragments.pages.BookCommentFragment;
 import com.example.bbook.fragments.pages.BookDetailFragment;
 import com.example.bbook.fragments.pages.HomepageFragment;
@@ -20,7 +22,7 @@ public class BookDetailActivity extends Activity {
 	BookCommentFragment bookCommentFragment=new BookCommentFragment();
 	HomepageFragment mainPageFragment=new HomepageFragment();
 	Goods goods;
-
+	GoodsPicture goodsPicture;
 	int selectedIndex=0;
 
 	TextView detailLabel;
@@ -43,7 +45,8 @@ public class BookDetailActivity extends Activity {
 		bookPublisher.setText("出版社:"+goods.getPublisher());
 		TextView bookPrice=(TextView) findViewById(R.id.book_price);
 		bookPrice.setText("价格:"+goods.getGoodsPrice());
-
+		goodsPicture=(GoodsPicture) findViewById(R.id.picture);
+		goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
 		
 		
 		detailLabel.setOnClickListener(new OnClickListener() {

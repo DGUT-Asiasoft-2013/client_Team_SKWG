@@ -6,9 +6,11 @@ import java.util.List;
 
 import com.example.bbook.BookDetailActivity;
 import com.example.bbook.R;
+import com.example.bbook.ShopActivity;
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
+import com.example.bbook.api.Shop;
 import com.example.bbook.api.widgets.AvatarView;
 import com.example.bbook.api.widgets.GoodsPicture;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -20,6 +22,8 @@ import android.R.raw;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -136,12 +140,6 @@ public class HomepageFragment extends Fragment {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-
-
-
-
-
-
 					}
 				});
 
@@ -180,8 +178,6 @@ goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
 			goodsPicture.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					//	Toast.makeText(getActivity(), "picture",Toast.LENGTH_SHORT).show();
 					goBookDetailActivity( position);
 				}
 			});
@@ -191,6 +187,7 @@ goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Toast.makeText(getActivity(), "ID",Toast.LENGTH_SHORT).show();
+					goShopActivity(position);
 				}
 			});
 			return view;
@@ -336,6 +333,13 @@ goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
 		goods=data.get(position);
 		Intent intent=new Intent(getActivity(),BookDetailActivity.class);
 		intent.putExtra("goods", goods);
+		startActivity(intent);
+	}
+	
+	public void goShopActivity(int position){
+		Shop shop=data.get(position).getShop();
+		Intent intent=new Intent(getActivity(),ShopActivity.class);
+		intent.putExtra("shop", shop);
 		startActivity(intent);
 	}
 }

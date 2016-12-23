@@ -41,6 +41,7 @@
         <activity android:name="com.example.bbook.SearchArticleActivity" />
         <activity android:name="com.example.bbook.ChangePasswordActivity" />
         <activity android:name="com.example.bbook.PreOrderActivity" />
+        <activity android:name="com.example.bbook.ShopActivity" />
     </application>
 
 </manifest>
