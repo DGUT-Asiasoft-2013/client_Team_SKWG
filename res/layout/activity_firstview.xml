@@ -29,7 +29,7 @@
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:text="注册"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="#333333" />
 
         <Button
             android:id="@+id/btn_login"
@@ -37,7 +37,7 @@
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:text="登陆"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="#333333" />
     </LinearLayout>
 
 </LinearLayout>

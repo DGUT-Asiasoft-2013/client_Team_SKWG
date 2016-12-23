@@ -8,19 +8,23 @@ import android.view.View.OnClickListener;
 
 public class MainActivity extends Activity {
 
+    public static MainActivity mInstace = null;
+      
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_firstview);
 		
-		//µÇÂ½°´Å¥µã»÷ÊÂ¼ş
+		mInstace = this;
+		
+		//è·³è½¬åˆ°ç™»å½•é¡µé¢
 		findViewById(R.id.btn_login).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				goLogin();
 			}
 		});
-		//×¢²á°´Å¥µã»÷ÊÂ¼ş
+		//è·³è½¬åˆ°æ³¨å†Œé¡µé¢
 		findViewById(R.id.btn_regist).setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -36,7 +40,7 @@ public class MainActivity extends Activity {
 	}
 	
 	void goRegiest(){
-		Intent itnt = new Intent(this, RegiestActivity.class);
+		Intent itnt = new Intent(this, RegisterActivity.class);
 		startActivity(itnt);
 	}
 	

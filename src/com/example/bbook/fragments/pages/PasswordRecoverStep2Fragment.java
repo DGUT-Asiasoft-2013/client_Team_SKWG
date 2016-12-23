@@ -2,6 +2,8 @@ package com.example.bbook.fragments.pages;
 
 
 import com.example.bbook.R;
+import com.example.bbook.api.widgets.TitleBarFragment;
+import com.example.bbook.fragments.pages.PasswordRecoverStep1Fragment.OnGoBackListener;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -18,6 +20,8 @@ public class PasswordRecoverStep2Fragment extends Fragment{
 	SimpleTextInputcellFragment fragVerifyCode;
 	SimpleTextInputcellFragment fragNewPassword;
 	SimpleTextInputcellFragment fragNewPasswordRepeat;
+	TitleBarFragment fragTitleBar;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if(view == null) {
@@ -25,6 +29,19 @@ public class PasswordRecoverStep2Fragment extends Fragment{
 			fragVerifyCode = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_verifycode);
 			fragNewPassword = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_newpassword);
 			fragNewPasswordRepeat = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_newpassword_repeat);
+			
+			fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.recover_step2_titlebar);
+			fragTitleBar.setTitleName("重置密码");
+			fragTitleBar.setBtnNextState(true);
+			
+			fragTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
+                
+                @Override
+                public void onGoBack() {
+                        goBack();
+                }
+        });
+			
 			view.findViewById(R.id.btn_submit).setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -70,4 +87,21 @@ public class PasswordRecoverStep2Fragment extends Fragment{
 			.show();
 		}
 	}
+	
+	  public static interface OnGoBackListener {
+              void onGoBack();
+      }
+
+      OnGoBackListener onGoBackListener;
+
+      public void setOnGoBackListener(OnGoBackListener onGoBackListener) {
+              this.onGoBackListener = onGoBackListener;
+      }
+
+      void goBack() {
+              if (onGoBackListener != null) {
+                      onGoBackListener.onGoBack();
+              }
+      }
+	
 }

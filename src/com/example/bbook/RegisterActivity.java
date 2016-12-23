@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.concurrent.RunnableFuture;
 
 import com.example.bbook.api.Server;
+import com.example.bbook.api.widgets.TitleBarFragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,15 +26,17 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class RegiestActivity extends Activity {
+public class RegisterActivity extends Activity {
 	SimpleTextInputcellFragment fragAccount, fragPassword, fragEmail, fragAddress, fragPhoneNum, fragRepeatPassword,
 			fragName;
 	PictureInputCellFragment fragImg;
+	
+	TitleBarFragment fragTitleBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_regist);
+		setContentView(R.layout.activity_register);
 
 		fragAccount = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_account);
 		fragPassword = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_password);
@@ -45,13 +48,32 @@ public class RegiestActivity extends Activity {
 		fragName = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_name);
 
 		fragImg = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_img);
+		
+		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.register_titlebar);
+		fragTitleBar.setTitleState(true);
+		fragTitleBar.setBtnNextText("注册", 16);
+		fragTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
+                
+                @Override
+                public void onGoBack() {
+                        finish();
+                }
+        });
 
-		findViewById(R.id.submit).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				submit();
-			}
-		});
+		fragTitleBar.setOnGoNextListener(new TitleBarFragment.OnGoNextListener() {
+                
+                @Override
+                public void onGoNext() {
+                        submit();
+                }
+        });
+		
+//		findViewById(R.id.submit).setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				submit();
+//			}
+//		});
 	}
 
 	@Override
@@ -82,7 +104,7 @@ public class RegiestActivity extends Activity {
 		String password = fragPassword.getText();
 		String passwordrepeat = fragRepeatPassword.getText();
 		if (!password.equals(passwordrepeat)) {
-			Toast.makeText(RegiestActivity.this, "两次密码输入不一致", Toast.LENGTH_LONG).show();
+			Toast.makeText(RegisterActivity.this, "两次密码输入不一致", Toast.LENGTH_LONG).show();
 			return;
 		}
 		password = MD5.getMD5(password);
@@ -107,7 +129,7 @@ public class RegiestActivity extends Activity {
 		Request request = Server.requestBuilderWithApi("register")
 				.method("post", null).post(requestbody.build()).build();
 
-		final ProgressDialog progressDialog = new ProgressDialog(RegiestActivity.this);
+		final ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this);
 		progressDialog.setMessage("请稍侯");
 		progressDialog.setCancelable(false);
 		progressDialog.setCanceledOnTouchOutside(false);
@@ -125,7 +147,7 @@ public class RegiestActivity extends Activity {
 						
 						public void run() {
 								progressDialog.dismiss();
-								RegiestActivity.this.onResponse(arg0, responseString);
+								RegisterActivity.this.onResponse(arg0, responseString);
 							
 						}
 					});
@@ -134,7 +156,7 @@ public class RegiestActivity extends Activity {
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							RegiestActivity.this.onFailure(arg0, e1);
+							RegisterActivity.this.onFailure(arg0, e1);
 							
 						}
 					});
@@ -150,7 +172,7 @@ public class RegiestActivity extends Activity {
 					@Override
 					public void run() {
 						progressDialog.dismiss();
-						RegiestActivity.this.onFailure(arg0, arg1);
+						RegisterActivity.this.onFailure(arg0, arg1);
 					}
 				});
 			}

@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <fragment 
+        android:id="@+id/login_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar"/>
+    
     <fragment
         android:id="@+id/input_account"
         android:layout_width="match_parent"
@@ -25,11 +32,5 @@
         android:layout_height="50dp"
         android:layout_margin="18dp"
         android:text="登陆" />
-
-    <TextView
-        android:id="@+id/btn_fotpassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="忘记密码？" />
 
 </LinearLayout>

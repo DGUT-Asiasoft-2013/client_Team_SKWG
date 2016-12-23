@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <fragment 
+        android:id="@+id/register_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar"/>
+    
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -71,11 +78,6 @@
                 class="inputcells.PictureInputCellFragment"
                 tools:layout="@layout/fragment_inputcell_picture" />
 
-            <Button
-                android:id="@+id/submit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="注册" />
         </LinearLayout>
     </ScrollView>
 
