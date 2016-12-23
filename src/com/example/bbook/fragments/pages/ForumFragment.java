@@ -45,29 +45,36 @@ public class ForumFragment extends Fragment {
 	int page=0;
 	List<Article>data;
 
+	View btnLoadMore;
+	TextView textLoadMore;
+
 	ListView listView;
 	View view;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (view==null) {
 			view=inflater.inflate(R.layout.fragment_page_forum, null);
+			btnLoadMore= inflater.inflate(R.layout.load_more_button, null);
+			textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
 
 			listView =(ListView)view.findViewById(R.id.list);
 			listView.setAdapter(listAdapter);
+			listView.addFooterView(btnLoadMore);
+
 			btn_addnote=(Button)view.findViewById(R.id.btn_addnote);
 			btn_myart=(Button)view.findViewById(R.id.btn_myart);
 			ImageView img_search=(ImageView)view.findViewById(R.id.imageView1);
 
 			img_search.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					Intent itnt =new Intent(getActivity(),SearchArticleActivity.class);
 					startActivity(itnt);
-					
+
 				}
 			});
-			
+
 			btn_myart.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -89,6 +96,14 @@ public class ForumFragment extends Fragment {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					onItemClicked(position);
+				}
+			});
+
+			btnLoadMore.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					loadmore();
 				}
 			});
 		}
@@ -149,6 +164,54 @@ public class ForumFragment extends Fragment {
 		});
 	}
 
+	void loadmore(){
+		btnLoadMore.setEnabled(false);
+		textLoadMore.setText("载入中…");
+
+		Request request = Server.requestBuilderWithApi("forums/"+(page+1)).get().build();
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				getActivity().runOnUiThread(new Runnable() {
+					public void run() {
+						btnLoadMore.setEnabled(true);
+						textLoadMore.setText("加载更多");
+					}
+				});
+
+				try{
+					final Page<Article> feeds = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Article>>() {});
+					if(feeds.getNumber()>page){
+
+						getActivity().runOnUiThread(new Runnable() {
+							public void run() {
+								if(data==null){
+									data = feeds.getContent();
+								}else{
+									data.addAll(feeds.getContent());
+								}
+								page = feeds.getNumber();
+								listAdapter.notifyDataSetChanged();
+							}
+						});
+					}
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				getActivity().runOnUiThread(new Runnable() {
+					public void run() {
+						btnLoadMore.setEnabled(true);
+						textLoadMore.setText("加载更多");
+					}
+				});
+			}
+		});
+	}
+	
 	//适配器为listview填充data文章内容
 	BaseAdapter listAdapter = new BaseAdapter() {
 
@@ -168,7 +231,7 @@ public class ForumFragment extends Fragment {
 			AvatarView avatar = (AvatarView)view.findViewById(R.id.avatar_fra);
 
 			Article article = data.get(position);
-//			Log.d("111", article.getAuthorAvatar().toString());
+			//			Log.d("111", article.getAuthorAvatar().toString());
 			avatar.load(Server.serverAdress + article.getAuthorAvatar());
 			txt_author.setText(article.getAuthorName());
 			txt_title.setText(article.getTitle());
@@ -223,10 +286,10 @@ public class ForumFragment extends Fragment {
 		Intent itnt =new Intent(getActivity(),AddNoteActivity.class);
 		startActivity(itnt);
 	}
-	
+
 	//跳到我的帖子页面
-		void gomyart(){
-			Intent itnt =new Intent(getActivity(),MyArticleActivity.class);
-			startActivity(itnt);
-		}
+	void gomyart(){
+		Intent itnt =new Intent(getActivity(),MyArticleActivity.class);
+		startActivity(itnt);
+	}
 }

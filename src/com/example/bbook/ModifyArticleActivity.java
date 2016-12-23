@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.example.bbook.api.Article;
 import com.example.bbook.api.Server;
-
+import com.example.bbook.api.widgets.AvatarView;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,6 +25,7 @@ import okhttp3.Response;
 public class ModifyArticleActivity extends Activity {
 	Article article;
 	TextView modify_title,modify_text;
+	Button btn_delete;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,13 +35,22 @@ public class ModifyArticleActivity extends Activity {
 		modify_text=(TextView)findViewById(R.id.editText2);
 		Button btn_modify=(Button)findViewById(R.id.btn_modify);
 
+		btn_delete=(Button)findViewById(R.id.btn_delete);
+
 		String title = getIntent().getStringExtra("Title");
 		String text = getIntent().getStringExtra("Text");
 		article =(Article)getIntent().getSerializableExtra("Data");
 
 		modify_title.setText(title);
 		modify_text.setText(text);
-		
+
+		btn_delete.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				delete();
+			}
+		});
+
 		findViewById(R.id.btn_return).setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -49,7 +59,7 @@ public class ModifyArticleActivity extends Activity {
 
 			}
 		});
-		
+
 		btn_modify.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -59,6 +69,45 @@ public class ModifyArticleActivity extends Activity {
 		});
 	}
 
+	//删除帖子
+	void delete(){
+		Log.d("111", article.getId().toString());
+		Request request = Server.requestBuilderWithApi("article/"+article.getId()+"/delete")
+				.method("delete", null)
+				.build();
+
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+
+			@Override
+			public void onResponse(final Call arg0, Response arg1) throws IOException {
+				try{	     
+					final String responString = arg1.body().toString();
+					runOnUiThread(new Runnable() {
+						public void run() {
+							ModifyArticleActivity.this.onResponsed(arg0,responString);
+						}
+					});
+				}catch (final Exception e) {
+					runOnUiThread(new Runnable() {
+						public void run() {
+							ModifyArticleActivity.this.onFailured(arg0, e);
+						}
+					});
+				}
+
+			}
+
+			@Override
+			public void onFailure(final Call arg0, final IOException arg1) {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						ModifyArticleActivity.this.onFailure(arg0, arg1);
+					}
+				});
+			}
+		});
+	}
+	//修改帖子内容
 	void modify(){
 
 		String title = modify_title.getText().toString();
@@ -124,6 +173,26 @@ public class ModifyArticleActivity extends Activity {
 	void onFailure(Call arg0, Exception arg1) {
 		new AlertDialog.Builder(this)
 		.setTitle("修改失败")
+		.setMessage(arg1.getLocalizedMessage())
+		.setNegativeButton("OK", null)
+		.show();
+	}
+	void onResponsed(Call arg0, String responseBody) {
+		new AlertDialog.Builder(this)
+		.setTitle("删除成功")
+		.setPositiveButton("OK",
+				new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				finish();
+			}
+		})
+		.show();
+	}
+
+	void onFailured(Call arg0, Exception arg1) {
+		new AlertDialog.Builder(this)
+		.setTitle("删除失败")
 		.setMessage(arg1.getLocalizedMessage())
 		.setNegativeButton("OK", null)
 		.show();

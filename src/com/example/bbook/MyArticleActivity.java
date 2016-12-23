@@ -35,12 +35,20 @@ public class MyArticleActivity extends Activity {
 
 	int page=0;
 	List<Article>data;
+	
+	View btnLoadMore;
+	TextView textLoadMore;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_myart);
 
+		btnLoadMore= LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
+		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
+		
 		listView =(ListView)findViewById(R.id.list);
+		listView.addFooterView(btnLoadMore);
 		listView.setAdapter(listAdapter);
 
 		findViewById(R.id.btn_return).setOnClickListener(new OnClickListener() {
@@ -56,6 +64,14 @@ public class MyArticleActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				onItemClicked(position);
+			}
+		});
+		
+		btnLoadMore.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				loadmore();
 			}
 		});
 	}
@@ -170,7 +186,7 @@ public class MyArticleActivity extends Activity {
 		String text = data.get(position).getText();
 //		String authorName = data.get(position).getAuthorName();
 //		String date = DateFormat.format("yyyy-MM-dd hh:mm", data.get(position).getCreateDate()).toString();
-//		String authorAvatar = data.get(position).getAuthorAvatar();
+//		String articleImage = data.get(position).getArticlesImage();
 		Article content = data.get(position);
 
 		Intent itnt =new Intent(MyArticleActivity.this,ModifyArticleActivity.class);
@@ -178,10 +194,59 @@ public class MyArticleActivity extends Activity {
 		itnt.putExtra("Title", title);
 //		itnt.putExtra("AuthorName", authorName);
 //		itnt.putExtra("Date", date);
-//		itnt.putExtra("AuthorAvatar", authorAvatar);
+//		itnt.putExtra("ArticleImage", articleImage);
 		itnt.putExtra("Data",content);
 
 		startActivity(itnt);
 	}
 
+	//加载更多
+		void loadmore(){
+			btnLoadMore.setEnabled(false);
+			textLoadMore.setText("载入中…");
+
+			Request request = Server.requestBuilderWithApi("myarticles?page="+(page+1)).get().build();
+			Server.getSharedClient().newCall(request).enqueue(new Callback() {
+				@Override
+				public void onResponse(Call arg0, Response arg1) throws IOException {
+					runOnUiThread(new Runnable() {
+						public void run() {
+							btnLoadMore.setEnabled(true);
+							textLoadMore.setText("加载更多");
+						}
+					});
+
+					try{
+						final Page<Article> searchs = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Article>>() {});
+						if(searchs.getNumber()>page){
+
+							runOnUiThread(new Runnable() {
+								public void run() {
+									if(data==null){
+										data = searchs.getContent();
+									}else{
+										data.addAll(searchs.getContent());
+									}
+									page = searchs.getNumber();
+									listAdapter.notifyDataSetChanged();
+								}
+							});
+						}
+					}catch(Exception ex){
+						ex.printStackTrace();
+					}
+				}
+
+				@Override
+				public void onFailure(Call arg0, IOException arg1) {
+					runOnUiThread(new Runnable() {
+						public void run() {
+							btnLoadMore.setEnabled(true);
+							textLoadMore.setText("加载更多");
+						}
+					});
+				}
+			});
+
+		}
 }

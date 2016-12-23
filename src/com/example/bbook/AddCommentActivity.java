@@ -43,6 +43,12 @@ public class AddCommentActivity extends Activity {
 				addcomment();
 			}
 		});
+		findViewById(R.id.btn_return).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				finish();
+			}
+		});
 	}
 	
 	void addcomment(){

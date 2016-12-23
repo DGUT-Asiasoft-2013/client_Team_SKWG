@@ -60,12 +60,18 @@
     <EditText
         android:id="@+id/editText2"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:ems="10"
         android:gravity="top|left"
         android:text="内容" >
 
         <requestFocus />
     </EditText>
+
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="直接删除帖子" />
 
 </LinearLayout>

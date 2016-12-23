@@ -39,8 +39,8 @@ public class SearchArticleActivity extends Activity {
 	Button btn_search;
 	ListView listView;
 
-//	View btnLoadMore;
-//	TextView textLoadMore;
+	View btnLoadMore;
+	TextView textLoadMore;
 
 	int page= 0;
 	List<Article>find;
@@ -49,41 +49,49 @@ public class SearchArticleActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_searcharticle);
 
-//			btnLoadMore= inflater.inflate(R.layout.load_more_button, null);
-//			textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
-			
-			listView = (ListView)findViewById(R.id.list);
-//			listView.addFooterView(btnLoadMore);
-			listView.setAdapter(listAdapter);
-			
-			btn_search=(Button)findViewById(R.id.btn_search);
-			searchText=(EditText)findViewById(R.id.keyword_txt);
-			
-		    btn_search.setOnClickListener(new OnClickListener() {		
-				@Override
-				public void onClick(View v) {
-					searchKeyword();
-				}
-			});
-			
-//			btnLoadMore.setOnClickListener(new View.OnClickListener() {
-//
-//				@Override
-//				public void onClick(View v) {
-//					loadmore();
-//				}
-//			});
-			
-			listView.setOnItemClickListener(new  AdapterView.OnItemClickListener() {
+		btnLoadMore= LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
+		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
 
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					onItemClicked(position);
-				}
-			});
-		
+		listView = (ListView)findViewById(R.id.list);
+		listView.addFooterView(btnLoadMore);
+		listView.setAdapter(listAdapter);
+
+		btn_search=(Button)findViewById(R.id.btn_search);
+		searchText=(EditText)findViewById(R.id.keyword_txt);
+		findViewById(R.id.btn_return).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				finish();
+
+			}
+		});
+		btn_search.setOnClickListener(new OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				searchKeyword();
+			}
+		});
+
+		btnLoadMore.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				loadmore();
+			}
+		});
+
+		listView.setOnItemClickListener(new  AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				onItemClicked(position);
+			}
+		});
+
 	}
 
+	//给listview适配搜索到的文章
 	BaseAdapter listAdapter = new BaseAdapter() {
 
 		@Override
@@ -102,7 +110,7 @@ public class SearchArticleActivity extends Activity {
 			AvatarView avatar = (AvatarView)view.findViewById(R.id.avatar_fra);
 
 			Article article = find.get(position);
-//			Log.d("111", article.getAuthorAvatar().toString());
+			//			Log.d("111", article.getAuthorAvatar().toString());
 			avatar.load(Server.serverAdress + article.getAuthorAvatar());
 			txt_author.setText(article.getAuthorName());
 			txt_title.setText(article.getTitle());
@@ -132,6 +140,7 @@ public class SearchArticleActivity extends Activity {
 		}
 	};
 
+	//点击item跳转传参
 	public void onItemClicked( int position){
 		String title = find.get(position).getTitle();
 		String text = find.get(position).getText();
@@ -150,14 +159,15 @@ public class SearchArticleActivity extends Activity {
 
 		startActivity(itnt);
 	}
-	
+
+	//按关键字搜索
 	void searchKeyword(){
-	    String keywords = searchText.getText().toString();
-	    
-	    //强制隐藏自带软键盘
-	    InputMethodManager inputMethodManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+		String keywords = searchText.getText().toString();
+
+		//强制隐藏自带软键盘
+		InputMethodManager inputMethodManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
 		inputMethodManager.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
-	    
+
 		Request request = Server.requestBuilderWithApi("article/s/"+keywords)
 				.get()
 				.build();
@@ -203,53 +213,55 @@ public class SearchArticleActivity extends Activity {
 		});
 	}
 
-//	void loadmore(){
-//		btnLoadMore.setEnabled(false);
-//		textLoadMore.setText("载入中…");
-//
-//		String keywords = searchText.getText().toString();
-//		Request request = Server.requestBuilderWithApi("article/s/"+keywords+"?page="+(page+1)).get().build();
-//		Server.getSharedClient().newCall(request).enqueue(new Callback() {
-//			@Override
-//			public void onResponse(Call arg0, Response arg1) throws IOException {
-//				getActivity().runOnUiThread(new Runnable() {
-//					public void run() {
-//						btnLoadMore.setEnabled(true);
-//						textLoadMore.setText("加载更多");
-//					}
-//				});
-//
-//				try{
-//					final Page<Article> searchs = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Article>>() {});
-//					if(searchs.getNumber()>page){
-//
-//						getActivity().runOnUiThread(new Runnable() {
-//							public void run() {
-//								if(find==null){
-//									find = searchs.getContent();
-//								}else{
-//									find.addAll(searchs.getContent());
-//								}
-//								page = searchs.getNumber();
-//								listAdapter.notifyDataSetChanged();
-//							}
-//						});
-//					}
-//				}catch(Exception ex){
-//					ex.printStackTrace();
-//				}
-//			}
-//
-//			@Override
-//			public void onFailure(Call arg0, IOException arg1) {
-//				getActivity().runOnUiThread(new Runnable() {
-//					public void run() {
-//						btnLoadMore.setEnabled(true);
-//						textLoadMore.setText("加载更多");
-//					}
-//				});
-//			}
-//		});
-//
-//	}
+	//加载更多
+	void loadmore(){
+		btnLoadMore.setEnabled(false);
+		textLoadMore.setText("载入中…");
+
+		String keywords = searchText.getText().toString();
+		Request request = Server.requestBuilderWithApi("article/s/"+keywords+"?page="+(page+1)).get().build();
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						btnLoadMore.setEnabled(true);
+						textLoadMore.setText("加载更多");
+					}
+				});
+
+				try{
+					final Page<Article> searchs = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Article>>() {});
+					if(searchs.getNumber()>page){
+
+						runOnUiThread(new Runnable() {
+							public void run() {
+								if(find==null){
+									find = searchs.getContent();
+								}else{
+									find.addAll(searchs.getContent());
+								}
+								page = searchs.getNumber();
+								listAdapter.notifyDataSetChanged();
+							}
+						});
+					}
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						btnLoadMore.setEnabled(true);
+						textLoadMore.setText("加载更多");
+					}
+				});
+			}
+		});
+
+	}
+
 }

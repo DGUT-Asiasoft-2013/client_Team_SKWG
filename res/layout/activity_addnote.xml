@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -29,31 +30,38 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:text="发送" />
+
+        <Button
+            android:id="@+id/btn_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="返回" />
+
     </FrameLayout>
 
     <EditText
         android:id="@+id/editText1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="请输入发表帖子标题"
-        android:ems="10" />
+        android:ems="10"
+        android:hint="请输入发表帖子标题" />
 
     <EditText
         android:id="@+id/editText2"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
+        android:ems="10"
         android:gravity="top|left"
-        android:hint="请输入发表帖子内容"
-        android:ems="10" >
+        android:hint="请输入发表帖子内容" >
 
         <requestFocus />
     </EditText>
 
-     <Button
-            android:id="@+id/btn_addpic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="添加图片" />
+    <fragment
+        android:id="@+id/input_articles_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="inputcells.PictureInputCellFragment"
+        tools:layout="@layout/fragment_inputcell_picture" />
 
 </LinearLayout>

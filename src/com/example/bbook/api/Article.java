@@ -14,8 +14,17 @@ public class Article implements Serializable{
 	
 	String authorName;
 	String authorAvatar;
+	String articlesImage;
 	
 	
+	public String getArticlesImage() {
+		return articlesImage;
+	}
+
+	public void setArticlesImage(String articlesImage) {
+		this.articlesImage = articlesImage;
+	}
+
 	public String getAuthorName() {
 		return authorName;
 	}

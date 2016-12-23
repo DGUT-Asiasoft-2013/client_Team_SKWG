@@ -11,14 +11,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import inputcells.PictureInputCellFragment;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AddNoteActivity extends Activity {
+	PictureInputCellFragment fragArticlesImage;
 
 	EditText articleTitle;
 	EditText articleText;
@@ -29,7 +33,16 @@ public class AddNoteActivity extends Activity {
 		setContentView(R.layout.activity_addnote);
 		articleTitle= (EditText)findViewById(R.id.editText1);
 		articleText= (EditText)findViewById(R.id.editText2);
+		fragArticlesImage = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_articles_image);
+		
+		findViewById(R.id.btn_return).setOnClickListener(new View.OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		
 		findViewById(R.id.btn_addnote).setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -38,7 +51,8 @@ public class AddNoteActivity extends Activity {
 			}
 		});
 	}
-	
+
+
 	void sendNote(){
 
 		String title = articleTitle.getText().toString();
@@ -46,16 +60,20 @@ public class AddNoteActivity extends Activity {
 
 		OkHttpClient client = Server.getSharedClient();
 
-		MultipartBody requestBuilder = new MultipartBody.Builder()
+		MultipartBody.Builder requestBuilder = new MultipartBody.Builder()
 				.addFormDataPart("title", title)
-				.addFormDataPart("text", text)
-				.build();
+				.addFormDataPart("text", text);
+
+		if(fragArticlesImage.getPngData() != null) {
+			requestBuilder.addFormDataPart("articlesImage", "articlesImage",
+					RequestBody.create(MediaType.parse("image/png"), fragArticlesImage.getPngData()));
+		}
 
 		Request request = Server.requestBuilderWithApi("article")
 				.method("post", null)
-				.post(requestBuilder)
+				.post(requestBuilder.build())
 				.build();
-		
+
 		client.newCall(request).enqueue(new Callback() {
 
 			@Override
@@ -85,7 +103,7 @@ public class AddNoteActivity extends Activity {
 				});
 			}
 		});
-	
+
 	}
 
 	void onResponse(Call arg0, String responseBody) {
@@ -108,5 +126,5 @@ public class AddNoteActivity extends Activity {
 		.setNegativeButton("OK", null)
 		.show();
 	}
-    
+
 }

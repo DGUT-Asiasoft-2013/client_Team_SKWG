@@ -29,6 +29,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:text="发送" />
+
+        <Button
+            android:id="@+id/btn_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="返回" />
+
     </FrameLayout>
 
     <EditText
@@ -41,11 +48,5 @@
 
         <requestFocus />
     </EditText>
-     <Button
-            android:id="@+id/btn_addpic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="添加图片" />
 
 </LinearLayout>
