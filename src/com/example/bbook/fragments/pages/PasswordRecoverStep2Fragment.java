@@ -31,7 +31,7 @@ public class PasswordRecoverStep2Fragment extends Fragment{
 			fragNewPasswordRepeat = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_newpassword_repeat);
 			
 			fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.recover_step2_titlebar);
-			fragTitleBar.setTitleName("重置密码");
+			fragTitleBar.setTitleName("重置密码", 18);
 			fragTitleBar.setBtnNextState(false);
 			
 			fragTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {

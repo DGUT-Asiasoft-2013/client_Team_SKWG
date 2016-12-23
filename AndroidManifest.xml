@@ -26,7 +26,7 @@
         </activity>
         <activity android:name="com.example.bbook.LoginActivity" />
         <activity android:name="com.example.bbook.HelloWorldActivity" />
-        <activity android:name="com.example.bbook.RegiestActivity" />
+        <activity android:name="com.example.bbook.RegisterActivity" />
         <activity android:name="com.example.bbook.AddGoodsActivity" />
         <activity android:name="com.example.bbook.OpenStoreActivity" />
         <activity android:name="com.example.bbook.BookDetailActivity" />

@@ -28,7 +28,7 @@ public class PasswordRecoverStep1Fragment extends Fragment {
                         fragTitleBar = (TitleBarFragment) getFragmentManager()
                                         .findFragmentById(R.id.recover_step1_titlebar);
                         fragTitleBar.setBtnNextText("下一步", 13);
-                        fragTitleBar.setTitleName("找回密码");
+                        fragTitleBar.setTitleName("找回密码", 18);
 
                         fragTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
 

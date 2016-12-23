@@ -51,7 +51,7 @@ public class MyProfileFragment extends Fragment {
                         fragMeTitleBar.setBtnBackState(false);
                         fragMeTitleBar.setSplitLineState(false);
                         fragMeTitleBar.setBtnNextState(false);
-                        fragMeTitleBar.setTitleName("我的");
+                        fragMeTitleBar.setTitleName("我的", 15);
                         
                         // 我要开店
                         itemOpenStore = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_openStore);

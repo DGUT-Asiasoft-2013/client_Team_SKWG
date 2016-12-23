@@ -41,7 +41,7 @@ public class LoginActivity extends Activity {
                 fragPassword = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_password);
 
                 fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.login_titlebar);
-                fragTitleBar.setTitleName("登录");
+                fragTitleBar.setTitleName("登录", 18);
                 fragTitleBar.setBtnNextText("忘记密码", 13);
                 // 返回
                 fragTitleBar.setOnGoBackListener(new OnGoBackListener() {

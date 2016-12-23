@@ -97,8 +97,9 @@ public class TitleBarFragment extends Fragment {
         }
 
         // 更改标题内容
-        public void setTitleName(String titleText) {
+        public void setTitleName(String titleText, float textSize) {
                 titleName.setText(titleText);
+                titleName.setTextSize(textSize);
         }
 
         

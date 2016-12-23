@@ -5,31 +5,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <fragment 
+    <fragment
         android:id="@+id/me_titlebar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         class="com.example.bbook.api.widgets.TitleBarFragment"
-        tools:layout="@layout/fragment_widget_titlebar"/>
-    
+        tools:layout="@layout/fragment_widget_titlebar" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="1"
+        android:layout_height="80dp"
         android:orientation="horizontal" >
 
         <com.example.bbook.api.widgets.AvatarView
             android:id="@+id/avatar"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
             android:background="@null" />
 
         <LinearLayout
+            android:layout_marginStart="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:orientation="vertical" >
 
             <TextView
@@ -68,7 +68,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6"
+        android:layout_weight="1"
         android:orientation="vertical" >
 
         <FrameLayout
