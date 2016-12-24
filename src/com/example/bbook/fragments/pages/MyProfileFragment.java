@@ -51,11 +51,12 @@ public class MyProfileFragment extends Fragment {
                         fragMeTitleBar.setBtnBackState(false);
                         fragMeTitleBar.setSplitLineState(false);
                         fragMeTitleBar.setBtnNextState(false);
-                        fragMeTitleBar.setTitleName("我的", 15);
+                        fragMeTitleBar.setTitleName("我的", 16);
                         
                         // 我要开店
                         itemOpenStore = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_openStore);
                         itemOpenStore.setItemText("我要开店");
+                        itemOpenStore.setItemImage(R.drawable.icon_shop);
                         itemOpenStore.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                                 @Override
@@ -68,6 +69,7 @@ public class MyProfileFragment extends Fragment {
                         // 我的店铺
                         itemMyStore = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_myStore);
                         itemMyStore.setItemText("我的店铺");
+                        itemMyStore.setItemImage(R.drawable.icon_shop);
                         itemMyStore.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                                 @Override
@@ -80,6 +82,7 @@ public class MyProfileFragment extends Fragment {
                         // 修改密码
                         itemBtnChange = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_change_password);
                         itemBtnChange.setItemText("修改密码");
+                        itemBtnChange.setItemImage(R.drawable.icon_password);
                         itemBtnChange.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                                 @Override
@@ -92,6 +95,7 @@ public class MyProfileFragment extends Fragment {
                         // 我的订单(没实现)
                         itemBtnOrder = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_order);
                         itemBtnOrder.setItemText("我的订单");
+                        itemBtnOrder.setItemImage(R.drawable.icon_order);
                         itemBtnOrder.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                                 @Override
@@ -103,6 +107,7 @@ public class MyProfileFragment extends Fragment {
                         // 注销
                         itemBtnExit = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_exit);
                         itemBtnExit.setItemText("注销");
+                        itemBtnExit.setItemImage(R.drawable.icon_exit);
                         itemBtnExit.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                                 @Override

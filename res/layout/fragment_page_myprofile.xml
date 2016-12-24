@@ -90,15 +90,15 @@
                 tools:layout="@layout/fragment_widget_item" />
         </FrameLayout>
 
-        <fragment
-            android:id="@+id/btn_change_password"
+         <fragment
+            android:id="@+id/btn_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             class="com.example.bbook.api.widgets.ItemFragment"
             tools:layout="@layout/fragment_widget_item" />
-
+        
         <fragment
-            android:id="@+id/btn_order"
+            android:id="@+id/btn_change_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             class="com.example.bbook.api.widgets.ItemFragment"
