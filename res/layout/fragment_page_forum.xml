@@ -23,7 +23,7 @@
             android:background="@android:color/darker_gray" />
 
         <ImageView
-            android:id="@+id/img_myart"
+            android:id="@+id/img_aboutme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"

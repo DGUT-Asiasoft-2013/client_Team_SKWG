@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.util.List;
 
 import com.example.bbook.AddNoteActivity;
+import com.example.bbook.CommentTomeActivity;
 import com.example.bbook.ForumContentActivity;
 import com.example.bbook.MyArticleActivity;
+import com.example.bbook.MyCommentActivity;
 import com.example.bbook.R;
 import com.example.bbook.SearchArticleActivity;
 import com.example.bbook.api.Article;
@@ -23,6 +25,8 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -32,8 +36,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,6 +47,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class ForumFragment extends Fragment {
+
+	PopupMenu myMenu;
+	Menu menu;
 
 	int page=0;
 	List<Article>data;
@@ -57,14 +66,39 @@ public class ForumFragment extends Fragment {
 			btnLoadMore= inflater.inflate(R.layout.load_more_button, null);
 			textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
 
+			myMenu=new PopupMenu(getActivity(),view.findViewById(R.id.img_aboutme));
+			menu=myMenu.getMenu();
+			getActivity().getMenuInflater().inflate(R.menu.menu_article, menu);
+
 			listView =(ListView)view.findViewById(R.id.list);
 			listView.setAdapter(listAdapter);
 			listView.addFooterView(btnLoadMore);
 
-			ImageView img_myart=(ImageView)view.findViewById(R.id.img_myart);
+			ImageView img_myart=(ImageView)view.findViewById(R.id.img_aboutme);
 			ImageView img_addnote=(ImageView)view.findViewById(R.id.img_addnote);
 			ImageView img_search=(ImageView)view.findViewById(R.id.img_search);
 
+			myMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+				@Override
+				public boolean onMenuItemClick(MenuItem item) {
+					switch (item.getItemId()) {
+					case R.id.myArticle:
+						gomyart();
+						break;
+					case R.id.commentTome:
+						gocommentTome();
+						break;
+					case R.id.myComment:
+						gomycomment();
+						break;
+					default:
+						break;
+					}
+					return false;
+				}
+
+			});
 			img_search.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -79,7 +113,7 @@ public class ForumFragment extends Fragment {
 
 				@Override
 				public void onClick(View v) {
-					gomyart();
+					myMenu.show();
 				}
 			});
 
@@ -302,6 +336,16 @@ public class ForumFragment extends Fragment {
 	//跳到我的帖子页面
 	void gomyart(){
 		Intent itnt =new Intent(getActivity(),MyArticleActivity.class);
+		startActivity(itnt);
+	}
+	//跳到对我的文章的评论页面
+	void gocommentTome(){
+		Intent itnt =new Intent(getActivity(),CommentTomeActivity.class);
+		startActivity(itnt);
+	}
+	//跳到我发出的评论页面
+	void gomycomment(){
+		Intent itnt =new Intent(getActivity(),MyCommentActivity.class);
 		startActivity(itnt);
 	}
 }

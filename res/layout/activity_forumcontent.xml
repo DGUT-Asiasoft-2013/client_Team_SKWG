@@ -102,15 +102,14 @@
             android:src="@drawable/icon_comment_article" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
+
     <ListView
         android:id="@+id/list_comment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="bottom"
-        android:background="@android:color/darker_gray" />
 
 </LinearLayout>

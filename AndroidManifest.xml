@@ -44,6 +44,8 @@
         <activity android:name="com.example.bbook.ShopActivity" />
         <activity android:name="com.example.bbook.AddCommomInfoActivity" />
         <activity android:name="com.example.bbook.ManageCommomInfoActivity" />
+        <activity android:name="com.example.bbook.MyCommentActivity" />
+        <activity android:name="com.example.bbook.CommentTomeActivity" />
     </application>
 
 </manifest>
