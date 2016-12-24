@@ -161,6 +161,14 @@ public class SearchArticleActivity extends Activity {
 	//按关键字搜索
 	void searchKeyword(){
 		String keywords = searchText.getText().toString();
+		if(keywords==null||keywords.isEmpty()){
+			 new AlertDialog.Builder(SearchArticleActivity.this)
+			.setMessage("请输入要搜索的关键字!")
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setPositiveButton("OK",null)
+			.show();
+			 return;
+		}
 
 		//强制隐藏自带软键盘
 		InputMethodManager inputMethodManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);

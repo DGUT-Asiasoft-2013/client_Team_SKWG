@@ -70,10 +70,10 @@ public class ForumContentActivity extends Activity {
 
 		article = (Article)getIntent().getSerializableExtra("Data");
 
-		TextView txt_title=(TextView)findViewById(R.id.textView1);
-		TextView txt_author=(TextView)findViewById(R.id.textView2);
-		TextView txt_text=(TextView)findViewById(R.id.textView3);
-		TextView txt_date=(TextView)findViewById(R.id.textView4);
+		TextView txt_title=(TextView)findViewById(R.id.txt_title);
+		TextView txt_author=(TextView)findViewById(R.id.txt_author);
+		TextView txt_text=(TextView)findViewById(R.id.txt_text);
+		TextView txt_date=(TextView)findViewById(R.id.txt_date);
 		AvatarView avatar = (AvatarView)findViewById(R.id.avatar);
 		avatar.load(Server.serverAdress+getIntent().getStringExtra("AuthorAvatar"));
 

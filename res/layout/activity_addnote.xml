@@ -49,13 +49,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="请输入发表帖子标题" />
+        android:hint="请输入发表帖子标题"
+        android:maxLength="20" />
 
     <EditText
         android:id="@+id/editText2"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:ems="10"
+         android:maxLength="100"
         android:gravity="top|left"
         android:hint="请输入发表帖子内容" >
 

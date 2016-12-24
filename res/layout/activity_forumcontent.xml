@@ -4,6 +4,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:layout_marginLeft="8dp"
+        android:gravity="center"
+        android:text="title"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="@android:color/darker_gray" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,12 +34,14 @@
             <com.example.bbook.api.widgets.AvatarView
                 android:id="@+id/avatar"
                 android:layout_width="60dp"
-                android:layout_height="60dp" />
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/txt_author"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:text="author"
                 android:textSize="15sp" />
@@ -34,26 +53,15 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/txt_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="title"
-                android:textSize="25sp"
-                android:textStyle="bold" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_gravity="bottom"
-                android:background="@android:color/darker_gray" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:layout_marginLeft="8dp"
+                android:minHeight="50dp"
+                android:maxHeight="140dp"
                 android:text="text"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
             <com.example.bbook.api.widgets.RectangleView
                 android:id="@+id/articleImage"
@@ -61,45 +69,45 @@
                 android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/txt_date"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:layout_weight="0.56"
+                    android:gravity="right|bottom"
+                    android:text="date"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:id="@+id/img_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/icon_like_none" />
+
+                <TextView
+                    android:id="@+id/count_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="center"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/img_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/icon_comment_article" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:layout_weight="0.56"
-            android:gravity="right|bottom"
-            android:text="date"
-            android:textSize="15sp" />
-
-        <ImageView
-            android:id="@+id/img_like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/icon_like_none" />
-
-        <TextView
-            android:id="@+id/count_like"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginRight="5dp"
-            android:gravity="center"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/img_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/icon_comment_article" />
     </LinearLayout>
 
     <View
