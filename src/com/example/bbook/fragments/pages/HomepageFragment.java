@@ -4,6 +4,8 @@ package com.example.bbook.fragments.pages;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.http.cookie.CookieIdentityComparator;
+
 import com.example.bbook.BookDetailActivity;
 import com.example.bbook.R;
 import com.example.bbook.ShopActivity;
@@ -65,7 +67,8 @@ public class HomepageFragment extends Fragment {
 	GoodsPicture goodsPicture;
 	TextView textview;
 	TextView goodsPrice;
-	String sortStyle;
+	String sortStyle="createDate";
+	String goodsType;
 	boolean sortState=false;
 
 	Goods goods;
@@ -88,24 +91,24 @@ public class HomepageFragment extends Fragment {
 		//bookView.addView(btnLoadMore, TRIM_MEMORY_UI_HIDDEN);
 
 		//bookView.addView(btnLoadMore,0 );
-//		view.findViewById(R.id.btn_laodmore).setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				LoadMore();
-//			}
-//		});
+		//		view.findViewById(R.id.btn_laodmore).setOnClickListener(new OnClickListener() {
+		//
+		//			@Override
+		//			public void onClick(View v) {
+		//				// TODO Auto-generated method stub
+		//				LoadMore();
+		//			}
+		//		});
 		popupMenuClassify=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu_classify));
 		menuClassify=popupMenuClassify.getMenu();
 		getActivity().getMenuInflater().inflate(R.menu.menu_classify, menuClassify);
-		
+
 		popupMenuSort=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu_sort));
 		menuSort=popupMenuSort.getMenu();
 		getActivity().getMenuInflater().inflate(R.menu.menu_sort, menuSort);
 
 		popupMenuSort.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
+
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				// TODO Auto-generated method stub
@@ -121,12 +124,12 @@ public class HomepageFragment extends Fragment {
 				case R.id.c:
 
 					break;
-			
+
 				default:
 					break;
 				}
-				
-				
+
+
 				return false;
 			}
 		});
@@ -138,19 +141,24 @@ public class HomepageFragment extends Fragment {
 
 				switch (item.getItemId()) {
 				case R.id.a:
-					
+					goodsType="novel";
+					Classify(goodsType);
 					break;
 				case R.id.b:
-					
+					goodsType="history";
+					Classify(goodsType);
 					break;
 				case R.id.c:
-
+					goodsType="youth";
+					Classify(goodsType);
 					break;
 				case R.id.d:
-
+					goodsType="computer";
+					Classify(goodsType);
 					break;
 				case R.id.e:
-
+					goodsType="technology";
+					Classify(goodsType);
 					break;
 				default:
 					break;
@@ -167,9 +175,9 @@ public class HomepageFragment extends Fragment {
 				popupMenuClassify.show();
 			}
 		});
-		
+
 		view.findViewById(R.id.pop_menu_sort).setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				popupMenuSort.show();
@@ -189,9 +197,15 @@ public class HomepageFragment extends Fragment {
 	public void SortStyle(String sortStyle){
 		String keyword=editKeyword.getText().toString();
 		OkHttpClient client=Server.getSharedClient();
+		Request request;
+		//		if(editKeyword.getText().equals("")){
+		//			request=Server.requestBuilderWithApi("goods/s/"+sortStyle)
+		//					.get().build();
+		//		}else{
 
-		Request request=Server.requestBuilderWithApi("goods/sort/"+keyword+"/"+sortStyle)
+		request=Server.requestBuilderWithApi("goods/sort/"+keyword+"/"+sortStyle)
 				.get().build();
+		//	}
 
 		client.newCall(request).enqueue(new Callback() {
 
@@ -295,12 +309,12 @@ public class HomepageFragment extends Fragment {
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		if(!sortState){
-			bookLoad();
-		}
-		else {
-			SortStyle(sortStyle);
-		}
+		//		if(!sortState){
+		bookLoad();
+		//		}
+		//		else {
+		//			SortStyle(sortStyle);
+		//		}
 	}
 
 	public void SearchBooksByKeyword(){
@@ -351,7 +365,59 @@ public class HomepageFragment extends Fragment {
 
 	}
 
+	public  void Classify(String goodsType){
 
+
+		OkHttpClient client=Server.getSharedClient();
+
+		Request request=Server.requestBuilderWithApi("goods/classify/"+goodsType)
+				.get().build();
+
+		client.newCall(request).enqueue(new Callback() {
+
+			@Override
+			public void onResponse(Call arg0, final Response arg1) throws IOException {
+				// TODO Auto-generated method stub
+				final String responseStr=arg1.body().string();
+
+
+				getActivity().runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						try {
+							Page<Goods> data=new ObjectMapper()
+									.readValue(responseStr, new TypeReference<Page<Goods>>() {
+									});
+							//Log.d("aaa",data.toString());
+							HomepageFragment.this.data=data.getContent();
+
+							HomepageFragment.this.page=data.getNumber();
+							bookAdapter.notifyDataSetInvalidated();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+
+
+
+					}
+				});
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+
+
+
+	}
 	public void bookLoad(){
 
 		OkHttpClient client=Server.getSharedClient();
