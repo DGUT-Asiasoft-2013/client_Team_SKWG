@@ -39,16 +39,18 @@
         </LinearLayout>
     </LinearLayout>
 
-          <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="bottom"
-            android:layout_margin="5dp"
-            android:background="@android:color/background_dark" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:layout_margin="5dp"
+        android:background="@android:color/background_dark" />
+
     <GridView
         android:id="@+id/goods_gridview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="260dp"
+        android:layout_weight="0.47"
         android:numColumns="3" >
     </GridView>
 
