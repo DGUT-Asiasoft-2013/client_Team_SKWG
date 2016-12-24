@@ -3,6 +3,7 @@ package com.example.bbook;
 import java.io.IOException;
 
 import com.example.bbook.api.Server;
+import com.example.bbook.api.widgets.TitleBarFragment;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -24,11 +25,24 @@ import okhttp3.Response;
 
 public class ChangePasswordActivity extends Activity {
 	SimpleTextInputcellFragment fragBeforePassword, fragNewPassword, fragNewPassowrdRepeat;
+	TitleBarFragment fragChangeTitleBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.avtivity_change_password);
+		
+		fragChangeTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.change_titlebar);
+		fragChangeTitleBar.setBtnNextState(false);
+		fragChangeTitleBar.setTitleName("修改密码", 16);
+		fragChangeTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
+                
+                @Override
+                public void onGoBack() {
+                        finish();
+                }
+        });
+		
 		findViewById(R.id.submit).setOnClickListener(new OnClickListener() {
 
 			@Override

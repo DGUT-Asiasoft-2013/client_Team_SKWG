@@ -9,6 +9,7 @@ import com.example.bbook.api.Server;
 import com.example.bbook.api.Shop;
 import com.example.bbook.api.widgets.AvatarView;
 import com.example.bbook.api.widgets.GoodsPicture;
+import com.example.bbook.api.widgets.TitleBarFragment;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -39,6 +40,7 @@ public class MystoreActivity extends Activity {
 	GridView goodsView;
 	List<Goods> data;
 	GoodsPicture goodsPicture;
+	TitleBarFragment fragMyShopTitleBar;
 	int page=0;
 
 	@Override
@@ -50,6 +52,17 @@ public class MystoreActivity extends Activity {
 		shopName = (TextView) findViewById(R.id.show_stopName);
 		shopImageUseBg = (AvatarView) findViewById(R.id.bgshow_img);
 		shopDescription = (TextView) findViewById(R.id.show_stopDescription);
+		
+		fragMyShopTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.my_shop_titlebar);
+		fragMyShopTitleBar.setBtnNextState(false);
+		fragMyShopTitleBar.setTitleName("我的商店", 16);
+		fragMyShopTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
+                
+                @Override
+                public void onGoBack() {
+                        finish();
+                }
+        });
 
 		//商品列表
 		goodsView=(GridView) findViewById(R.id.goods_gridview);

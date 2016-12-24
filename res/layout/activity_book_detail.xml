@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <fragment 
+        android:id="@+id/book_detail_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar"/>
+    
     <LinearLayout
+        android:layout_margin="6dp"
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:orientation="horizontal" >

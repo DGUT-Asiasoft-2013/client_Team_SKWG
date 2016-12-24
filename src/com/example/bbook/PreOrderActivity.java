@@ -7,6 +7,7 @@ import java.util.Date;
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.widgets.GoodsPicture;
+import com.example.bbook.api.widgets.TitleBarFragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,11 +28,24 @@ public class PreOrderActivity extends Activity{
 	TextView tvGoodsName, tvGoodsType, tvGoodsPrice;
 	EditText goodsCount;
 	GoodsPicture goodsImage;
+	TitleBarFragment fragPreorderTitleBar;
 	int count = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_preorder);
+		
+		fragPreorderTitleBar  = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.preorder_titlebar);
+		fragPreorderTitleBar.setBtnNextState(false);
+		fragPreorderTitleBar.setTitleName("添加至购物车", 16);
+		fragPreorderTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
+                
+                @Override
+                public void onGoBack() {
+                        finish();
+                }
+        });
+		
 		goods = (Goods) getIntent().getSerializableExtra("goods");
 		count = getIntent().getIntExtra("number", 0);
 		init();

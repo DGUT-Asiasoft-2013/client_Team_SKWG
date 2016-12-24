@@ -7,32 +7,31 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="3"
-        android:orientation="horizontal"
-        android:gravity="center" >
+        android:gravity="center"
+        android:orientation="horizontal" >
 
-        <TextView 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="B"
-            android:gravity="center"
-            android:textSize="60sp"
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:background="@drawable/circle_shape"
-            android:textColor="@android:color/white"/>
+            android:gravity="center"
+            android:text="B"
+            android:textColor="@android:color/white"
+            android:textSize="60sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Book" 
+            android:text="Book"
             android:textColor="#fff"
-            android:textSize="55sp"/>
-        
+            android:textSize="55sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="horizontal" >
@@ -40,9 +39,9 @@
         <Button
             android:id="@+id/btn_regist"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="50dp"
             android:layout_margin="10dp"
+            android:layout_weight="1"
             android:background="@drawable/register_button"
             android:text="注册"
             android:textColor="#333333" />
@@ -50,9 +49,9 @@
         <Button
             android:id="@+id/btn_login"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="50dp"
             android:layout_margin="10dp"
+            android:layout_weight="1"
             android:background="@drawable/login_button"
             android:text="登陆"
             android:textColor="#333333" />

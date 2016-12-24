@@ -33,7 +33,9 @@
         <activity android:name="com.example.bbook.OpenStoreActivity" />
         <activity android:name="com.example.bbook.BookDetailActivity" />
         <activity android:name="com.example.bbook.PasswordRecoverActivity" />
-        <activity android:name="com.example.bbook.BuyActivity" />
+        <activity
+            android:name="com.example.bbook.BuyActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name="com.example.bbook.MystoreActivity" />
         <activity android:name="com.example.bbook.ForumContentActivity" />
         <activity android:name="com.example.bbook.AddNoteActivity" />
@@ -42,7 +44,9 @@
         <activity android:name="com.example.bbook.ModifyArticleActivity" />
         <activity android:name="com.example.bbook.SearchArticleActivity" />
         <activity android:name="com.example.bbook.ChangePasswordActivity" />
-        <activity android:name="com.example.bbook.PreOrderActivity" />
+        <activity
+            android:name="com.example.bbook.PreOrderActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name="com.example.bbook.ShopActivity" />
         <activity android:name="com.example.bbook.AddCommomInfoActivity" />
         <activity android:name="com.example.bbook.ManageCommomInfoActivity" />

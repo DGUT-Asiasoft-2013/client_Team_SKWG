@@ -3,6 +3,7 @@ package com.example.bbook;
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.widgets.GoodsPicture;
+import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.fragments.pages.BookCommentFragment;
 import com.example.bbook.fragments.pages.BookDetailFragment;
 import com.example.bbook.fragments.pages.HomepageFragment;
@@ -27,6 +28,7 @@ public class BookDetailActivity extends Activity {
 	HomepageFragment mainPageFragment=new HomepageFragment();
 	Goods goods;
 	GoodsPicture goodsPicture;
+	TitleBarFragment fragBookDetail;
 	int selectedIndex=0;
 	int num=0;
 
@@ -38,6 +40,18 @@ public class BookDetailActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_book_detail);
 
+		fragBookDetail = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.book_detail_titlebar);
+		fragBookDetail.setBtnNextState(false);
+		fragBookDetail.setTitleState(false);
+		fragBookDetail.setSplitLineState(false);
+		fragBookDetail.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
+                
+                @Override
+                public void onGoBack() {
+                        finish();
+                }
+        });
+		
 		goods=(Goods) getIntent().getSerializableExtra("goods");
 		detailLabel=(TextView) findViewById(R.id.book_detail);
 		commentLabel=(TextView) findViewById(R.id.book_comment);
