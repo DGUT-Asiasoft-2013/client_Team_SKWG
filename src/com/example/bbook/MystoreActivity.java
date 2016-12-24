@@ -35,7 +35,7 @@ public class MystoreActivity extends Activity {
 
 	AvatarView shopImageUseBg;
 	TextView shopName,shopDescription;
-
+	
 	GridView goodsView;
 	List<Goods> data;
 	GoodsPicture goodsPicture;
@@ -123,12 +123,14 @@ public class MystoreActivity extends Activity {
 			}else{
 				view = convertView;
 			}
-			TextView goodsPrice=(TextView) view.findViewById(R.id.price);
-			goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
-
 			Goods	goods=data.get(position);
+			TextView goodsPrice=(TextView) view.findViewById(R.id.price);
 			goodsPrice.setText("价格："+goods.getGoodsPrice());
+			TextView goodsName=(TextView) view.findViewById(R.id.id);
+			goodsName.setText(goods.getGoodsName());
+			
 			//商品图片、点击事件
+			goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
 			goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
 			goodsPicture.setOnClickListener(new OnClickListener() {				
 				@Override

@@ -53,10 +53,12 @@ import okhttp3.Response;
 public class HomepageFragment extends Fragment {
 	//书籍展示页面
 
-	PopupMenu popupMenu;
-	Menu menu;
+	PopupMenu popupMenuClassify,popupMenuSort;
+	Menu menuClassify,menuSort;
 
-	//AvatarAndNameFragment[]  ava=new AvatarAndNameFragment[6];
+	//	View btnLoadMore;
+	TextView textLoadMore;
+	Button btnLoadMore;
 	GridView bookView;
 	//ImageView imageView;
 	AvatarView avatar;
@@ -68,25 +70,67 @@ public class HomepageFragment extends Fragment {
 
 	Goods goods;
 	EditText editKeyword;
-	Button btnSearch;
+	ImageView btnSearch;
 	Button sortByName;
 	List<Goods> data;
 	int page=0;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		View view=inflater.inflate(R.layout.fragment_home_page, null);
 
-		btnSearch=(Button) view.findViewById(R.id.btn_search);
+		btnSearch=(ImageView) view.findViewById(R.id.btn_search);
 		editKeyword=(EditText) view.findViewById(R.id.edit_keyword);
 		bookView=(GridView) view.findViewById(R.id.book_gridView);
 		bookView.setAdapter(bookAdapter);
 
-		popupMenu=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu));
-		menu=popupMenu.getMenu();
-		getActivity().getMenuInflater().inflate(R.menu.menu_classify, menu);
+		//	btnLoadMore=inflater.inflate(R.layout.load_more_btn,null);
+		//	textLoadMore=(TextView) btnLoadMore.findViewById(R.id.load_more_text);
+		//bookView.addView(btnLoadMore, TRIM_MEMORY_UI_HIDDEN);
 
-		popupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+		//bookView.addView(btnLoadMore,0 );
+//		view.findViewById(R.id.btn_laodmore).setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				LoadMore();
+//			}
+//		});
+		popupMenuClassify=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu_classify));
+		menuClassify=popupMenuClassify.getMenu();
+		getActivity().getMenuInflater().inflate(R.menu.menu_classify, menuClassify);
+		
+		popupMenuSort=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu_sort));
+		menuSort=popupMenuSort.getMenu();
+		getActivity().getMenuInflater().inflate(R.menu.menu_sort, menuSort);
+
+		popupMenuSort.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				// TODO Auto-generated method stub
+				switch (item.getItemId()) {
+				case R.id.a:
+					sortStyle="goodsPrice";
+					SortStyle(sortStyle);
+					break;
+				case R.id.b:
+					sortStyle="goodsName";
+					SortStyle(sortStyle);
+					break;
+				case R.id.c:
+
+					break;
+			
+				default:
+					break;
+				}
+				
+				
+				return false;
+			}
+		});
+		popupMenuClassify.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
@@ -94,10 +138,10 @@ public class HomepageFragment extends Fragment {
 
 				switch (item.getItemId()) {
 				case R.id.a:
-
+					
 					break;
 				case R.id.b:
-
+					
 					break;
 				case R.id.c:
 
@@ -115,37 +159,26 @@ public class HomepageFragment extends Fragment {
 			}
 		});
 
-		view.findViewById(R.id.pop_menu).setOnClickListener(new OnClickListener() {
+		view.findViewById(R.id.pop_menu_classify).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				popupMenu.show();
+				popupMenuClassify.show();
 			}
 		});
-		sortByName=(Button) view.findViewById(R.id.sort_book_name);
-		sortByName.setOnClickListener(new OnClickListener() {
+		
+		view.findViewById(R.id.pop_menu_sort).setOnClickListener(new OnClickListener() {
+			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				sortStyle="goodsName";
-				SortStyle(sortStyle);
-			}
-		});
-		view.findViewById(R.id.sort_book_price).setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				sortStyle="goodsPrice";
-				SortStyle(sortStyle);
+				popupMenuSort.show();
 			}
 		});
 		btnSearch.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				SearchBooksByKeyword();
 			}
 		});
@@ -171,22 +204,15 @@ public class HomepageFragment extends Fragment {
 
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
-
-						// TODO Auto-generated method stub
-
-						// TODO Auto-generated method stub
 						try {
 							Page<Goods> data=new ObjectMapper()
 									.readValue(responseStr, new TypeReference<Page<Goods>>() {
 									});
-							//Log.d("aaa",data.toString());
 							HomepageFragment.this.data=data.getContent();
 							HomepageFragment.this.page=data.getNumber();
 							bookAdapter.notifyDataSetInvalidated();
 							sortState=true;
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -215,8 +241,6 @@ public class HomepageFragment extends Fragment {
 			}
 			textview=(TextView) view.findViewById(R.id.id);
 			goodsPrice=(TextView) view.findViewById(R.id.price);
-			//			imageView=(ImageView) view.findViewById(R.id.picture);
-			//	avatar=(AvatarView) view.findViewById(R.id.picture);
 			goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
 
 			goods=data.get(position);
@@ -378,6 +402,77 @@ public class HomepageFragment extends Fragment {
 
 	}
 	//
+	public void LoadMore(){
+
+
+		btnLoadMore.setEnabled(false);
+		textLoadMore.setText("加载更多");
+
+		Request request=Server.requestBuilderWithApi("goods/s?page="+(page+1)).get().build();
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+
+			@Override
+			public void onResponse(Call arg0, final Response arg1) throws IOException {
+				// TODO Auto-generated method stub
+				getActivity().runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						btnLoadMore.setEnabled(true);
+						textLoadMore.setText("加载中");
+						try {
+							Page<Goods> feeds=new ObjectMapper()
+									.readValue(arg1.body().string(),
+											new TypeReference<Page<Goods>>() {
+									});
+
+							if(feeds.getNumber()>page){
+								if(data==null){
+									data=feeds.getContent();
+								}else{
+									data.addAll(feeds.getContent());
+								}
+								page=feeds.getNumber();
+								getActivity().runOnUiThread(new Runnable() {
+
+									@Override
+									public void run() {
+										// TODO Auto-generated method stub
+										bookAdapter.notifyDataSetChanged();	
+									}
+								});
+							}
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+
+
+
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				// TODO Auto-generated method stub
+				getActivity().runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						btnLoadMore.setEnabled(true);
+						textLoadMore.setText("���ظ���");
+					}
+				});
+			}
+		});
+
+
+	}
+
+
 	public void goBookDetailActivity(int position){
 		goods=data.get(position);
 		Intent intent=new Intent(getActivity(),BookDetailActivity.class);

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+        <item 
+        android:id="@+id/a"
+        android:title="按价格排序"
+        />
+    <item 
+        android:id="@+id/b"
+        android:title="按商品名排序"
+        />
+    <item 
+        android:id="@+id/c"
+        android:title="按商家排序"
+        />
+
+
+</menu>
