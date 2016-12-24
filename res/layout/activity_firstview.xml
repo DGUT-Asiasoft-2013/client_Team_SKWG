@@ -9,15 +9,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:gravity="center" >
+
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="B"
+            android:gravity="center"
+            android:textSize="60sp"
+            android:background="@drawable/circle_shape"
+            android:textColor="@android:color/white"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BBook" 
+            android:text="Book" 
             android:textColor="#fff"
-            android:textSize="60sp"/>
+            android:textSize="55sp"/>
         
     </LinearLayout>
 
