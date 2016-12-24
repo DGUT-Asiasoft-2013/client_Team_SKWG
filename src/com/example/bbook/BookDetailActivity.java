@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 //书籍详情Activity
 import android.widget.TextView;
+import android.widget.Toast;
 public class BookDetailActivity extends Activity {
 
 	BookDetailFragment bookDetailFragment=new BookDetailFragment();
@@ -110,6 +111,7 @@ public class BookDetailActivity extends Activity {
 			public void onClick(View v) {
 				num=Integer.parseInt(numEdit.getText().toString());
 				if(num<=0){
+					Toast.makeText(BookDetailActivity.this, "请输入购买数量", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				goBuy(num);
@@ -120,14 +122,20 @@ public class BookDetailActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				goPreorder();
+				num=Integer.parseInt(numEdit.getText().toString());
+				if(num<=0){
+					Toast.makeText(BookDetailActivity.this, "请输入购买数量", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				goPreorder(num);
 			}
 		});
 	}
 
 
-	protected void goPreorder() {
+	protected void goPreorder(int num) {
 		Intent itnt = new Intent(BookDetailActivity.this, PreOrderActivity.class);
+		itnt.putExtra("number", num);
 		itnt.putExtra("goods", goods);
 		startActivity(itnt);
 	}
@@ -136,7 +144,6 @@ public class BookDetailActivity extends Activity {
 	protected void goBuy(int num) {
 		Intent itnt = new Intent(BookDetailActivity.this, BuyActivity.class);
 		itnt.putExtra("number", num);
-		Log.d("num", num+"");
 		itnt.putExtra("goods", goods);
 		startActivity(itnt);
 	}

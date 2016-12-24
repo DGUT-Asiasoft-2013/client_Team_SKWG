@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Server;
+import com.example.bbook.api.widgets.GoodsPicture;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.TextView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
@@ -22,13 +24,17 @@ import okhttp3.Response;
 
 public class PreOrderActivity extends Activity{
 	Goods goods;
+	TextView tvGoodsName, tvGoodsType, tvGoodsPrice;
 	EditText goodsCount;
+	GoodsPicture goodsImage;
+	int count = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_preorder);
 		goods = (Goods) getIntent().getSerializableExtra("goods");
-		goodsCount = (EditText) findViewById(R.id.count);
+		count = getIntent().getIntExtra("number", 0);
+		init();
 		findViewById(R.id.submit).setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -36,6 +42,23 @@ public class PreOrderActivity extends Activity{
 				onSubmit();
 			}
 		});
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		tvGoodsName.setText("书名: " + goods.getGoodsName());
+		tvGoodsType.setText("类型: " + goods.getGoodsType());
+		tvGoodsPrice.setText("价格: " + goods.getGoodsPrice());
+		goodsImage.load(Server.serverAdress + goods.getGoodsImage());
+		goodsCount.setText(count + "");
+	}
+	private void init() {
+		goodsCount = (EditText) findViewById(R.id.count);
+		goodsImage = (GoodsPicture) findViewById(R.id.goods_image);
+		tvGoodsName = (TextView) findViewById(R.id.name);
+		tvGoodsType = (TextView) findViewById(R.id.type);
+		tvGoodsPrice = (TextView) findViewById(R.id.price);
 	}
 	protected void onSubmit() {
 		int count = Integer.parseInt(goodsCount.getText().toString());

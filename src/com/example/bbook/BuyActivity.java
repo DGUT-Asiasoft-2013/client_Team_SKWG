@@ -8,6 +8,7 @@ import java.util.List;
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.entity.CommomInfo;
+import com.example.bbook.api.widgets.GoodsPicture;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +38,7 @@ public class BuyActivity extends Activity {
 	
 	EditText goodsCount;
 	TextView tvGoodsName, tvGoodsType, tvGoodsPrice, infoName, infoAddress, infoTel, infoPostcode;
-	ImageView ivGoodsImage;
+	GoodsPicture goodsImage;
 	Button btnSubmit, btnAddInfo;
 	Goods goods;
 	LinearLayout info;
@@ -87,6 +88,7 @@ public class BuyActivity extends Activity {
 		tvGoodsName.setText("书名: " + goods.getGoodsName());
 		tvGoodsType.setText("类型: " + goods.getGoodsType());
 		tvGoodsPrice.setText("价格: " + goods.getGoodsPrice());
+		goodsImage.load(Server.serverAdress + goods.getGoodsImage());
 		goodsCount.setText(count + "");
 		Request request = Server.requestBuilderWithApi("commominfo/default").get().build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
@@ -204,7 +206,7 @@ public class BuyActivity extends Activity {
 		tvGoodsName = (TextView) findViewById(R.id.name);
 		tvGoodsType = (TextView) findViewById(R.id.type);
 		tvGoodsPrice = (TextView) findViewById(R.id.price);
-		ivGoodsImage = (ImageView) findViewById(R.id.goods_image);
+		goodsImage = (GoodsPicture) findViewById(R.id.goods_image);
 		infoName = (TextView)findViewById(R.id.info_name);
 		infoAddress = (TextView) findViewById(R.id.info_address);
 		infoTel = (TextView) findViewById(R.id.info_tel);
