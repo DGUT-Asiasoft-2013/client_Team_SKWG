@@ -84,10 +84,10 @@ public class BuyActivity extends Activity {
 	
 	
 	private void reload() {
-		tvGoodsName.setText(goods.getGoodsName());
-		tvGoodsType.setText(goods.getGoodsType());
-		tvGoodsPrice.setText(goods.getGoodsPrice());
-//		goodsCount.setText(count);
+		tvGoodsName.setText("书名: " + goods.getGoodsName());
+		tvGoodsType.setText("类型: " + goods.getGoodsType());
+		tvGoodsPrice.setText("价格: " + goods.getGoodsPrice());
+		goodsCount.setText(count + "");
 		Request request = Server.requestBuilderWithApi("commominfo/default").get().build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
 			

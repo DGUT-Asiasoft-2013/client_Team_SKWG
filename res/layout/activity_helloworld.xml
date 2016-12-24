@@ -15,7 +15,7 @@
     <fragment
         android:id="@+id/frag_tabbar"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         class="com.example.bbook.api.widgets.MainTabbarFragment"
         tools:layout="@layout/fragment_widget_main_tabbar" />

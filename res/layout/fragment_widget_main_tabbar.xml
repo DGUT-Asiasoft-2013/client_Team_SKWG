@@ -1,118 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:background="@android:color/holo_green_dark"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
     <LinearLayout
-        android:id="@+id/tab_homepage"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical" >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp" >
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_launcher" />
+        <LinearLayout
+            android:id="@+id/tab_homepage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="首页"
-            android:textColor="@android:color/white" />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/tab_background_home" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="首页" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_sort"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/tab_background_catagorize" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="分类" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_forum"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/tab_backgaound_forum" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="论坛" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_shopcar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/tab_background_shopping_cart" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="购物车"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_me"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/tab_backgroun_me" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="我的" />
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/tab_sort"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical" >
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_launcher" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="分类"
-            android:textColor="@android:color/white" />
-
-    </LinearLayout>
-    
-    <LinearLayout
-        android:id="@+id/tab_forum"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical" >
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_launcher" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="论坛"
-            android:textColor="@android:color/white" />
-
-    </LinearLayout>
-    
-    <LinearLayout
-        android:id="@+id/tab_shopcar"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical" >
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_launcher" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="购物车"
-            android:textColor="@android:color/white" />
-
-    </LinearLayout>
-    
-    <LinearLayout
-        android:id="@+id/tab_me"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical" >
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_launcher" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="我的"
-            android:textColor="@android:color/white" />
-
-    </LinearLayout>
-    
 
 </LinearLayout>
