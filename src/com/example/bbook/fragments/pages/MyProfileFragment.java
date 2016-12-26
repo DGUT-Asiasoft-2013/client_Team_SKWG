@@ -3,6 +3,7 @@ package com.example.bbook.fragments.pages;
 import java.io.IOException;
 
 import com.example.bbook.ChangePasswordActivity;
+import com.example.bbook.ChangeUserMessageActivity;
 import com.example.bbook.LoginActivity;
 import com.example.bbook.MystoreActivity;
 import com.example.bbook.OpenStoreActivity;
@@ -144,6 +145,15 @@ public class MyProfileFragment extends Fragment {
 		// }
 		// });
 
+		view.findViewById(R.id.btn_change_userMessage).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent itnt = new Intent(getActivity(),ChangeUserMessageActivity.class);
+				startActivity(itnt);
+			}
+		});
 		return view;
 	}
 
