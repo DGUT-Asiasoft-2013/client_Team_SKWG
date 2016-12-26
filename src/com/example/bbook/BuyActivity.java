@@ -160,7 +160,7 @@ public class BuyActivity extends Activity {
 
                 int orderState = 2;
                 count = Integer.parseInt(goodsCount.getText().toString());
-                String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + count;
+                 final String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + count;
 
                 String name = defaultInfo.getName();
                 String address = defaultInfo.getAddress();
@@ -186,8 +186,9 @@ public class BuyActivity extends Activity {
                                         public void run() {
                                                 // goPay();
                                                 try {
-                                                        BuyActivity.this.onResponse(arg0, arg1.body().string());
-                                                } catch (IOException e) {
+                                                  //     BuyActivity.this.onResponse(arg0, arg1.body().string());
+                                                	goPay(orderId);
+                                                } catch (Exception e) {
                                                         // TODO Auto-generated
                                                         // catch block
                                                         e.printStackTrace();
@@ -207,8 +208,11 @@ public class BuyActivity extends Activity {
                 new AlertDialog.Builder(this).setTitle("成功").setMessage(responseBody).show();
         }
 
-        void goPay() {
+        void goPay(String  orderId) {
                 Toast.makeText(this, "提交订单成功", Toast.LENGTH_SHORT).show();
+                Intent intent =new Intent(BuyActivity.this,PayActivity.class);
+                intent.putExtra("orderId", orderId);
+                startActivity(intent);
                 finish();
         }
 
