@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -14,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="发帖"
+            android:text="回复楼层"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
@@ -24,7 +23,7 @@
             android:layout_gravity="bottom"
             android:background="@android:color/darker_gray" />
 
-       <ImageView
+        <ImageView
             android:id="@+id/img_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,28 +46,12 @@
     <EditText
         android:id="@+id/editText1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="请输入发表帖子标题"
-        android:maxLength="20" />
-
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:ems="10"
-        android:maxLength="100"
+        android:layout_height="250dp"
         android:gravity="top|left"
-        android:hint="请输入发表帖子内容" >
+        android:ems="10"
+        android:inputType="textMultiLine" >
 
         <requestFocus />
     </EditText>
-
-    <fragment
-        android:id="@+id/input_articles_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        class="inputcells.PictureInputCellFragment"
-        tools:layout="@layout/fragment_inputcell_picture" />
 
 </LinearLayout>

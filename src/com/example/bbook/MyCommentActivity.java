@@ -3,6 +3,7 @@ package com.example.bbook;
 import java.io.IOException;
 import java.util.List;
 
+import com.example.bbook.api.Article;
 import com.example.bbook.api.Comment;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
@@ -12,12 +13,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -62,6 +66,13 @@ public class MyCommentActivity extends Activity{
 				loadmore();
 			}
 		});
+
+		listView.setOnItemClickListener(new  AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				onItemClicked(position);
+			}
+		});
 	}
 	@Override
 	protected void onResume() {
@@ -76,7 +87,7 @@ public class MyCommentActivity extends Activity{
 			View view = null;
 			if(convertView==null){
 				LayoutInflater inflater= LayoutInflater.from(parent.getContext());
-				view =inflater.inflate(R.layout.comment_list_item, null);
+				view =inflater.inflate(R.layout.reply_list_item, null);
 			}else{
 				view = convertView;
 			}
@@ -210,4 +221,66 @@ public class MyCommentActivity extends Activity{
 			}
 		});
 	}
+
+	//点击listview删除评论
+	public void onItemClicked( int position){
+		Comment comment = data.get(position);
+		
+		Request request = Server.requestBuilderWithApi("deletecomment/"+comment.getId())
+				.method("delete", null)
+				.build();
+
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+
+			@Override
+			public void onResponse(final Call arg0, Response arg1) throws IOException {
+
+				try{	     
+					final String responString = arg1.body().toString();
+					runOnUiThread(new Runnable() {
+						public void run() {
+							MyCommentActivity.this.onResponsed(arg0,responString);
+						}
+					});
+				}catch (final Exception e) {
+					runOnUiThread(new Runnable() {
+						public void run() {
+							MyCommentActivity.this.onFailured(arg0, e);
+						}
+					});
+				}
+			}
+			@Override
+			public void onFailure(final Call arg0, final IOException arg1) {
+
+				runOnUiThread(new Runnable() {
+					public void run() {
+						MyCommentActivity.this.onFailured(arg0, arg1);
+					}
+				});
+
+			}
+		});
+
+	}
+	void onResponsed(Call arg0, String responseBody) {
+		new AlertDialog.Builder(this)
+		.setTitle("删除成功")
+		.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				reload();
+			}
+		})
+		.show();
+	}
+
+	void onFailured(Call arg0, Exception arg1) {
+		new AlertDialog.Builder(this)
+		.setTitle("删除失败")
+		.setMessage(arg1.getLocalizedMessage())
+		.setNegativeButton("OK", null)
+		.show();
+	}
 }
+

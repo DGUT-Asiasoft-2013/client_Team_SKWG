@@ -77,7 +77,7 @@ public class CommentTomeActivity extends Activity {
 			View view = null;
 			if(convertView==null){
 				LayoutInflater inflater= LayoutInflater.from(parent.getContext());
-				view =inflater.inflate(R.layout.comment_list_item, null);
+				view =inflater.inflate(R.layout.reply_list_item, null);
 			}else{
 				view = convertView;
 			}

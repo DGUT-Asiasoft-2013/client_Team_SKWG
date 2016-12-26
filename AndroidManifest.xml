@@ -45,7 +45,7 @@
         <activity android:name="com.example.bbook.SearchArticleActivity" />
         <activity android:name="com.example.bbook.ChangePasswordActivity" />
         <activity
-            android:name="com.example.bbook.PreOrderActivity"
+            android:name="com.example.bbook.AddToCartActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name="com.example.bbook.ShopActivity" />
         <activity android:name="com.example.bbook.AddCommomInfoActivity" />
@@ -53,6 +53,7 @@
         <activity android:name="com.example.bbook.MyCommentActivity" />
         <activity android:name="com.example.bbook.CommentTomeActivity" />
         <activity android:name="com.example.bbook.ChangeUserMessageActivity" />
+        <activity android:name="com.example.bbook.AddReplyActivity" />
     </application>
 
 </manifest>

@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +39,7 @@ import okhttp3.Response;
 public class ForumContentActivity extends Activity {
 	Comment comment;
 	Article article;
-	Button btn_like,btn_send;
+	Button btn_like,btn_reply;
 	ListView listView;
 	TextView count_like;
 	ImageView img_like,img_comment;
@@ -77,11 +78,16 @@ public class ForumContentActivity extends Activity {
 		AvatarView avatar = (AvatarView)findViewById(R.id.avatar);
 		avatar.load(Server.serverAdress+getIntent().getStringExtra("AuthorAvatar"));
 
+		//内容滚动显示
+		txt_text.setMovementMethod(ScrollingMovementMethod.getInstance());
+		
 		//图片不为空显示图片
 		RectangleView articleImage = (RectangleView)findViewById(R.id.articleImage);
 		if(article.getArticlesImage()!=null){
 			articleImage.setVisibility(RectangleView.VISIBLE);
 			articleImage.load(Server.serverAdress+article.getArticlesImage());
+		}else{
+			articleImage.setVisibility(RectangleView.GONE);
 		}
 
 		txt_title.setText(title);         //文章标题
@@ -95,13 +101,11 @@ public class ForumContentActivity extends Activity {
 			public void onClick(View v) {
 				//发表本帖子的评论
 				goaddcomment();
-
 			}
 		});
 
 
 		img_like.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				toggleLikes();
@@ -109,10 +113,15 @@ public class ForumContentActivity extends Activity {
 		});
 
 		btnLoadMore.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				loadmore();
+			}
+		});
+		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
 			}
 		});
 	}
@@ -130,6 +139,7 @@ public class ForumContentActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = null;
+			MyListener myListener=null;
 			if(convertView==null){
 				LayoutInflater inflater= LayoutInflater.from(parent.getContext());
 				// 自定义listitem显示回复内容
@@ -137,11 +147,14 @@ public class ForumContentActivity extends Activity {
 			}else{
 				view = convertView;
 			}
+			myListener = new MyListener(position);
+			
 			TextView text1 = (TextView)view.findViewById(R.id.text1); //作者
 			TextView text2 = (TextView)view.findViewById(R.id.text2); //内容
 			TextView text3 = (TextView)view.findViewById(R.id.text3); //日期
 			AvatarView avatar = (AvatarView)view.findViewById(R.id.avatar); //评论者头像
-
+			btn_reply=(Button)view.findViewById(R.id.btn_reply);        //回复按钮
+			
 			comment = data.get(position);
 			text1.setText(comment.getAuthorName());
 			text2.setText(comment.getText());
@@ -149,14 +162,8 @@ public class ForumContentActivity extends Activity {
 			text3.setText(dateStr);
 			avatar.load(Server.serverAdress + comment.getAuthorAvatar());
 
-//			btn_send=(Button)view.findViewById(R.id.btn_reply);
-//			btn_send.setOnClickListener(new OnClickListener() {
-//				@Override
-//				public void onClick(View v) {
-//					//					goaddreply(comment);
-//
-//				}
-//			});
+			btn_reply.setTag(position);
+			btn_reply.setOnClickListener(myListener);
 
 			return view;
 		}
@@ -180,15 +187,22 @@ public class ForumContentActivity extends Activity {
 		}
 	};
 
+	private class MyListener implements OnClickListener{
+		int mPosition;
+		public MyListener(int inPosition){
+			mPosition=inPosition;
+		}
+		@Override
+		public void onClick(View v){
+			Intent itnt =new Intent(ForumContentActivity.this,AddReplyActivity.class);
+			Comment comment=data.get(mPosition);
+			itnt.putExtra("data",article);
+			itnt.putExtra("comment",comment);
+			startActivity(itnt);
+		}
+	}
 
-	//	//回复楼层
-	//	void goaddreply(Comment comment){
-	//		Intent itnt =new Intent(ForumContentActivity.this,AddReplyActivity.class);
-	//		itnt.putExtra("data",article);
-	//		itnt.putExtra("comment",comment);
-	//		startActivity(itnt);
-	//	}
-
+	
 	//更新点赞和评论的显示
 	void reload(){
 		reloadLikes();
@@ -389,10 +403,9 @@ public class ForumContentActivity extends Activity {
 	//根据返回的赞的数量改变点赞按钮的数量显示
 	void onReloadLikesResult(int count){
 		if(count>0){
-			count_like.setVisibility(TextView.VISIBLE);
 			count_like.setText(""+count);
 		}else{
-			count_like.setVisibility(TextView.GONE);
+			count_like.setText("");
 		}
 	}
 

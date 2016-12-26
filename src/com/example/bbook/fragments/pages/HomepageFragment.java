@@ -67,10 +67,14 @@ public class HomepageFragment extends Fragment {
 	GoodsPicture goodsPicture;
 	TextView textview;
 	TextView goodsPrice;
+
 	String sortStyle="createDate";
 	String goodsType;
-	boolean sortState=false;
+	String keyword;
+	boolean isSearched=false,isSorted=false,isClassified=false;
+	//boolean sortState=false;
 
+	
 	Goods goods;
 	EditText editKeyword;
 	ImageView btnSearch;
@@ -115,11 +119,14 @@ public class HomepageFragment extends Fragment {
 				switch (item.getItemId()) {
 				case R.id.a:
 					sortStyle="goodsPrice";
-					SortStyle(sortStyle);
+					//SortStyle(sortStyle);
+					isSorted=true;
+					bookLoad();
 					break;
 				case R.id.b:
 					sortStyle="goodsName";
-					SortStyle(sortStyle);
+				//	SortStyle(sortStyle);
+					bookLoad();
 					break;
 				case R.id.c:
 
@@ -142,23 +149,33 @@ public class HomepageFragment extends Fragment {
 				switch (item.getItemId()) {
 				case R.id.a:
 					goodsType="novel";
-					Classify(goodsType);
+				//	Classify(goodsType);
+					isClassified=true;
+					bookLoad();
 					break;
 				case R.id.b:
 					goodsType="history";
-					Classify(goodsType);
+				//	Classify(goodsType);
+					isClassified=true;
+					bookLoad();
 					break;
 				case R.id.c:
 					goodsType="youth";
-					Classify(goodsType);
+				//	Classify(goodsType);
+					isClassified=true;
+					bookLoad();
 					break;
 				case R.id.d:
 					goodsType="computer";
-					Classify(goodsType);
+				//	Classify(goodsType);
+					isClassified=true;
+					bookLoad();
 					break;
 				case R.id.e:
 					goodsType="technology";
-					Classify(goodsType);
+				//	Classify(goodsType);
+					isClassified=true;
+					bookLoad();
 					break;
 				default:
 					break;
@@ -187,7 +204,10 @@ public class HomepageFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				SearchBooksByKeyword();
+			//	SearchBooksByKeyword();
+				keyword=editKeyword.getText().toString();
+				isSearched=true;
+				bookLoad();
 			}
 		});
 
@@ -225,7 +245,7 @@ public class HomepageFragment extends Fragment {
 							HomepageFragment.this.data=data.getContent();
 							HomepageFragment.this.page=data.getNumber();
 							bookAdapter.notifyDataSetInvalidated();
-							sortState=true;
+							isSorted=true;
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -315,10 +335,12 @@ public class HomepageFragment extends Fragment {
 		//		else {
 		//			SortStyle(sortStyle);
 		//		}
+	
+		
 	}
 
 	public void SearchBooksByKeyword(){
-		String keyword=editKeyword.getText().toString();
+		keyword=editKeyword.getText().toString();
 		//Log.d("aaa", keyword);
 		OkHttpClient client=Server.getSharedClient();
 
@@ -419,11 +441,41 @@ public class HomepageFragment extends Fragment {
 
 	}
 	public void bookLoad(){
-
+		Request request;
+		request=Server.requestBuilderWithApi("goods/s")
+				.get().build();
+		if(isSearched){
+			request=Server.requestBuilderWithApi("goods/search/"+keyword)
+					.get().build();
+		}
+		if(isClassified){
+			request=Server.requestBuilderWithApi("goods/classify/"+goodsType)
+					.get().build();
+		}
+		if(isSorted){
+			request=Server.requestBuilderWithApi("goods/sort/"+sortStyle)
+					.get().build();
+		}
+		if(isSearched&&isClassified){
+			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/classify/"+goodsType)
+					.get().build();
+		}
+		if(isSearched&&isSorted){
+			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/sort/"+sortStyle)
+					.get().build();
+		}
+		if(isClassified&&isSorted){
+			request=Server.requestBuilderWithApi("goods/classify/"+goodsType+"/sort/"+sortStyle)
+					.get().build();
+			
+		}
+		if(isSearched&&isClassified&&isSorted){
+			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/classify/"+goodsType+"/sort/"+sortStyle)
+					.get().build();
+		}
 		OkHttpClient client=Server.getSharedClient();
 
-		Request request=Server.requestBuilderWithApi("goods/s")
-				.get().build();
+		
 
 		client.newCall(request).enqueue(new Callback() {
 

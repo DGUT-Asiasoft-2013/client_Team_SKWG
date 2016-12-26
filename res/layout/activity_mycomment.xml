@@ -27,16 +27,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
             android:src="@drawable/icon_return_article" />
-
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="44dp"
+        android:gravity="center"
+        android:text="点击直接删除该评论" />
 
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="44dp" />
+        android:layout_marginTop="64dp" />
 
 </FrameLayout>
