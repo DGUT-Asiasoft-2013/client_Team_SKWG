@@ -23,7 +23,7 @@ import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class PreOrderActivity extends Activity{
+public class AddToCartActivity extends Activity{
 	Goods goods;
 	TextView tvGoodsName, tvGoodsType, tvGoodsPrice;
 	EditText goodsCount;
@@ -76,14 +76,11 @@ public class PreOrderActivity extends Activity{
 	}
 	protected void onSubmit() {
 		int count = Integer.parseInt(goodsCount.getText().toString());
-		String ordersId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + count;
 		MultipartBody body = new MultipartBody.Builder()
-				.addFormDataPart("goodsId", goods.getId() + "")
-				.addFormDataPart("count", count + "")
-				.addFormDataPart("ordersID", ordersId).build();
+				.addFormDataPart("quantity", count + "").build();
 				
 		
-		Request request = Server.requestBuilderWithApi("orders/preorder")
+		Request request = Server.requestBuilderWithApi("shoppingcart/add/" + goods.getId())
 				.method("post", null).post(body).build();
 		
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
@@ -95,7 +92,7 @@ public class PreOrderActivity extends Activity{
 					
 					@Override
 					public void run() {
-						PreOrderActivity.this.onResponse(arg0,body);						
+						AddToCartActivity.this.onResponse(arg0,body);						
 					}
 				});
 			}
@@ -106,7 +103,7 @@ public class PreOrderActivity extends Activity{
 					
 					@Override
 					public void run() {
-						PreOrderActivity.this.onFailture(arg0,arg1);
+						AddToCartActivity.this.onFailture(arg0,arg1);
 					}
 				});
 			}

@@ -6,7 +6,7 @@ import com.example.bbook.api.widgets.MainTabbarFragment.OnTabSelectedListener;
 import com.example.bbook.fragments.pages.ForumFragment;
 import com.example.bbook.fragments.pages.HomepageFragment;
 import com.example.bbook.fragments.pages.MyProfileFragment;
-import com.example.bbook.fragments.pages.ShoppingCarFragment;
+import com.example.bbook.fragments.pages.ShoppingCartFragment;
 import com.example.bbook.fragments.pages.SortFragment;
 
 import android.app.Activity;
@@ -19,7 +19,7 @@ public class HelloWorldActivity extends Activity {
 	HomepageFragment contentHomepage = new HomepageFragment();
 	SortFragment contentSort = new SortFragment();
 	ForumFragment contentForum= new ForumFragment();
-	ShoppingCarFragment contentShopping = new ShoppingCarFragment();
+	ShoppingCartFragment contentShopping = new ShoppingCartFragment();
 	MyProfileFragment contentMyProfile = new MyProfileFragment();
 	MainTabbarFragment tabbar;
 

@@ -148,7 +148,7 @@ public class BookDetailActivity extends Activity {
 
 
 	protected void goPreorder(int num) {
-		Intent itnt = new Intent(BookDetailActivity.this, PreOrderActivity.class);
+		Intent itnt = new Intent(BookDetailActivity.this, AddToCartActivity.class);
 		itnt.putExtra("number", num);
 		itnt.putExtra("goods", goods);
 		startActivity(itnt);
