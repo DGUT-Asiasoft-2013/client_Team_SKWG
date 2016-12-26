@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
+    android:orientation="vertical" >
+
+    <fragment
+        android:id="@+id/changeUserMessage_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:text="头像" />
+
+        <com.example.bbook.api.widgets.AvatarView
+            android:id="@+id/avatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginRight="20dp" />
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical|end"
+            android:scaleType="fitCenter"
+            android:src="@drawable/btn_next" />
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <fragment
+                android:id="@+id/change_Name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ChangeItemFragment"
+                tools:layout="@layout/fragment_widget_change_textview" />
+            
+            
+
+            <fragment
+                android:id="@+id/change_Address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ChangeItemFragment"
+                tools:layout="@layout/fragment_widget_change_textview" />
+
+            <fragment
+                android:id="@+id/change_Phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ChangeItemFragment"
+                tools:layout="@layout/fragment_widget_change_textview" />
+
+            <fragment
+                android:id="@+id/change_Email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="com.example.bbook.api.widgets.ChangeItemFragment"
+                tools:layout="@layout/fragment_widget_change_textview" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -57,7 +57,23 @@ public class AddNoteActivity extends Activity {
 
 		String title = articleTitle.getText().toString();
 		String text = articleText.getText().toString();
-
+		if(title==null||title.isEmpty()){
+			 new AlertDialog.Builder(this)
+			.setMessage("请输入标题!")
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setPositiveButton("OK",null)
+			.show();
+			 return;
+		}
+		if(text==null||text.isEmpty()){
+			 new AlertDialog.Builder(this)
+			.setMessage("请输入内容!")
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setPositiveButton("OK",null)
+			.show();
+			 return;
+		}
+		
 		OkHttpClient client = Server.getSharedClient();
 
 		MultipartBody.Builder requestBuilder = new MultipartBody.Builder()
