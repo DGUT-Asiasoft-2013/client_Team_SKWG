@@ -3,19 +3,20 @@ package com.example.bbook;
 import java.io.IOException;
 
 import com.example.bbook.api.Article;
+import com.example.bbook.api.Comment;
 import com.example.bbook.api.Server;
-
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
@@ -23,45 +24,40 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class AddCommentActivity extends Activity {
-	EditText commentText;
+public class AddReplyActivity extends Activity {
+	ImageView img_send;
+	EditText editText;
 	Article article;
-	
-
-
+	Comment comment;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_addcomment);
+		setContentView(R.layout.activity_addreply);
+		editText=(EditText)findViewById(R.id.editText1);
+		img_send=(ImageView)findViewById(R.id.img_send);
 		
 		article= (Article)getIntent().getSerializableExtra("data");
+		comment= (Comment)getIntent().getSerializableExtra("comment");
+		String content="//@"+comment.getAuthorName()+":"+comment.getText();
+		editText.setText(content);
 		
-		commentText=(EditText)findViewById(R.id.editText1);
-		ImageView img_addcomment=(ImageView)findViewById(R.id.img_send);
-		img_addcomment.setOnClickListener(new OnClickListener() {
+		img_send.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				addcomment();
+				addreply();
 			}
 		});
 		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View v) {
 				finish();
 			}
 		});
+		
 	}
-	
-	void addcomment(){
-		String text = commentText.getText().toString();
-		if(text==null||text.isEmpty()){
-			 new AlertDialog.Builder(this)
-			.setMessage("请输入评论内容!")
-			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setPositiveButton("OK",null)
-			.show();
-			 return;
-		}
+
+	void addreply(){
+		String text = editText.getText().toString();
 
 		OkHttpClient client = Server.getSharedClient();
 
@@ -82,13 +78,13 @@ public class AddCommentActivity extends Activity {
 					final String responString = arg1.body().toString();
 					runOnUiThread(new Runnable() {
 						public void run() {
-							AddCommentActivity.this.onResponse(arg0,responString);
+							AddReplyActivity.this.onResponse(arg0,responString);
 						}
 					});
 				}catch (final Exception e) {
 					runOnUiThread(new Runnable() {
 						public void run() {
-							AddCommentActivity.this.onFailure(arg0, e);
+							AddReplyActivity.this.onFailure(arg0, e);
 						}
 					});
 				}
@@ -98,17 +94,17 @@ public class AddCommentActivity extends Activity {
 			public void onFailure(final Call arg0, final IOException arg1) {
 				runOnUiThread(new Runnable() {
 					public void run() {
-						AddCommentActivity.this.onFailure(arg0, arg1);
+						AddReplyActivity.this.onFailure(arg0, arg1);
 					}
 				});
 
 			}
 		});
 	}
-	
+
 	void onResponse(Call arg0, String responseBody) {
 		new AlertDialog.Builder(this)
-		.setTitle("发表成功")
+		.setTitle("回复成功")
 		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
 			@Override
@@ -122,9 +118,10 @@ public class AddCommentActivity extends Activity {
 
 	void onFailure(Call arg0, Exception arg1) {
 		new AlertDialog.Builder(this)
-		.setTitle("发表失败")
+		.setTitle("回复失败")
 		.setMessage(arg1.getLocalizedMessage())
 		.setNegativeButton("OK", null)
 		.show();
 	}
+	
 }

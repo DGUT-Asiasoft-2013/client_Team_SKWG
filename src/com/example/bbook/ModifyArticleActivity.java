@@ -138,7 +138,7 @@ public class ModifyArticleActivity extends Activity {
 			public void onFailure(final Call arg0, final IOException arg1) {
 				runOnUiThread(new Runnable() {
 					public void run() {
-						ModifyArticleActivity.this.onFailure(arg0, arg1);
+						ModifyArticleActivity.this.onFailured(arg0, arg1);
 					}
 				});
 			}
