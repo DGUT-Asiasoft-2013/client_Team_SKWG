@@ -13,6 +13,20 @@ public class User implements Serializable {
 	String address;
 	String phoneNum;
 	String avatar;
+	String payPassword;
+	double money;
+	public String getPayPassword() {
+		return payPassword;
+	}
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
+	}
+	public double getMoney() {
+		return money;
+	}
+	public void setMoney(double money) {
+		this.money = money;
+	}
 	public Integer getId() {
 		return id;
 	}
