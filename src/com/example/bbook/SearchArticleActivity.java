@@ -61,6 +61,7 @@ public class SearchArticleActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				finish();
+				overridePendingTransition(0,R.anim.slide_out_buttom);
 
 			}
 		});
@@ -97,7 +98,7 @@ public class SearchArticleActivity extends Activity {
 			View view = null;
 			if(convertView==null){
 				LayoutInflater inflater= LayoutInflater.from(parent.getContext());
-				view =inflater.inflate(R.layout.forum_list_item, null);
+				view =inflater.inflate(R.layout.forum_list_item1, null);
 			}else{
 				view = convertView;
 			}
@@ -156,6 +157,7 @@ public class SearchArticleActivity extends Activity {
 		itnt.putExtra("Data",content);
 
 		startActivity(itnt);
+		overridePendingTransition(R.anim.slide_in_right,0);
 	}
 
 	//按关键字搜索

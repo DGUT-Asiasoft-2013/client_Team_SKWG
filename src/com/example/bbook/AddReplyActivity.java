@@ -51,6 +51,7 @@ public class AddReplyActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				finish();
+				overridePendingTransition(0,R.anim.slide_out_left);
 			}
 		});
 		
@@ -110,6 +111,7 @@ public class AddReplyActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				finish();
+				overridePendingTransition(0,R.anim.slide_out_right);
 
 			}
 		})

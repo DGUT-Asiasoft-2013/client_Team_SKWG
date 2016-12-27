@@ -79,7 +79,7 @@ public class ForumContentActivity extends Activity {
 		avatar.load(Server.serverAdress+getIntent().getStringExtra("AuthorAvatar"));
 
 		//内容滚动显示
-		txt_text.setMovementMethod(ScrollingMovementMethod.getInstance());
+//		txt_text.setMovementMethod(ScrollingMovementMethod.getInstance());
 		
 		//图片不为空显示图片
 		RectangleView articleImage = (RectangleView)findViewById(R.id.articleImage);
@@ -122,6 +122,7 @@ public class ForumContentActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				finish();
+				overridePendingTransition(0,R.anim.slide_out_left);
 			}
 		});
 	}
@@ -199,6 +200,7 @@ public class ForumContentActivity extends Activity {
 			itnt.putExtra("data",article);
 			itnt.putExtra("comment",comment);
 			startActivity(itnt);
+			overridePendingTransition(R.anim.slide_in_right,0);
 		}
 	}
 
@@ -445,5 +447,6 @@ public class ForumContentActivity extends Activity {
 		Intent itnt = new Intent(ForumContentActivity.this,AddCommentActivity.class);
 		itnt.putExtra("data",article);
 		startActivity(itnt);
+		overridePendingTransition(R.anim.slide_in_right,0);
 	}
 }

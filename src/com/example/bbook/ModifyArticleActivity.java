@@ -55,6 +55,7 @@ public class ModifyArticleActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				finish();
+				overridePendingTransition(0,R.anim.slide_out_left);
 
 			}
 		});
@@ -204,6 +205,7 @@ public class ModifyArticleActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				finish();
+				overridePendingTransition(0,R.anim.slide_out_right);
 			}
 		})
 		.show();
@@ -224,6 +226,7 @@ public class ModifyArticleActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				finish();
+				overridePendingTransition(0,R.anim.slide_out_buttom);
 			}
 		})
 		.show();
