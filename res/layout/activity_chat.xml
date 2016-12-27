@@ -44,7 +44,7 @@
             android:layout_height="30dp" 
             android:text="发送"
             android:textSize="13sp"
-            android:background="@drawable/submit_buttom"
+            android:background="#39c"
             android:textColor="@android:color/white"/>
     </LinearLayout>
 

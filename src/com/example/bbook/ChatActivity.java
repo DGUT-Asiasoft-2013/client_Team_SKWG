@@ -283,8 +283,9 @@ public class ChatActivity extends Activity {
                                 @Override
                                 public void run() {
                                         refresh();
+                                        chatList.setSelection(chatData.size()-1);
                                 }
-                        }, 3000);   
+                        }, 1000);   
                 }
         }
 
