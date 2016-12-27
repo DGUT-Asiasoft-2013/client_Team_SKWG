@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE"
+   
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="104dp"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                class="com.example.bbook.api.widgets.ClassifyLeftViewFragment"
+                tools:layout="@layout/fragment_wedget_classify_itemtx" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
