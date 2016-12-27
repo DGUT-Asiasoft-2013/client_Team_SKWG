@@ -3,9 +3,14 @@ package com.example.bbook;
 import java.io.IOException;
 
 import com.example.bbook.api.Server;
+import com.example.bbook.fragments.pages.HomepageFragment;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.StringIdGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +32,7 @@ public class PayActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pay);
-		
+
 		orderId=getIntent().getStringExtra("orderId");
 		fragPayPassword=(SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.pay_password);
 		findViewById(R.id.btn_pay).setOnClickListener(new OnClickListener() {
@@ -36,6 +41,15 @@ public class PayActivity extends Activity {
 			public void onClick(View v) {
 				goCheckPayPassword();
 
+			}
+		});
+
+		findViewById(R.id.text_set_paypassword).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				goSetPayPassword();
 			}
 		});
 	}
@@ -54,7 +68,7 @@ public class PayActivity extends Activity {
 
 		OkHttpClient client=Server.getSharedClient();
 		MultipartBody.Builder requestBody=new MultipartBody.Builder()
-				.addFormDataPart("payPassword", payPassword);
+				.addFormDataPart("payPassword", MD5.getMD5(payPassword));
 
 		Request request=Server.requestBuilderWithApi("payPassword")
 				.method("post",null)
@@ -62,7 +76,7 @@ public class PayActivity extends Activity {
 				.build();
 
 		client.newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				// TODO Auto-generated method stub
@@ -72,16 +86,16 @@ public class PayActivity extends Activity {
 					goPay();
 				}
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 
 	}
-	
+
 	public void goPay(){
 		int state=3;
 		OkHttpClient client=Server.getSharedClient();
@@ -90,30 +104,55 @@ public class PayActivity extends Activity {
 		Request request=Server.requestBuilderWithApi("order/payfor/"+orderId)
 				.method("post",null)
 				.post(requestBody.build())
-			.build();
-		
+				.build();
+
 		client.newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
-				// TODO Auto-generated method stub
+				String responseStr=arg1.body().string();
+				final Boolean checkPayState=new ObjectMapper().readValue(responseStr, Boolean.class);
+				Log.d("aaasss",  responseStr);
 				runOnUiThread(new Runnable() {
-					
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
-						
-						Toast.makeText(PayActivity.this,"支付成功", Toast.LENGTH_SHORT).show();
+						if(checkPayState){
+							Toast.makeText(PayActivity.this,"支付成功", Toast.LENGTH_SHORT).show();
+							goHomePage();
+						}
 					}
 				});
-				
+
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
-				// TODO Auto-generated method stub
-				
+
 			}
 		});
 	}
+
+	public void goSetPayPassword(){
+		Intent intent=new Intent(PayActivity.this,SetPayPasswordActivity.class);
+		startActivity(intent);
+
+
+
+	}
+	public void goHomePage(){
+		new AlertDialog.Builder(this).setMessage("支付成功").setPositiveButton("返回主页", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				Intent itnt = new Intent(PayActivity.this,HelloWorldActivity.class);
+				startActivity(itnt);
+				finish();
+			}
+		}).show();
+
+
+
+
+	}
+
 }

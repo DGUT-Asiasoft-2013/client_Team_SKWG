@@ -20,6 +20,15 @@
         android:layout_centerHorizontal="true"
         android:text="确认支付"
         />
+    <TextView 
+        android:id="@+id/text_set_paypassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="没有支付密码？"
+        android:layout_below="@id/btn_pay"
+        android:layout_alignRight="@id/pay_password"
+        />
+    
     
 
 </RelativeLayout>

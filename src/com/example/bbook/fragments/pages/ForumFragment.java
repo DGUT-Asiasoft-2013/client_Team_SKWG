@@ -105,6 +105,7 @@ public class ForumFragment extends Fragment {
 				public void onClick(View v) {
 					Intent itnt =new Intent(getActivity(),SearchArticleActivity.class);
 					startActivity(itnt);
+					getActivity().overridePendingTransition(R.anim.slide_in_buttom,0);
 
 				}
 			});
@@ -325,27 +326,35 @@ public class ForumFragment extends Fragment {
 		itnt.putExtra("Data",content);
 
 		startActivity(itnt);
+		getActivity().overridePendingTransition(R.anim.slide_in_right,0);
 	}
 
 	//跳到发帖子页面
 	void goaddnote(){
 		Intent itnt =new Intent(getActivity(),AddNoteActivity.class);
 		startActivity(itnt);
+		getActivity().overridePendingTransition(R.anim.slide_in_right,0);
 	}
 
 	//跳到我的帖子页面
 	void gomyart(){
 		Intent itnt =new Intent(getActivity(),MyArticleActivity.class);
 		startActivity(itnt);
+		getActivity().overridePendingTransition(R.anim.slide_in_left,0);
+
 	}
 	//跳到对我的文章的评论页面
 	void gocommentTome(){
 		Intent itnt =new Intent(getActivity(),CommentTomeActivity.class);
 		startActivity(itnt);
+		getActivity().overridePendingTransition(R.anim.slide_in_left,0);
+
 	}
 	//跳到我发出的评论页面
 	void gomycomment(){
 		Intent itnt =new Intent(getActivity(),MyCommentActivity.class);
 		startActivity(itnt);
+		getActivity().overridePendingTransition(R.anim.slide_in_left,0);
+
 	}
 }

@@ -51,7 +51,7 @@
             android:layout_gravity="right"
             android:layout_marginRight="8dp"
             android:layout_marginTop="5dp"
-            android:src="@drawable/icon_search_article" />
+            android:src="@drawable/icon_search_black" />
 
         <View
             android:layout_width="match_parent"

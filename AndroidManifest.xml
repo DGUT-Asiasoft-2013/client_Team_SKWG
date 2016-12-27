@@ -57,7 +57,8 @@
         <activity android:name="com.example.bbook.ChangeMessageActivity" />
         <activity android:name="com.example.bbook.AddReplyActivity" />
         <activity android:name="com.example.bbook.ChatActivity"/>
-        
+        <activity android:name="com.example.bbook.SetPayPasswordActivity" />
+
     </application>
 
 </manifest>

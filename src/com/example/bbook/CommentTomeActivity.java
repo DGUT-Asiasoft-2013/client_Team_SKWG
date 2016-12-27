@@ -53,6 +53,7 @@ public class CommentTomeActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				finish();
+				overridePendingTransition(0,R.anim.slide_out_left);
 			}
 		});
 		

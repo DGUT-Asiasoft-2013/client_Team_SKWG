@@ -24,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,10 +35,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class ManageCommomInfoActivity extends Activity{
+	final static int SELECTED_INFO_CODE = 1;
 	List<CommomInfo> dataList;
 	ListView infoList;
 	TextView infoName, infoAddress, infoTel, infoPostcode;
 	CommomInfo defaultInfo;
+	CommomInfo selectedInfo;
 	int page = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,20 @@ public class ManageCommomInfoActivity extends Activity{
 			public void onClick(View v) {
 				goAdd();
 			}
-		});;
+		});
+		infoList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				selectedInfo = dataList.get(position);
+				if(selectedInfo != null) {
+					Intent data = new Intent();
+					data.putExtra("selectedInfo", selectedInfo);
+					setResult(SELECTED_INFO_CODE, data);
+					finish();
+				}
+			}
+		});
 	}
 
 	@Override
