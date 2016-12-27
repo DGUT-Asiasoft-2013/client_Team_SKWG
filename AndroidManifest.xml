@@ -53,6 +53,7 @@
         <activity android:name="com.example.bbook.MyCommentActivity" />
         <activity android:name="com.example.bbook.CommentTomeActivity" />
         <activity android:name="com.example.bbook.ChangeUserMessageActivity" />
+        <activity android:name="com.example.bbook.ChangeMessageActivity" />
         <activity android:name="com.example.bbook.AddReplyActivity" />
     </application>
 

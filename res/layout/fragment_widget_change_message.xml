@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE"
+    android:orientation="vertical" >
+
+    <fragment
+        android:id="@+id/change_message_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar" />
+    
+    <EditText 
+        android:id="@+id/edit_change_message"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="40dp"/>
+
+</LinearLayout>
