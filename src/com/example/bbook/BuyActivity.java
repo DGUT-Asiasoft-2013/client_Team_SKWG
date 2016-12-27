@@ -38,7 +38,8 @@ import okhttp3.Response;
 public class BuyActivity extends Activity {
 	final static int SELECTED_INFO_CODE = 1;
 	EditText goodsCount;
-	TextView tvGoodsName, tvGoodsType, tvGoodsPrice, infoName, infoAddress, infoTel, infoPostcode;
+	TextView tvGoodsName, tvGoodsType, tvGoodsPrice, infoName,
+	infoAddress, infoTel, infoPostcode, tvSum;
 	GoodsPicture goodsImage;
 	Button btnSubmit, btnAddInfo;
 	Goods goods;
@@ -49,7 +50,7 @@ public class BuyActivity extends Activity {
 	TitleBarFragment fragOrderConfirm;
 
 	int count = 0;
-
+	double sum = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -114,6 +115,8 @@ public class BuyActivity extends Activity {
 		tvGoodsPrice.setText("价格: " + goods.getGoodsPrice());
 		goodsImage.load(Server.serverAdress + goods.getGoodsImage());
 		goodsCount.setText(count + "");
+		sum = Double.parseDouble(goods.getGoodsPrice()) * count;
+		tvSum.setText(sum + "");
 		Request request = Server.requestBuilderWithApi("commominfo/default").get().build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
 
@@ -229,6 +232,7 @@ public class BuyActivity extends Activity {
 		tvGoodsName = (TextView) findViewById(R.id.name);
 		tvGoodsType = (TextView) findViewById(R.id.type);
 		tvGoodsPrice = (TextView) findViewById(R.id.price);
+		tvSum = (TextView) findViewById(R.id.sum);
 		goodsImage = (GoodsPicture) findViewById(R.id.goods_image);
 		infoName = (TextView) findViewById(R.id.info_name);
 		infoAddress = (TextView) findViewById(R.id.info_address);

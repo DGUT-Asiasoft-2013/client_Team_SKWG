@@ -3,6 +3,9 @@ package com.example.bbook;
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.widgets.GoodsPicture;
+import com.example.bbook.api.widgets.NumberPlusAndMinusFrament;
+import com.example.bbook.api.widgets.NumberPlusAndMinusFrament.OnMinusClickListener;
+import com.example.bbook.api.widgets.NumberPlusAndMinusFrament.OnPlusClickListener;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.fragments.pages.BookCommentFragment;
 import com.example.bbook.fragments.pages.BookDetailFragment;
@@ -22,7 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 public class BookDetailActivity extends Activity {
-
+	NumberPlusAndMinusFrament fragNumberPlusAndMinus;
 	BookDetailFragment bookDetailFragment=new BookDetailFragment();
 	BookCommentFragment bookCommentFragment=new BookCommentFragment();
 	HomepageFragment mainPageFragment=new HomepageFragment();
@@ -39,7 +42,7 @@ public class BookDetailActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_book_detail);
-
+		fragNumberPlusAndMinus = (NumberPlusAndMinusFrament) getFragmentManager().findFragmentById(R.id.number_plus_and_minus);
 		fragBookDetail = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.book_detail_titlebar);
 		fragBookDetail.setBtnNextState(false);
 		fragBookDetail.setTitleState(false);
@@ -51,6 +54,28 @@ public class BookDetailActivity extends Activity {
                         finish();
                 }
         });
+		
+		fragNumberPlusAndMinus.setOnMinusClickListener(new OnMinusClickListener() {
+			
+			@Override
+			public void onMinusClicked() {
+				if(num <= 0) {
+					return;
+				} else {
+					num--;
+					fragNumberPlusAndMinus.setQuantityText(num + "");
+				}
+			}
+		});
+		
+		fragNumberPlusAndMinus.setOnPlusClickListener(new OnPlusClickListener() {
+			
+			@Override
+			public void onPlusClicked() {
+				num++;
+				fragNumberPlusAndMinus.setQuantityText(num + "");
+			}
+		});
 		
 		goods=(Goods) getIntent().getSerializableExtra("goods");
 		detailLabel=(TextView) findViewById(R.id.book_detail);
@@ -68,32 +93,33 @@ public class BookDetailActivity extends Activity {
 		goodsPicture=(GoodsPicture) findViewById(R.id.picture);
 		goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
 
-		final EditText numEdit=(EditText) findViewById(R.id.edit_number);
-		numEdit.setText("0");
-		findViewById(R.id.btn_minus).setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if(num<=0){
-					return;
-				}
-				num--;
-				numEdit.setText(num+"");
-			}
-		});
-
-		findViewById(R.id.btn_plus).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if(num>=Integer.parseInt(goods.getGoodsCount())){
-					return ;
-				}
-				num++;
-				numEdit.setText(num+"");
-			}
-		});
+		
+//		final EditText numEdit=(EditText) findViewById(R.id.edit_number);
+//		numEdit.setText("0");
+//		findViewById(R.id.btn_minus).setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				if(num<=0){
+//					return;
+//				}
+//				num--;
+//				numEdit.setText(num+"");
+//			}
+//		});
+//
+//		findViewById(R.id.btn_plus).setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				if(num>=Integer.parseInt(goods.getGoodsCount())){
+//					return ;
+//				}
+//				num++;
+//				numEdit.setText(num+"");
+//			}
+//		});
 
 		detailLabel.setOnClickListener(new OnClickListener() {
 
@@ -123,7 +149,7 @@ public class BookDetailActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				num=Integer.parseInt(numEdit.getText().toString());
+				num=Integer.parseInt(fragNumberPlusAndMinus.getQuantityText());
 				if(num<=0){
 					Toast.makeText(BookDetailActivity.this, "请输入购买数量", Toast.LENGTH_SHORT).show();
 					return;
@@ -136,7 +162,7 @@ public class BookDetailActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				num=Integer.parseInt(numEdit.getText().toString());
+				num=Integer.parseInt(fragNumberPlusAndMinus.getQuantityText());
 				if(num<=0){
 					Toast.makeText(BookDetailActivity.this, "请输入购买数量", Toast.LENGTH_SHORT).show();
 					return;

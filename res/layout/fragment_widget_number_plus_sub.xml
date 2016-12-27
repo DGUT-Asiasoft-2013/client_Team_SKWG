@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="20dp"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/btn_minus"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:background="@drawable/shap_plus_minus"
+        android:padding="4dp"
+        android:src="@drawable/icon_minus" />
+
+    <TextView
+        android:id="@+id/tv_quantity"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:background="@drawable/shap_plus_minus"
+        android:gravity="center_horizontal"
+        android:text="0" >
+    </TextView>
+
+    <ImageView
+        android:id="@+id/btn_plus"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:background="@drawable/shap_plus_minus"
+        android:padding="4dp"
+        android:src="@drawable/icon_plus" />
+
+</LinearLayout>
