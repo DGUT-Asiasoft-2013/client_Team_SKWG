@@ -12,6 +12,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.net.nsd.NsdManager.RegistrationListener;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -112,6 +113,13 @@ public class RegisterActivity extends Activity {
 		password = MD5.getMD5(password);
 
 		String account = fragAccount.getText();
+		if(account.isEmpty()){
+		        Toast toast = Toast.makeText(RegisterActivity.this, "用户名不能为空", Toast.LENGTH_SHORT);
+		        toast.setGravity(Gravity.CENTER, 0, 0);
+		        toast.show();
+		        return;
+		}
+		
 		String name = fragName.getText();
 		String email = fragEmail.getText();
 		String address = fragAddress.getText();
@@ -182,7 +190,7 @@ public class RegisterActivity extends Activity {
 	}
 
 	protected void onResponse(Call arg0, String responseBody) {
-		new AlertDialog.Builder(this).setTitle("注册成功").setMessage(responseBody)
+		new AlertDialog.Builder(this).setTitle("注册成功")
 				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
 					@Override
@@ -194,7 +202,7 @@ public class RegisterActivity extends Activity {
 	}
 
 	protected void onFailure(Call arg0, Exception arg1) {
-		new AlertDialog.Builder(this).setTitle("注册失败").setMessage(arg1.getLocalizedMessage())
+		new AlertDialog.Builder(this).setTitle("注册失败")
 				.setNegativeButton("确定", null).show();
 	}
 }

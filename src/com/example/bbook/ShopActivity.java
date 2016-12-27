@@ -57,6 +57,15 @@ public class ShopActivity extends Activity {
 		goodsView=(GridView) findViewById(R.id.goods_gridview);
 		goodsView.setAdapter(goodsAdapter);
 		
+		//联系卖家
+		findViewById(R.id.contact_seller).setOnClickListener(new View.OnClickListener() {
+                
+                @Override
+                public void onClick(View v) {
+                        contactSeller();
+                }
+        });
+		
 
 	}
 
@@ -168,5 +177,11 @@ public class ShopActivity extends Activity {
 		Intent intent=new Intent(ShopActivity.this,BookDetailActivity.class);
 		intent.putExtra("goods", goods);
 		startActivity(intent);
+	}
+	
+	public void contactSeller(){
+	        Intent itnt = new Intent(ShopActivity.this, ChatActivity.class);
+	        itnt.putExtra("shop", shop);
+	        startActivity(itnt);
 	}
 }

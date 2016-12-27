@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f1f1f1"
+    android:orientation="vertical" >
+
+    <fragment
+        android:id="@+id/chat_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar" />
+
+    <ListView
+        android:id="@+id/chat_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/chat_titlebar"
+        android:layout_marginBottom="40dp" >
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/input_chat"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/et_chat"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="3dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/send_chat"
+            android:layout_gravity="center"
+            android:layout_margin="3dp"
+            android:layout_width="50dp"
+            android:layout_height="30dp" 
+            android:text="发送"
+            android:textSize="13sp"
+            android:background="@drawable/submit_buttom"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_above="@id/input_chat"
+        android:background="#eee" />
+
+</RelativeLayout>
