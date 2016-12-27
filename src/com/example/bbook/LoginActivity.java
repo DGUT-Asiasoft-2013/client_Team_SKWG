@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 import inputcells.SimpleTextInputcellFragment;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -136,19 +137,22 @@ public class LoginActivity extends Activity {
 	}
 
 	void onResponse(Call arg0, String responseBody) {
-		new AlertDialog.Builder(this).setTitle("登陆成功").setMessage(responseBody)
-				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method
-						// stub
-						Intent itnt = new Intent(LoginActivity.this, HelloWorldActivity.class);
-						startActivity(itnt);
-						MainActivity.mInstace.finish();
-						finish();
-					}
-				}).show();
+		// new
+		// AlertDialog.Builder(this).setTitle("登陆成功").setMessage(responseBody)
+		// .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+		//
+		// @Override
+		// public void onClick(DialogInterface dialog, int which) {
+		// TODO Auto-generated method
+		// stub
+//		Toast.makeText(LoginActivity.this, "欢迎使用BBook", Toast.LENGTH_SHORT).show();
+		Intent itnt = new Intent(LoginActivity.this, HelloWorldActivity.class);
+		startActivity(itnt);
+		MainActivity.mInstace.finish();
+		Toast.makeText(LoginActivity.this, "欢迎使用BBook", Toast.LENGTH_SHORT).show();
+		finish();
+		// }
+		// }).show();
 
 	}
 
