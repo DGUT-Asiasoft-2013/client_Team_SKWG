@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.example.bbook.ChangePasswordActivity;
 import com.example.bbook.ChangeUserMessageActivity;
 import com.example.bbook.LoginActivity;
+import com.example.bbook.MyOrdersActivity;
 import com.example.bbook.MystoreActivity;
 import com.example.bbook.OpenStoreActivity;
 import com.example.bbook.R;
@@ -104,7 +105,8 @@ public class MyProfileFragment extends Fragment {
 
 				@Override
 				public void onDetailed() {
-
+					Intent intent=new Intent(getActivity(),MyOrdersActivity.class);
+					startActivity(intent);
 				}
 			});
 
