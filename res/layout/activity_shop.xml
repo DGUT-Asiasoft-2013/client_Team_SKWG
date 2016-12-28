@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
+    <fragment
+        android:id="@+id/shop_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,8 +21,9 @@
         <com.example.bbook.api.widgets.GoodsPicture
             android:id="@+id/shop_picture"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="1" />
 
         <LinearLayout
@@ -23,31 +32,70 @@
             android:layout_weight="3"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/shop_name"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="店名" />
+                android:orientation="horizontal"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp" >
+
+                <TextView
+                    android:id="@+id/shop_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="店名" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/subscribe_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="关注数："
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/subscribe"
+                        android:layout_width="50dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/submit_buttom"
+                        android:gravity="center"
+                        android:text="关注"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="vertical" >
+                android:orientation="horizontal"
+                android:padding="5dp" >
 
                 <TextView
                     android:id="@+id/shop_owner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:text="卖家" />
 
-                <Button
+                <TextView
                     android:id="@+id/contact_seller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
+                    android:layout_width="68dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/register_button"
+                    android:gravity="center"
                     android:text="联系卖家"
+                    android:textColor="#333333"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -58,7 +106,7 @@
         android:layout_height="1dp"
         android:layout_gravity="bottom"
         android:layout_margin="5dp"
-        android:background="@android:color/background_dark" />
+        android:background="#eee" />
 
     <GridView
         android:id="@+id/goods_gridview"

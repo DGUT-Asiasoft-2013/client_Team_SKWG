@@ -52,6 +52,13 @@ public class ChatActivity extends Activity {
                 fragChatTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.chat_titlebar);
                 fragChatTitleBar.setTitleName(shop.getOwner().getName(), 16);
                 fragChatTitleBar.setBtnNextState(false);
+                fragChatTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
+                        
+                        @Override
+                        public void onGoBack() {
+                                finish();
+                        }
+                });
 
                 chatList = (ListView) findViewById(R.id.chat_list);
                 chatList.setDivider(null);
@@ -285,7 +292,7 @@ public class ChatActivity extends Activity {
                                         refresh();
                                         chatList.setSelection(chatData.size()-1);
                                 }
-                        }, 1000);   
+                        }, 2000);   
                 }
         }
 
