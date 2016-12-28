@@ -21,7 +21,7 @@ public class Goods   implements Serializable {
 	String pubDate;
 	String pritime;
 	Shop shop;
-	
+	int quantity;	// 购买数量
 //	User seller;
 //	User buyer;
 	
@@ -104,6 +104,13 @@ public class Goods   implements Serializable {
 	public void setPritime(String pritime) {
 		this.pritime = pritime;
 	}
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	
 //	public User getSeller() {
 //		return seller;
 //	}

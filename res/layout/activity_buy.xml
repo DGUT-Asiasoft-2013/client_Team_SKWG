@@ -16,16 +16,13 @@
             class="com.example.bbook.api.widgets.TitleBarFragment"
             tools:layout="@layout/fragment_widget_titlebar" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="40dp"
-            android:layout_marginTop="40dp" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                 android:layout_marginBottom="40dp"
+            android:layout_marginTop="40dp" >
 
                 <TextView
                     android:layout_width="match_parent"
@@ -84,94 +81,18 @@
                     android:layout_height="10dp"
                     android:background="#EEE" />
 
-                <LinearLayout
+                <ListView
+                    android:id="@+id/list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:layout_height="wrap_content" >
+                </ListView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="4dp"
-                        android:text="商家名称" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:orientation="horizontal" >
-
-                        <FrameLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.25"
-                            android:padding="5dp" >
-
-                            <com.example.bbook.api.widgets.GoodsPicture
-                                android:id="@+id/goods_image"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/ic_launcher" />
-                            <!-- <ImageView -->
-                            <!-- android:id="@+id/goods_image" -->
-                            <!-- android:layout_width="match_parent" -->
-                            <!-- android:layout_height="71dp" -->
-                            <!-- android:background="@drawable/ic_launcher" /> -->
-                        </FrameLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.75"
-                            android:orientation="vertical" >
-
-                            <TextView
-                                android:id="@+id/name"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="商品名称" />
-
-                            <TextView
-                                android:id="@+id/type"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:text="商品分类" />
-
-                            <TextView
-                                android:id="@+id/price"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="￥00.00" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:orientation="horizontal" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="购买数量:" />
-
-                    <EditText
-                        android:id="@+id/count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:hint="0" />
-                </LinearLayout>
-
-                
             </LinearLayout>
-        </ScrollView>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_gravity="bottom"
-            >
+            android:layout_gravity="bottom" >
 
             <TextView
                 android:layout_width="wrap_content"
