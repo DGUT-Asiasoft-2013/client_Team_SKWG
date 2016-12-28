@@ -59,7 +59,8 @@
         <activity android:name="com.example.bbook.ChatActivity"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name="com.example.bbook.SetPayPasswordActivity" />
-
+        <activity android:name="com.example.bbook.AddRewardActivity" />
+        
     </application>
 
 </manifest>

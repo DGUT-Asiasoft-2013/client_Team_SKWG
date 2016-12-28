@@ -55,18 +55,18 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="@android:color/white"
-        android:layout_marginTop="40dp" >
+        android:layout_height="25dp"
+        android:layout_marginTop="40dp"
+        android:background="@android:color/white" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="25dp"
             android:text="大家心得"
             android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <View
             android:layout_width="match_parent"
@@ -76,15 +76,15 @@
 
         <ImageView
             android:id="@+id/imageView1"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@drawable/icon_forum" />
-
     </FrameLayout>
+
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="70dp" />
+        android:layout_marginTop="68dp" />
 
 </FrameLayout>
