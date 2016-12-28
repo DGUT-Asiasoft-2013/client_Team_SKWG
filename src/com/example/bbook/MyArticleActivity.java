@@ -148,17 +148,18 @@ public class MyArticleActivity extends Activity {
 			TextView txt_title = (TextView)view.findViewById(R.id.text2);
 			TextView txt_text = (TextView)view.findViewById(R.id.text3);
 			TextView txt_date = (TextView)view.findViewById(R.id.text4);
+			TextView txt_comNum = (TextView)view.findViewById(R.id.text5);	
 			AvatarView avatar = (AvatarView)view.findViewById(R.id.avatar_fra);
 
 			Article article = data.get(position);
-			//				Log.d("111", article.getAuthorAvatar().toString());
 			avatar.load(Server.serverAdress + article.getAuthorAvatar());
 			txt_author.setText(article.getAuthorName());
 			txt_title.setText(article.getTitle());
 			txt_text.setText(article.getText());
 			String dateStr = DateFormat.format("yyyy-MM-dd hh:mm", article.getCreateDate()).toString();
 			txt_date.setText(dateStr);
-
+			txt_comNum.setText(article.getCommentNum()+"");
+			
 			return view;
 		}
 

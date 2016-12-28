@@ -164,12 +164,13 @@ public class ForumFragment extends Fragment {
 			}else{
 				view = convertView;
 			}
-			TextView txt_author = (TextView)view.findViewById(R.id.text1);
-			TextView txt_title = (TextView)view.findViewById(R.id.text2);
-			TextView txt_text = (TextView)view.findViewById(R.id.text3);
-			TextView txt_date = (TextView)view.findViewById(R.id.text4);
-			AvatarView avatar = (AvatarView)view.findViewById(R.id.avatar_fra);
-			RectangleView articleImage = (RectangleView)view.findViewById(R.id.articleImage);
+			TextView txt_author = (TextView)view.findViewById(R.id.text1);  //帖子作者
+			TextView txt_title = (TextView)view.findViewById(R.id.text2);   //帖子标题
+			TextView txt_text = (TextView)view.findViewById(R.id.text3);    //帖子内容
+			TextView txt_date = (TextView)view.findViewById(R.id.text4);    //帖子日期
+			TextView txt_comNum = (TextView)view.findViewById(R.id.text5);	//帖子评论数
+			AvatarView avatar = (AvatarView)view.findViewById(R.id.avatar_fra);  //作者头像
+			RectangleView articleImage = (RectangleView)view.findViewById(R.id.articleImage);  // 帖子图片
 
 			Article article = data.get(position);
 
@@ -187,7 +188,7 @@ public class ForumFragment extends Fragment {
 			txt_text.setText(article.getText());
 			String dateStr = DateFormat.format("yyyy-MM-dd hh:mm", article.getCreateDate()).toString();
 			txt_date.setText(dateStr);
-
+			txt_comNum.setText(article.getCommentNum()+"");
 			return view;
 		}
 

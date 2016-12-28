@@ -69,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.60"
                 android:gravity="right"
+                android:layout_marginRight="8dp"
                 android:text="date" />
 
             <ImageView
@@ -85,6 +86,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
                 android:text="num" />
         </LinearLayout>
     </LinearLayout>

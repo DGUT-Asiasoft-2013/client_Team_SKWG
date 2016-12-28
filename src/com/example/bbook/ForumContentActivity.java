@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,8 +43,9 @@ public class ForumContentActivity extends Activity {
 	Button btn_like,btn_reply;
 	ListView listView;
 	TextView count_like;
-	ImageView img_like,img_comment;
-
+	FrameLayout fraLike,fraComment,fraReward;
+	ImageView img_like;
+	
 	View btnLoadMore;
 	TextView textLoadMore;
 
@@ -95,8 +97,10 @@ public class ForumContentActivity extends Activity {
 		txt_text.setText(text);           //文章内容
 		txt_date.setText(date);           //文章日期
 
-		img_comment=(ImageView)findViewById(R.id.img_comment);
-		img_comment.setOnClickListener(new OnClickListener() {	
+		fraLike=(FrameLayout)findViewById(R.id.fra_like);
+		fraComment=(FrameLayout)findViewById(R.id.fra_comment);
+		fraReward=(FrameLayout)findViewById(R.id.fra_reward);
+		fraComment.setOnClickListener(new OnClickListener() {	
 			@Override
 			public void onClick(View v) {
 				//发表本帖子的评论
@@ -105,10 +109,17 @@ public class ForumContentActivity extends Activity {
 		});
 
 
-		img_like.setOnClickListener(new OnClickListener() {
+		fraLike.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				toggleLikes();
+			}
+		});
+		
+		fraReward.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				goaddreward();
 			}
 		});
 
@@ -449,4 +460,12 @@ public class ForumContentActivity extends Activity {
 		startActivity(itnt);
 		overridePendingTransition(R.anim.slide_in_right,0);
 	}
+	
+	//跳转到该文章的打赏页面
+		void goaddreward(){
+			Intent itnt = new Intent(ForumContentActivity.this,AddRewardActivity.class);
+			itnt.putExtra("data",article);
+			startActivity(itnt);
+			overridePendingTransition(R.anim.slide_in_right,0);
+		}
 }

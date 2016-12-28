@@ -15,8 +15,18 @@ public class Article implements Serializable{
 	String authorName;
 	String authorAvatar;
 	String articlesImage;
+	int commentNum;
 	
 	
+	
+	public int getCommentNum() {
+		return commentNum;
+	}
+
+	public void setCommentNum(int commentNum) {
+		this.commentNum = commentNum;
+	}
+
 	public String getArticlesImage() {
 		return articlesImage;
 	}
