@@ -16,6 +16,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore.Video;
@@ -29,6 +32,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -122,7 +126,8 @@ public class MyOrdersActivity extends Activity {
 				@Override
 				public void onClick(View v) {
 					//删除订单
-				//	goOrderDelete(position);
+					goOrderDelete(position);
+				//	deleteOrder(position);
 				}
 			});
 			
@@ -206,6 +211,50 @@ public class MyOrdersActivity extends Activity {
 		Intent intent=new Intent(MyOrdersActivity.this,ShopActivity.class);
 		intent.putExtra("shop",ordersData.get(position).getGoods().getShop());
 		startActivity(intent);
+	}
+	public void goOrderDelete(final int position){
+		AlertDialog.Builder builder=new Builder(this);
+		builder.setMessage("是否删除订单？");
+		builder.setNegativeButton("取消",null);
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				deleteOrder(position);
+			}
+		});
+		builder.show();
+	}
+	
+	public void deleteOrder(int position){
+		OkHttpClient client=Server.getSharedClient();
+		Request request=Server.requestBuilderWithApi("orders/delete/"+ordersData.get(position).getOrdersID())
+				.get().build();
+		client.newCall(request).enqueue(new Callback() {
+			
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				// TODO Auto-generated method stub
+				String responseStr=arg1.body().string();
+				final Boolean isDeleted=new ObjectMapper().readValue(responseStr, Boolean.class);
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						if(isDeleted){
+							Toast.makeText(MyOrdersActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+							LoadMyOrders();
+						}
+					}
+				});
+			}
+			
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 }
