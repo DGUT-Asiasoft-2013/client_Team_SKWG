@@ -12,6 +12,7 @@ import com.example.bbook.api.entity.CommomInfo;
 import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.fragments.NumberPlusAndMinusFrament;
+import com.example.bbook.fragments.pages.ShoppingCartFragment;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,7 +78,7 @@ public class BuyActivity extends Activity {
 		// 需要下单的商品
 		goods = (Goods) getIntent().getSerializableExtra("goods");
 		selectedGoods = (List<Goods>) getIntent().getSerializableExtra("selectedGoods");
-		
+
 		if(selectedGoods == null) {
 			selectedGoods = new ArrayList<Goods>();
 		}
@@ -98,6 +99,9 @@ public class BuyActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				onSubmit();
+				for(int i = 0; i < selectedGoods.size(); i++) {
+					onDelete(selectedGoods.get(i).getId());
+				}
 			}
 		});
 		list.setAdapter(listAdapter);
@@ -188,9 +192,9 @@ public class BuyActivity extends Activity {
 
 	private void addOrder(Goods goods) {
 		int orderState = 2;
-		
+
 		quantity = goods.getQuantity();
-		
+
 		final String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + quantity;
 
 		String name = selectedInfo.getName();
@@ -277,6 +281,7 @@ public class BuyActivity extends Activity {
 				gHolder.tvType.setText(goods.getGoodsType());
 				gHolder.tvCount.setText("剩余 " + goods.getGoodsCount() + " 件");
 				gHolder.tvPrice.setText(goods.getGoodsPrice());
+				Log.d("goods.getQuantity()", goods.getQuantity() + "");
 				gHolder.tvQuantity.setText(goods.getQuantity() + "");
 				gHolder.btnPlus.setOnClickListener(new OnClickListener() {
 
@@ -325,7 +330,20 @@ public class BuyActivity extends Activity {
 			return selectedGoods == null ? 0 : selectedGoods.size();
 		}
 	};
+	protected void onDelete(int goodsId) {
+		Request request = Server.requestBuilderWithApi("shoppingcart/delete/" + goodsId).get().build();
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
 
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+
+			}
+		});
+	}
 	void init() {
 		goodsCount = (EditText) findViewById(R.id.count);
 		tvGoodsName = (TextView) findViewById(R.id.name);

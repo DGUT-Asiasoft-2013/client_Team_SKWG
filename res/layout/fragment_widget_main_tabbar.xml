@@ -4,10 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,15 +20,15 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/tab_background_home" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:text="首页" />
         </LinearLayout>
 
@@ -45,15 +41,15 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/tab_background_catagorize" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:text="分类" />
         </LinearLayout>
 
@@ -66,15 +62,15 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/tab_backgaound_forum" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:text="论坛" />
         </LinearLayout>
 
@@ -87,8 +83,8 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/tab_background_shopping_cart" />
 
@@ -96,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="购物车"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -108,15 +104,15 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/tab_backgroun_me" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:text="我的" />
         </LinearLayout>
     </LinearLayout>

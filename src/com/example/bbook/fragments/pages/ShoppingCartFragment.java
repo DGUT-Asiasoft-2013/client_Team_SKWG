@@ -12,6 +12,7 @@ import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.entity.ShoppingCart;
+import com.example.bbook.api.entity.ShoppingCart.Key;
 import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -30,9 +31,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -47,8 +50,9 @@ public class ShoppingCartFragment extends Fragment {
 	TextView tvSum;
 	Button btnPay;
 	int page = 0;
-	int count = 0;
+	int selectedCount = 0;
 	double sum = 00.00;;
+	boolean isAllSelected;
 	List<Goods> selectedGoods = new ArrayList<Goods>();
 	List<ShoppingCart>  listData;
 	@Override
@@ -62,11 +66,8 @@ public class ShoppingCartFragment extends Fragment {
 			titleBar.setSplitLineState(false);
 			titleBar.setTitleName("购物车", 16);
 		}
-//		init(view);
-//		if(selectedGoods == null) {
-//			selectedGoods = new ArrayList<Goods>();
-//		}
 		list = (ListView) view.findViewById(R.id.list);
+		list.setDivider(null);
 		selectAll = (CheckBox) view.findViewById(R.id.select_all);
 		tvSum = (TextView) view.findViewById(R.id.sum);
 		btnPay = (Button) view.findViewById(R.id.pay);
@@ -88,13 +89,17 @@ public class ShoppingCartFragment extends Fragment {
 						View view = list.getChildAt(i);
 						 CheckBox cbCheckEatch = (CheckBox) view.findViewById(R.id.check_eatch);
 						 cbCheckEatch.setChecked(true);
+						 isAllSelected = true;
 					}
-				} else {
+				} else if (isChecked == false && isAllSelected == true){
 					for(int i = 0; i < list.getChildCount(); i++) {
 						 View view = list.getChildAt(i);
 						 CheckBox cbCheckEatch = (CheckBox) view.findViewById(R.id.check_eatch);
 						 cbCheckEatch.setChecked(false);
+						 isAllSelected = false;
 					}
+				} else {
+					
 				}
 			}
 		});
@@ -105,6 +110,7 @@ public class ShoppingCartFragment extends Fragment {
 	protected void goBuy() {
 		Intent itnt = new Intent(getActivity(), BuyActivity.class);
 		itnt.putExtra("selectedGoods", (Serializable)selectedGoods);
+		
 		startActivity(itnt);
 		
 	}
@@ -112,8 +118,10 @@ public class ShoppingCartFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		sum = 00.00;
-		selectAll.setChecked(false);
+//		sum = 00.00;
+//		selectedCount = 0;
+//		setViewText();
+//		selectAll.setChecked(false);
 		reload();
 	}
 
@@ -126,7 +134,7 @@ public class ShoppingCartFragment extends Fragment {
 	
 	private void setViewText() {
 		tvSum.setText(sum + "");
-		btnPay.setText("结算(" + count + ")");
+		btnPay.setText("结算(" + selectedCount + ")");
 	}
 	
 	private void reload() {
@@ -177,6 +185,7 @@ public class ShoppingCartFragment extends Fragment {
 		TextView tvGoodsPrice;
 		TextView tvGoodsQuantity;
 		CheckBox cbCheck;
+		ImageView ivDelete;
 	}
 
 	BaseAdapter listAdapter = new BaseAdapter() {
@@ -195,17 +204,12 @@ public class ShoppingCartFragment extends Fragment {
 				infoHolder.tvGoodsQuantity = (TextView) view.findViewById(R.id.goods_quantity);
 				infoHolder.tvGoodsPrice = (TextView) view.findViewById(R.id.goods_price);
 				infoHolder.cbCheck = (CheckBox) view.findViewById(R.id.check_eatch);
+				infoHolder.ivDelete = (ImageView) view.findViewById(R.id.delete);
 				view.setTag(infoHolder);
 			} else {
 				view = convertView;
 				infoHolder = (GoodsInfoHolder) view.getTag();
 			}
-			//			GoodsPicture imgGoods = (GoodsPicture) view.findViewById(R.id.goods_image);
-			//			TextView tvGoodsName = (TextView) view.findViewById(R.id.goods_name);
-			//			TextView tvGoodsType = (TextView) view.findViewById(R.id.goods_type);
-			//			TextView tvGoodsPrice = (TextView) view.findViewById(R.id.goods_price);
-			//			TextView tvGoodsQuantity = (TextView) view.findViewById(R.id.goods_quantity);
-			////			CheckBox
 			final ShoppingCart cart = listData.get(position);
 			if(cart != null) {
 				infoHolder.imgGoods.load(Server.serverAdress + cart.getId().getGoods().getGoodsImage());
@@ -213,6 +217,13 @@ public class ShoppingCartFragment extends Fragment {
 				infoHolder.tvGoodsType.setText("类型： " + cart.getId().getGoods().getGoodsType());
 				infoHolder.tvGoodsPrice.setText("￥" + cart.getId().getGoods().getGoodsPrice());
 				infoHolder.tvGoodsQuantity.setText("×" + cart.getQuantity());
+				infoHolder.ivDelete.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						ShoppingCartFragment.this.onDelete(cart.getId().getGoods().getId());
+					}
+				});
 				infoHolder.cbCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 					boolean isCheck = false;
 					@Override
@@ -220,40 +231,27 @@ public class ShoppingCartFragment extends Fragment {
 						if(isCheck) {
 							sum -= Double.parseDouble(cart.getId().getGoods().getGoodsPrice()) * cart.getQuantity();
 							isCheck = !isCheck;
-							count -= 1;
+							selectedCount -= 1;
+							ShoppingCartFragment.this.isAllSelected = false;
+							ShoppingCartFragment.this.selectAll.setChecked(false);
 							Goods goods = cart.getId().getGoods();
-							goods.setQuantity(count);
+							goods.setQuantity(cart.getQuantity());
 							ShoppingCartFragment.this.selectedGoods.add(goods);
 							setViewText();
 						} else {
 							isCheck= !isCheck;
-							count +=1;
+							selectedCount +=1;
 							sum += Double.parseDouble(cart.getId().getGoods().getGoodsPrice()) * cart.getQuantity();
 							Goods goods = cart.getId().getGoods();
-							goods.setQuantity(count);
+							goods.setQuantity(cart.getQuantity());
 							ShoppingCartFragment.this.selectedGoods.add(goods);
+							if(selectedCount == ShoppingCartFragment.this.listData.size()) {
+								ShoppingCartFragment.this.selectAll.setChecked(true);
+							}
 							setViewText();
 						}
 					}
 				});
-//				(new OnClickListener() {
-//					boolean isCheck = false;
-//					
-//					@Override
-//					public void onClick(View v) {
-//						if(isCheck) {
-//							sum -= Double.parseDouble(cart.getId().getGoods().getGoodsPrice()) * cart.getQuantity();
-//							isCheck = !isCheck;
-//							count -= 1;
-//							setViewText();
-//						} else {
-//							isCheck= !isCheck;
-//							count +=1;
-//							sum += Double.parseDouble(cart.getId().getGoods().getGoodsPrice()) * cart.getQuantity();
-//							setViewText();
-//						}
-//					}
-//				});
 			}
 			return view;
 		}
@@ -283,4 +281,27 @@ public class ShoppingCartFragment extends Fragment {
 		
 		
 	};
+	protected void onDelete(int goodsId) {
+		Request request = Server.requestBuilderWithApi("shoppingcart/delete/" + goodsId).get().build();
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				getActivity().runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
+						ShoppingCartFragment.this.reload();
+					}
+				});
+			}
+			
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
 }
