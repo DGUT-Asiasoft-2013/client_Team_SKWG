@@ -29,6 +29,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import okhttp3.Call;
@@ -45,8 +46,8 @@ public class ForumContentActivity extends Activity {
 	TextView count_like;
 	FrameLayout fraLike,fraComment,fraReward;
 	ImageView img_like;
-	
-	View btnLoadMore;
+
+	View btnLoadMore,listViewHead;
 	TextView textLoadMore;
 
 	List<Comment> data;
@@ -59,12 +60,18 @@ public class ForumContentActivity extends Activity {
 
 		btnLoadMore=LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
 		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
-		count_like =(TextView)findViewById(R.id.count_like);
-		img_like=(ImageView)findViewById(R.id.img_like);
+
+		LayoutInflater inflater = LayoutInflater.from(ForumContentActivity.this);
+		listViewHead = inflater.inflate(R.layout.forum_top_item, null);//这是头部View
+
+		count_like =(TextView)listViewHead.findViewById(R.id.count_like);		//这里可以获取头部的组件
+		img_like=(ImageView)listViewHead.findViewById(R.id.img_like);
 
 		listView = (ListView)findViewById(R.id.list_comment);
+		listView.addHeaderView(listViewHead);//添加进去
 		listView.addFooterView(btnLoadMore);
 		listView.setAdapter(listAdapter);
+		//		setListViewHeightBasedOnChildren(listView);
 
 		String title=getIntent().getStringExtra("Title");  
 		String text=getIntent().getStringExtra("Text");
@@ -73,18 +80,18 @@ public class ForumContentActivity extends Activity {
 
 		article = (Article)getIntent().getSerializableExtra("Data");
 
-		TextView txt_title=(TextView)findViewById(R.id.txt_title);
-		TextView txt_author=(TextView)findViewById(R.id.txt_author);
-		TextView txt_text=(TextView)findViewById(R.id.txt_text);
-		TextView txt_date=(TextView)findViewById(R.id.txt_date);
-		AvatarView avatar = (AvatarView)findViewById(R.id.avatar);
+		TextView txt_title=(TextView)listViewHead.findViewById(R.id.txt_title);        //头部item标题
+		TextView txt_author=(TextView)listViewHead.findViewById(R.id.txt_author); 
+		TextView txt_text=(TextView)listViewHead.findViewById(R.id.txt_text);
+		TextView txt_date=(TextView)listViewHead.findViewById(R.id.txt_date);
+		AvatarView avatar = (AvatarView)listViewHead.findViewById(R.id.avatar);
 		avatar.load(Server.serverAdress+getIntent().getStringExtra("AuthorAvatar"));
 
 		//内容滚动显示
-//		txt_text.setMovementMethod(ScrollingMovementMethod.getInstance());
-		
+		//		txt_text.setMovementMethod(ScrollingMovementMethod.getInstance());
+
 		//图片不为空显示图片
-		RectangleView articleImage = (RectangleView)findViewById(R.id.articleImage);
+		RectangleView articleImage = (RectangleView)listViewHead.findViewById(R.id.articleImage);
 		if(article.getArticlesImage()!=null){
 			articleImage.setVisibility(RectangleView.VISIBLE);
 			articleImage.load(Server.serverAdress+article.getArticlesImage());
@@ -97,9 +104,9 @@ public class ForumContentActivity extends Activity {
 		txt_text.setText(text);           //文章内容
 		txt_date.setText(date);           //文章日期
 
-		fraLike=(FrameLayout)findViewById(R.id.fra_like);
-		fraComment=(FrameLayout)findViewById(R.id.fra_comment);
-		fraReward=(FrameLayout)findViewById(R.id.fra_reward);
+		fraLike=(FrameLayout)listViewHead.findViewById(R.id.fra_like);
+		fraComment=(FrameLayout)listViewHead.findViewById(R.id.fra_comment);
+		fraReward=(FrameLayout)listViewHead.findViewById(R.id.fra_reward);
 		fraComment.setOnClickListener(new OnClickListener() {	
 			@Override
 			public void onClick(View v) {
@@ -115,7 +122,7 @@ public class ForumContentActivity extends Activity {
 				toggleLikes();
 			}
 		});
-		
+
 		fraReward.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -137,6 +144,31 @@ public class ForumContentActivity extends Activity {
 			}
 		});
 	}
+
+
+	//	public void setListViewHeightBasedOnChildren(ListView listView) {   
+	//        // 获取ListView对应的Adapter   
+	//        ListAdapter listAdapter = listView.getAdapter();   
+	//        if (listAdapter == null) {   
+	//            return;   
+	//        }   
+	//   
+	//        int totalHeight = 0;   
+	//        for (int i = 0, len = listAdapter.getCount(); i < len; i++) {   
+	//            // listAdapter.getCount()返回数据项的数目   
+	//            View listItem = listAdapter.getView(i, null, listView);   
+	//            // 计算子项View 的宽高   
+	//            listItem.measure(0, 0);    
+	//            // 统计所有子项的总高度   
+	//            totalHeight += listItem.getMeasuredHeight();    
+	//        }   
+	//   
+	//        ViewGroup.LayoutParams params = listView.getLayoutParams();   
+	//        params.height = totalHeight+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));   
+	//        // listView.getDividerHeight()获取子项间分隔符占用的高度   
+	//        // params.height最后得到整个ListView完整显示需要的高度   
+	//        listView.setLayoutParams(params);   
+	//    }   
 
 	//重新显示回复的条目
 	@Override
@@ -160,13 +192,13 @@ public class ForumContentActivity extends Activity {
 				view = convertView;
 			}
 			myListener = new MyListener(position);
-			
+
 			TextView text1 = (TextView)view.findViewById(R.id.text1); //作者
 			TextView text2 = (TextView)view.findViewById(R.id.text2); //内容
 			TextView text3 = (TextView)view.findViewById(R.id.text3); //日期
 			AvatarView avatar = (AvatarView)view.findViewById(R.id.avatar); //评论者头像
 			btn_reply=(Button)view.findViewById(R.id.btn_reply);        //回复按钮
-			
+
 			comment = data.get(position);
 			text1.setText(comment.getAuthorName());
 			text2.setText(comment.getText());
@@ -215,7 +247,7 @@ public class ForumContentActivity extends Activity {
 		}
 	}
 
-	
+
 	//更新点赞和评论的显示
 	void reload(){
 		reloadLikes();
@@ -236,7 +268,7 @@ public class ForumContentActivity extends Activity {
 						public void run() {
 							ForumContentActivity.this.page = data.getNumber();
 							ForumContentActivity.this.data = data.getContent();
-							listAdapter.notifyDataSetInvalidated();
+							listAdapter.notifyDataSetChanged();
 						}
 					});
 				}catch (final Exception e) {
@@ -460,12 +492,12 @@ public class ForumContentActivity extends Activity {
 		startActivity(itnt);
 		overridePendingTransition(R.anim.slide_in_right,0);
 	}
-	
+
 	//跳转到该文章的打赏页面
-		void goaddreward(){
-			Intent itnt = new Intent(ForumContentActivity.this,AddRewardActivity.class);
-			itnt.putExtra("data",article);
-			startActivity(itnt);
-			overridePendingTransition(R.anim.slide_in_right,0);
-		}
+	void goaddreward(){
+		Intent itnt = new Intent(ForumContentActivity.this,AddRewardActivity.class);
+		itnt.putExtra("data",article);
+		startActivity(itnt);
+		overridePendingTransition(R.anim.slide_in_right,0);
+	}
 }
