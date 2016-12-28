@@ -1,17 +1,20 @@
 package com.example.bbook;
 
+import java.io.IOException;
+
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.widgets.GoodsPicture;
-import com.example.bbook.api.widgets.NumberPlusAndMinusFrament;
-import com.example.bbook.api.widgets.NumberPlusAndMinusFrament.OnMinusClickListener;
-import com.example.bbook.api.widgets.NumberPlusAndMinusFrament.OnPlusClickListener;
 import com.example.bbook.api.widgets.TitleBarFragment;
+import com.example.bbook.fragments.NumberPlusAndMinusFrament;
+import com.example.bbook.fragments.NumberPlusAndMinusFrament.OnMinusClickListener;
+import com.example.bbook.fragments.NumberPlusAndMinusFrament.OnPlusClickListener;
 import com.example.bbook.fragments.pages.BookCommentFragment;
 import com.example.bbook.fragments.pages.BookDetailFragment;
 import com.example.bbook.fragments.pages.HomepageFragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +27,11 @@ import android.widget.EditText;
 //书籍详情Activity
 import android.widget.TextView;
 import android.widget.Toast;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
+import okhttp3.Request;
+import okhttp3.Response;
 public class BookDetailActivity extends Activity {
 	NumberPlusAndMinusFrament fragNumberPlusAndMinus;
 	BookDetailFragment bookDetailFragment=new BookDetailFragment();
@@ -93,34 +101,6 @@ public class BookDetailActivity extends Activity {
 		goodsPicture=(GoodsPicture) findViewById(R.id.picture);
 		goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
 
-		
-//		final EditText numEdit=(EditText) findViewById(R.id.edit_number);
-//		numEdit.setText("0");
-//		findViewById(R.id.btn_minus).setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				if(num<=0){
-//					return;
-//				}
-//				num--;
-//				numEdit.setText(num+"");
-//			}
-//		});
-//
-//		findViewById(R.id.btn_plus).setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				if(num>=Integer.parseInt(goods.getGoodsCount())){
-//					return ;
-//				}
-//				num++;
-//				numEdit.setText(num+"");
-//			}
-//		});
-
 		detailLabel.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -138,7 +118,6 @@ public class BookDetailActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				selectedIndex=1;
-				//				String string=goods.getGoodsName();
 				Intent intent=new Intent(BookDetailActivity.this,BookCommentFragment.class);
 				intent.putExtra("goods", goods);
 				changeFragmentContent(selectedIndex);
@@ -174,16 +153,59 @@ public class BookDetailActivity extends Activity {
 
 
 	protected void goPreorder(int num) {
-		Intent itnt = new Intent(BookDetailActivity.this, AddToCartActivity.class);
-		itnt.putExtra("number", num);
-		itnt.putExtra("goods", goods);
-		startActivity(itnt);
+//		Intent itnt = new Intent(BookDetailActivity.this, AddToCartActivity.class);
+//		goods.setQuantity(num);
+//		itnt.putExtra("goods", goods);
+//		startActivity(itnt);
+		
+		int quantity = num;
+		MultipartBody body = new MultipartBody.Builder()
+				.addFormDataPart("quantity", quantity + "").build();
+				
+		
+		Request request = Server.requestBuilderWithApi("shoppingcart/add/" + goods.getId())
+				.method("post", null).post(body).build();
+		
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			
+			@Override
+			public void onResponse(final Call arg0, final Response arg1) throws IOException {
+				final String body = arg1.body().string();
+				runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						BookDetailActivity.this.onResponse(arg0, body);
+					}
+				});
+			}
+			
+			@Override
+			public void onFailure(final Call arg0, final IOException arg1) {
+				runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						onFailture(arg0, arg1);
+					}
+				});
+			}
+		});
 	}
-
+	void onResponse(Call arg0, String responseBody){
+		Toast.makeText(BookDetailActivity.this, "加入购物车成功", Toast.LENGTH_SHORT).show();;
+	}
+	
+	void onFailture(Call arg0, Exception arg1) {
+		new AlertDialog.Builder(this)
+		.setTitle("失败")
+		.setMessage(arg1.getLocalizedMessage())
+		.show();
+	}
 
 	protected void goBuy(int num) {
 		Intent itnt = new Intent(BookDetailActivity.this, BuyActivity.class);
-		itnt.putExtra("number", num);
+		goods.setQuantity(num);
 		itnt.putExtra("goods", goods);
 		startActivity(itnt);
 	}

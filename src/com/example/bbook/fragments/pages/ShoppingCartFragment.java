@@ -1,10 +1,14 @@
 package com.example.bbook.fragments.pages;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.example.bbook.BuyActivity;
 import com.example.bbook.R;
+import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.entity.ShoppingCart;
@@ -15,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +49,7 @@ public class ShoppingCartFragment extends Fragment {
 	int page = 0;
 	int count = 0;
 	double sum = 00.00;;
+	List<Goods> selectedGoods = new ArrayList<Goods>();
 	List<ShoppingCart>  listData;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,12 +63,22 @@ public class ShoppingCartFragment extends Fragment {
 			titleBar.setTitleName("购物车", 16);
 		}
 //		init(view);
+//		if(selectedGoods == null) {
+//			selectedGoods = new ArrayList<Goods>();
+//		}
 		list = (ListView) view.findViewById(R.id.list);
 		selectAll = (CheckBox) view.findViewById(R.id.select_all);
 		tvSum = (TextView) view.findViewById(R.id.sum);
 		btnPay = (Button) view.findViewById(R.id.pay);
 		tvSum.setText(sum + "");
 		list.setAdapter(listAdapter);
+		btnPay.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				goBuy();
+			}
+		});
 		selectAll.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override
@@ -84,6 +100,13 @@ public class ShoppingCartFragment extends Fragment {
 		});
 		
 		return view;
+	}
+
+	protected void goBuy() {
+		Intent itnt = new Intent(getActivity(), BuyActivity.class);
+		itnt.putExtra("selectedGoods", (Serializable)selectedGoods);
+		startActivity(itnt);
+		
 	}
 
 	@Override
@@ -198,11 +221,17 @@ public class ShoppingCartFragment extends Fragment {
 							sum -= Double.parseDouble(cart.getId().getGoods().getGoodsPrice()) * cart.getQuantity();
 							isCheck = !isCheck;
 							count -= 1;
+							Goods goods = cart.getId().getGoods();
+							goods.setQuantity(count);
+							ShoppingCartFragment.this.selectedGoods.add(goods);
 							setViewText();
 						} else {
 							isCheck= !isCheck;
 							count +=1;
 							sum += Double.parseDouble(cart.getId().getGoods().getGoodsPrice()) * cart.getQuantity();
+							Goods goods = cart.getId().getGoods();
+							goods.setQuantity(count);
+							ShoppingCartFragment.this.selectedGoods.add(goods);
 							setViewText();
 						}
 					}
