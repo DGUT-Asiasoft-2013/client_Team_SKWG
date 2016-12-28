@@ -200,7 +200,7 @@ public class BuyActivity extends Activity {
 		Log.d("orderID", orderId);
 		MultipartBody body = new MultipartBody.Builder().addFormDataPart("ordersID", orderId)
 				.addFormDataPart("ordersState", orderState + "").addFormDataPart("goodsQTY", quantity + "")
-				.addFormDataPart("goodsSum", (Integer.valueOf(goods.getGoodsPrice()) * quantity) + "")
+				.addFormDataPart("goodsSum", (Double.parseDouble(goods.getGoodsPrice()) * quantity) + "")
 				.addFormDataPart("buyerName", name).addFormDataPart("buyerPhoneNum", tel)
 				.addFormDataPart("buyerAddress", address).addFormDataPart("postCode", postCode)
 				.addFormDataPart("goodsId", goods.getId() + "").build();
