@@ -1,15 +1,20 @@
 package com.example.bbook;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.entity.CommomInfo;
+import com.example.bbook.api.entity.Orders;
 import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.api.widgets.TitleBarFragment;
+import com.example.bbook.fragments.NumberPlusAndMinusFrament;
+import com.example.bbook.fragments.pages.ShoppingCartFragment;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,8 +24,11 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,14 +50,17 @@ public class BuyActivity extends Activity {
 	infoAddress, infoTel, infoPostcode, tvSum;
 	GoodsPicture goodsImage;
 	Button btnSubmit, btnAddInfo;
+	ListView list;
 	Goods goods;
 	LinearLayout info;
 	List<CommomInfo> dataList;
 	CommomInfo defaultInfo;
 	CommomInfo selectedInfo;
 	TitleBarFragment fragOrderConfirm;
-
-	int count = 0;
+	List<Goods> selectedGoods;		// 需要下单的商品
+	List<String> toBePayOrders;
+	NumberPlusAndMinusFrament fragNumberAndMinus;
+	int quantity = 0;
 	double sum = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +77,18 @@ public class BuyActivity extends Activity {
 				finish();
 			}
 		});
-
+		// 需要下单的商品
 		goods = (Goods) getIntent().getSerializableExtra("goods");
-		count = getIntent().getIntExtra("number", 0);
+		selectedGoods = (List<Goods>) getIntent().getSerializableExtra("selectedGoods");
+
+		if(selectedGoods == null) {
+			selectedGoods = new ArrayList<Goods>();
+		}
+		if(goods!= null) {
+			selectedGoods.add(goods);
+		}
 		init();
+		list = (ListView) findViewById(R.id.list);
 		info.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -82,14 +101,17 @@ public class BuyActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				onSubmit();
+				for(int i = 0; i < selectedGoods.size(); i++) {
+					onDelete(selectedGoods.get(i).getId());
+				}
 			}
 		});
-
+		list.setAdapter(listAdapter);
 	}
 
 	protected void goManageInfo() {
 		Intent itnt = new Intent(BuyActivity.this, ManageCommomInfoActivity.class);
-//		startActivity(itnt);
+		//		startActivity(itnt);
 		startActivityForResult(itnt, SELECTED_INFO_CODE);
 	}
 
@@ -101,7 +123,7 @@ public class BuyActivity extends Activity {
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -110,12 +132,9 @@ public class BuyActivity extends Activity {
 	}
 
 	private void reload() {
-		tvGoodsName.setText("书名: " + goods.getGoodsName());
-		tvGoodsType.setText("类型: " + goods.getGoodsType());
-		tvGoodsPrice.setText("价格: " + goods.getGoodsPrice());
-		goodsImage.load(Server.serverAdress + goods.getGoodsImage());
-		goodsCount.setText(count + "");
-		sum = Double.parseDouble(goods.getGoodsPrice()) * count;
+		for(int i = 0; i < selectedGoods.size(); i++) {
+			sum += Double.parseDouble(selectedGoods.get(i).getGoodsPrice()) * selectedGoods.get(i).getQuantity();
+		}
 		tvSum.setText(sum + "");
 		Request request = Server.requestBuilderWithApi("commominfo/default").get().build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
@@ -167,19 +186,31 @@ public class BuyActivity extends Activity {
 	}
 
 	protected void onSubmit() {
+		for(int i = 0; i < selectedGoods.size(); i++) {
+			addOrder(selectedGoods.get(i));
+		}
 
+	}
+
+	private void addOrder(Goods goods) {
 		int orderState = 2;
-		count = Integer.parseInt(goodsCount.getText().toString());
-		final String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + count;
 
+		quantity = goods.getQuantity();
+		final String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + quantity;
+		if(toBePayOrders == null) {
+			toBePayOrders = new ArrayList();
+		}
+		if(goods != null) {
+			toBePayOrders.add(orderId);
+		}
 		String name = selectedInfo.getName();
 		String address = selectedInfo.getAddress();
 		String tel = selectedInfo.getTel();
 		String postCode = selectedInfo.getPostCode();
 		Log.d("orderID", orderId);
 		MultipartBody body = new MultipartBody.Builder().addFormDataPart("ordersID", orderId)
-				.addFormDataPart("ordersState", orderState + "").addFormDataPart("goodsQTY", count + "")
-				.addFormDataPart("goodsSum", (Integer.valueOf(goods.getGoodsPrice()) * count) + "")
+				.addFormDataPart("ordersState", orderState + "").addFormDataPart("goodsQTY", quantity + "")
+				.addFormDataPart("goodsSum", (Double.parseDouble(goods.getGoodsPrice()) * quantity) + "")
 				.addFormDataPart("buyerName", name).addFormDataPart("buyerPhoneNum", tel)
 				.addFormDataPart("buyerAddress", address).addFormDataPart("postCode", postCode)
 				.addFormDataPart("goodsId", goods.getId() + "").build();
@@ -194,14 +225,9 @@ public class BuyActivity extends Activity {
 
 					@Override
 					public void run() {
-						// goPay();
 						try {
-							// BuyActivity.this.onResponse(arg0,
-							// arg1.body().string());
-							goPay(orderId);
+							goPay();
 						} catch (Exception e) {
-							// TODO Auto-generated
-							// catch block
 							e.printStackTrace();
 						}
 					}
@@ -219,14 +245,111 @@ public class BuyActivity extends Activity {
 		new AlertDialog.Builder(this).setTitle("成功").setMessage(responseBody).show();
 	}
 
-	void goPay(String orderId) {
+	void goPay() {
 		Toast.makeText(this, "提交订单成功", Toast.LENGTH_SHORT).show();
 		Intent intent = new Intent(BuyActivity.this, PayActivity.class);
-		intent.putExtra("orderId", orderId);
+		intent.putExtra("toBePayOrders", (Serializable)toBePayOrders);
 		startActivity(intent);
 		finish();
 	}
 
+	private class GoodsHolder {
+		GoodsPicture ImgGoods;
+		TextView tvName, tvType, tvPrice, tvCount, tvQuantity;
+		ImageView btnMinus,btnPlus;
+	}
+
+	BaseAdapter listAdapter = new BaseAdapter() {
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			final GoodsHolder gHolder;
+			if(convertView == null) {
+				gHolder = new GoodsHolder();
+				LayoutInflater inflater = LayoutInflater.from(BuyActivity.this);
+				convertView = inflater.inflate(R.layout.list_item_order_confirm, null);
+				gHolder.ImgGoods = (GoodsPicture) convertView.findViewById(R.id.goods_image);
+				gHolder.tvName = (TextView) convertView.findViewById(R.id.name);
+				gHolder.tvType = (TextView) convertView.findViewById(R.id.type);
+				gHolder.tvPrice = (TextView) convertView.findViewById(R.id.price);
+				gHolder.tvCount = (TextView) convertView.findViewById(R.id.Count);
+				gHolder.tvQuantity = (TextView) convertView.findViewById(R.id.quantity);
+				gHolder.btnMinus = (ImageView) convertView.findViewById(R.id.btn_minus);
+				gHolder.btnPlus = (ImageView) convertView.findViewById(R.id.btn_plus);
+				convertView.setTag(gHolder);
+			} else {
+				gHolder = (GoodsHolder) convertView.getTag();
+			}
+
+			final Goods goods = selectedGoods.get(position);
+			if(goods != null) {
+				gHolder.ImgGoods.load(Server.serverAdress + goods.getGoodsImage());
+				gHolder.tvName.setText(goods.getGoodsName());
+				gHolder.tvType.setText(goods.getGoodsType());
+				gHolder.tvCount.setText("剩余 " + goods.getGoodsCount() + " 件");
+				gHolder.tvPrice.setText(goods.getGoodsPrice());
+				Log.d("goods.getQuantity()", goods.getQuantity() + "");
+				gHolder.tvQuantity.setText(goods.getQuantity() + "");
+				gHolder.btnPlus.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						quantity++;
+
+						sum+= Double.parseDouble(goods.getGoodsPrice());
+						tvSum.setText(sum + "");
+						goods.setQuantity(quantity);
+						gHolder.tvQuantity.setText(quantity + "");
+					}
+				});
+				gHolder.btnMinus.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						if(quantity <= 0) {
+							return;
+						} else {
+							quantity--;
+							sum-= Double.parseDouble(goods.getGoodsPrice());
+							goods.setQuantity(quantity);
+							tvSum.setText(sum + "");
+							gHolder.tvQuantity.setText(quantity + "");
+						}
+					}
+				});
+			}
+
+			return convertView;
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return selectedGoods.get(position);
+		}
+
+		@Override
+		public int getCount() {
+			return selectedGoods == null ? 0 : selectedGoods.size();
+		}
+	};
+	protected void onDelete(int goodsId) {
+		Request request = Server.requestBuilderWithApi("shoppingcart/delete/" + goodsId).get().build();
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+
+			}
+		});
+	}
 	void init() {
 		goodsCount = (EditText) findViewById(R.id.count);
 		tvGoodsName = (TextView) findViewById(R.id.name);
@@ -239,7 +362,6 @@ public class BuyActivity extends Activity {
 		infoTel = (TextView) findViewById(R.id.info_tel);
 		infoPostcode = (TextView) findViewById(R.id.info_postcode);
 		btnSubmit = (Button) findViewById(R.id.submit);
-		// btnAddInfo = (Button) findViewById(R.id.add_info);
 		info = (LinearLayout) findViewById(R.id.info);
 	}
 }

@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/shoppingcart_titlebar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_gravity="top"
         class="com.example.bbook.api.widgets.TitleBarFragment"
         tools:layout="@layout/fragment_widget_titlebar" />
@@ -22,7 +22,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="horizontal" >
 
@@ -40,7 +40,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="40dp" >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -49,23 +49,25 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="50dp"
+                    android:gravity="center"
                     android:text="合计：" />
 
                 <TextView
                     android:id="@+id/sum"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
+                    android:gravity="center"
                     android:text="00.00" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/pay"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="30dp"
                 android:layout_gravity="right"
                 android:layout_marginLeft="10dp"
                 android:background="#F30"

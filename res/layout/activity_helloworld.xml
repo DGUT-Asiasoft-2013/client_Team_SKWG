@@ -2,22 +2,29 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-     >
+    android:layout_height="match_parent" >
 
-    <FrameLayout
-        android:id="@+id/contain"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="60dp" >
-    </FrameLayout>
+        android:layout_height="match_parent" >
 
-    <fragment
-        android:id="@+id/frag_tabbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        class="com.example.bbook.api.widgets.MainTabbarFragment"
-        tools:layout="@layout/fragment_widget_main_tabbar" />
+        <FrameLayout
+            android:id="@+id/contain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/frag_tabbar"
+            android:layout_alignParentTop="true"
+             >
+
+        </FrameLayout>
+
+        <fragment
+            android:id="@+id/frag_tabbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            class="com.example.bbook.api.widgets.MainTabbarFragment"
+            tools:layout="@layout/fragment_widget_main_tabbar" />
+    </RelativeLayout>
 
 </FrameLayout>

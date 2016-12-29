@@ -1,10 +1,13 @@
 package com.example.bbook;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.example.bbook.api.Server;
 import com.example.bbook.fragments.pages.HomepageFragment;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.StringIdGenerator;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
@@ -26,14 +29,12 @@ import okhttp3.Response;
 
 public class PayActivity extends Activity {
 	SimpleTextInputcellFragment fragPayPassword;
-	String orderId;
+	List<String> toBePayOrders;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pay);
-
-		orderId=getIntent().getStringExtra("orderId");
+		toBePayOrders = (List<String>) getIntent().getSerializableExtra("toBePayOrders");
 		fragPayPassword=(SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.pay_password);
 		findViewById(R.id.btn_pay).setOnClickListener(new OnClickListener() {
 
@@ -48,7 +49,6 @@ public class PayActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				goSetPayPassword();
 			}
 		});
@@ -56,7 +56,6 @@ public class PayActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		fragPayPassword.setLabelText("支付密码");
 		fragPayPassword.setHintText("请输入支付密码");
@@ -79,24 +78,40 @@ public class PayActivity extends Activity {
 
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
-				// TODO Auto-generated method stub
-				String responseStr=arg1.body().string();
-				Boolean checkPayPassword=new ObjectMapper().readValue(responseStr, Boolean.class);
-				if(checkPayPassword){
-					goPay();
-				}
+				final String responseStr=arg1.body().string();
+				runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						
+						Boolean checkPayPassword;
+						try {
+							checkPayPassword = new ObjectMapper().readValue(responseStr, Boolean.class);
+							if(checkPayPassword){
+								for(int i = 0; i < toBePayOrders.size(); i++) {
+									goPay(toBePayOrders.get(i));
+								}
+							}
+						} catch (JsonParseException e) {
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+					}
+				});
 			}
 
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
-				// TODO Auto-generated method stub
-
 			}
 		});
 
 	}
 
-	public void goPay(){
+	public void goPay(String orderId){
 		int state=3;
 		OkHttpClient client=Server.getSharedClient();
 		MultipartBody.Builder requestBody=new MultipartBody.Builder()
@@ -143,7 +158,6 @@ public class PayActivity extends Activity {
 		new AlertDialog.Builder(this).setMessage("支付成功").setPositiveButton("返回主页", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				Intent itnt = new Intent(PayActivity.this,HelloWorldActivity.class);
 				startActivity(itnt);
 				finish();

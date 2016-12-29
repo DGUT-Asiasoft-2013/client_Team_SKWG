@@ -1,4 +1,4 @@
-package com.example.bbook.api.widgets;
+package com.example.bbook.fragments;
 
 import com.example.bbook.R;
 
