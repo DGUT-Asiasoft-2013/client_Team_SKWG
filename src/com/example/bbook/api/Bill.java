@@ -22,6 +22,54 @@ public class Bill implements Serializable {
 	String detial; 					// 收支备注
 	Double item;   					//收支金额
 	Double money; 					// 余额
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public UUID getBillNumber() {
+		return billNumber;
+	}
+	public void setBillNumber(UUID billNumber) {
+		this.billNumber = billNumber;
+	}
+	public int getBillState() {
+		return billState;
+	}
+	public void setBillState(int billState) {
+		this.billState = billState;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	public String getDetial() {
+		return detial;
+	}
+	public void setDetial(String detial) {
+		this.detial = detial;
+	}
+	public Double getItem() {
+		return item;
+	}
+	public void setItem(Double item) {
+		this.item = item;
+	}
+	public Double getMoney() {
+		return money;
+	}
+	public void setMoney(Double money) {
+		this.money = money;
+	}
 	
 	
 }

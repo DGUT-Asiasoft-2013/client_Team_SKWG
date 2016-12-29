@@ -7,7 +7,7 @@
     android:orientation="vertical" >
 
     <fragment
-        android:id="@+id/register_titlebar"
+        android:id="@+id/mybill_titlebar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         class="com.example.bbook.api.widgets.TitleBarFragment"
@@ -16,7 +16,8 @@
     
 
     <ListView
-        android:id="@+id/list"
+        android:id="@+id/bill_list"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp" >
