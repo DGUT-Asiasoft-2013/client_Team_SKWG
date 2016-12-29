@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import okhttp3.Call;
@@ -32,7 +33,8 @@ public class AddRewardActivity extends Activity {
 	AvatarView avatar;
 	TextView txt_author,txt_other;
 	Button reward1,reward2,reward3,reward4,reward5,reward6;
-
+	ImageButton ibtn_back;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
@@ -53,7 +55,9 @@ public class AddRewardActivity extends Activity {
 		avatar.load(Server.serverAdress+article.getAuthorAvatar());
 		txt_author.setText(article.getAuthorName());
 
-		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
+		ibtn_back=(ImageButton)findViewById(R.id.btn_back);
+		ibtn_back.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View arg0) {
 				finish();

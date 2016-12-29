@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import okhttp3.Call;
@@ -33,7 +34,7 @@ public class CommentTomeActivity extends Activity {
 
 	View btnLoadMore;
 	TextView textLoadMore;
-
+	ImageButton ibtn_back;
 	ListView listView;
 	List<Comment> data;
 	int page =0;
@@ -49,11 +50,13 @@ public class CommentTomeActivity extends Activity {
 		listView.addFooterView(btnLoadMore);
 		listView.setAdapter(listAdapter);
 
-		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
+		ibtn_back=(ImageButton)findViewById(R.id.btn_back);
+		ibtn_back.setOnClickListener(new OnClickListener() {
+
 			@Override
-			public void onClick(View v) {
+			public void onClick(View arg0) {
 				finish();
-				overridePendingTransition(0,R.anim.slide_out_left);
+				overridePendingTransition(0, R.anim.slide_out_left);
 			}
 		});
 		
