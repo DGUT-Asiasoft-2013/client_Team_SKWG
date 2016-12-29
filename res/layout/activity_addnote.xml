@@ -26,8 +26,8 @@
 
        <ImageView
             android:id="@+id/img_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="right"
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
@@ -35,8 +35,8 @@
 
         <ImageView
             android:id="@+id/img_return"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="left"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
@@ -48,9 +48,9 @@
         android:id="@+id/editText1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:ems="15"
         android:hint="请输入发表帖子标题"
-        android:maxLength="20" />
+        android:maxLength="30" />
 
     <EditText
         android:id="@+id/editText2"
