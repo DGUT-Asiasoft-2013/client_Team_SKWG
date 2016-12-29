@@ -294,6 +294,7 @@ public class HomepageFragment extends Fragment {
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Toast.makeText(getActivity(), "ID",Toast.LENGTH_SHORT).show();
+					textview.setTextColor(Color.RED);
 					goShopActivity(position);
 				}
 			});

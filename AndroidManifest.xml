@@ -56,14 +56,14 @@
         <activity android:name="com.example.bbook.ChangeUserMessageActivity" />
         <activity android:name="com.example.bbook.ChangeMessageActivity" />
         <activity android:name="com.example.bbook.AddReplyActivity" />
-        <activity android:name="com.example.bbook.ChatActivity"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name="com.example.bbook.ChatActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name="com.example.bbook.SetPayPasswordActivity" />
         <activity android:name="com.example.bbook.AddRewardActivity" />
         <activity android:name="com.example.bbook.MyOrdersActivity" />
         <activity android:name="com.example.bbook.MyBillActivity" />
-        
-        
+        <activity android:name="com.example.bbook.ClassifyActivity" />
     </application>
 
 </manifest>
