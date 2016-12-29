@@ -9,6 +9,7 @@ import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.widgets.AvatarView;
 import com.example.bbook.api.widgets.RectangleView;
+import com.example.bbook.api.widgets.TitleBarFragment;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,6 +48,7 @@ public class ForumContentActivity extends Activity {
 	FrameLayout fraLike,fraComment,fraReward;
 	ImageView img_like;
 
+	TitleBarFragment fragTitleBar;
 	View btnLoadMore,listViewHead;
 	TextView textLoadMore;
 
@@ -57,6 +59,11 @@ public class ForumContentActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_forumcontent);
+
+		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.me_titlebar);
+		fragTitleBar.setSplitLineState(true);
+		fragTitleBar.setBtnNextState(false);
+		fragTitleBar.setTitleName("详情", 16);
 
 		btnLoadMore=LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
 		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
@@ -136,11 +143,13 @@ public class ForumContentActivity extends Activity {
 				loadmore();
 			}
 		});
-		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
+
+		fragTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
+
 			@Override
-			public void onClick(View v) {
+			public void onGoBack() {
 				finish();
-				overridePendingTransition(0,R.anim.slide_out_left);
+				overridePendingTransition(0, R.anim.slide_out_left);
 			}
 		});
 	}

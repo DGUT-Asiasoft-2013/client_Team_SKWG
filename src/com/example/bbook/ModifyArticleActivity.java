@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -26,6 +27,8 @@ public class ModifyArticleActivity extends Activity {
 	Article article;
 	TextView modify_title,modify_text;
 	Button btn_delete;
+	ImageButton ibtn_back,ibtn_next;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,20 +53,20 @@ public class ModifyArticleActivity extends Activity {
 			}
 		});
 
-		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
+		ibtn_next=(ImageButton)findViewById(R.id.btn_next);
+		ibtn_back=(ImageButton)findViewById(R.id.btn_back);
+		ibtn_back.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View arg0) {
 				finish();
-				overridePendingTransition(0,R.anim.slide_out_left);
-
+				overridePendingTransition(0, R.anim.slide_out_left);
 			}
 		});
-
-		findViewById(R.id.img_send).setOnClickListener(new OnClickListener() {
+		ibtn_next.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View arg0) {
 				modify();
 			}
 		});

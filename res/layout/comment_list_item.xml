@@ -4,51 +4,52 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
 
-    <com.example.bbook.api.widgets.AvatarView
-        android:id="@+id/avatar"
-        android:layout_width="25dp"
-        android:layout_height="25dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/text1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="author" />
-
-        <TextView
-            android:id="@+id/text2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="content" />
+        <com.example.bbook.api.widgets.AvatarView
+            android:id="@+id/avatar"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:gravity="right"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/text3"
-                android:layout_width="wrap_content"
+                android:id="@+id/text1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
-                android:gravity="right|center"
-                android:text="date" />
+                android:gravity="left"
+                android:text="author" />
 
-            <Button
-                android:id="@+id/btn_reply"
-                android:layout_width="45dp"
+            <TextView
+                android:id="@+id/text2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:layout_marginTop="2dp"
                 android:gravity="right"
-                android:text="回复"
-                android:textSize="10sp" />
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/text3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right|center"
+                    android:text="date" />
+
+                <Button
+                    android:id="@+id/btn_reply"
+                    android:layout_width="45dp"
+                    android:layout_height="30dp"
+                    android:gravity="right"
+                    android:text="回复"
+                    android:textSize="10sp" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
 </LinearLayout>

@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import okhttp3.Call;
@@ -37,7 +38,7 @@ public class SearchArticleActivity extends Activity {
 
 	EditText searchText;
 	ListView listView;
-
+	ImageButton ibtn_back;
 	View btnLoadMore;
 	TextView textLoadMore;
 
@@ -56,13 +57,14 @@ public class SearchArticleActivity extends Activity {
 		listView.setAdapter(listAdapter);
 
 		searchText=(EditText)findViewById(R.id.keyword_txt);
-		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
+		
+		ibtn_back=(ImageButton)findViewById(R.id.btn_back);
+		ibtn_back.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				finish();
-				overridePendingTransition(0,R.anim.slide_out_buttom);
-
+				overridePendingTransition(0, R.anim.slide_out_buttom);
 			}
 		});
 		findViewById(R.id.img_search).setOnClickListener(new OnClickListener() {		
