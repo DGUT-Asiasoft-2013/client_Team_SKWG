@@ -42,7 +42,8 @@ public class MystoreActivity extends Activity {
         List<Goods> data;
         GoodsPicture goodsPicture;
         TitleBarFragment fragMyShopTitleBar;
-        int page = 0, shopId;
+        int page = 0;
+        Shop myshop;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,7 @@ public class MystoreActivity extends Activity {
 
         protected void goAdd() {
                 Intent itnt = new Intent(MystoreActivity.this, AddGoodsActivity.class);
+                itnt.putExtra("shop", myshop);
                 startActivity(itnt);
         }
 
@@ -117,7 +119,7 @@ public class MystoreActivity extends Activity {
         }
 
         void onResponse(Call arg0, Shop shop) {
-                shopId = shop.getId();
+                myshop = shop;
                 shopName.setText("我的店铺:" + shop.getShopName());
                 shopDescription.setText(shop.getDescription());
                 shopImageUseBg.load(shop);
@@ -237,7 +239,7 @@ public class MystoreActivity extends Activity {
         // 关注功能
 
         void reloadSubscribe() {
-                Request request = Server.requestBuilderWithApi("shop/" + shopId + "/subscribe").get().build();
+                Request request = Server.requestBuilderWithApi("shop/" + myshop.getId() + "/subscribe").get().build();
                 Server.getSharedClient().newCall(request).enqueue(new Callback() {
 
                         @Override

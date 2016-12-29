@@ -56,19 +56,9 @@
                 android:id="@+id/subscribe_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="关注数："
+                android:text="关注数：0"
                 android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/subscribe"
-                android:layout_width="50dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/submit_buttom"
-                android:gravity="center"
-                android:text="关注"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 

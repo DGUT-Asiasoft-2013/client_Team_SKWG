@@ -1,13 +1,23 @@
 package com.example.bbook;
 
 import java.io.IOException;
+import java.util.List;
 
+import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
+import com.example.bbook.api.Shop;
+import com.example.bbook.api.User;
+import com.example.bbook.api.entity.Subscribe;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 import inputcells.PictureInputCellFragment;
 import inputcells.SimpleTextInputcellFragment;
 import okhttp3.Call;
@@ -24,6 +34,10 @@ public class AddGoodsActivity extends Activity{
 	fragGoodsPublisher,fragGoodsAuthor,fragGoodsPubDate,
 	fragGoodsPritime;
 	PictureInputCellFragment fragGoodsImage;
+	Shop shop;
+	List<Subscribe> subscribeData;
+	Integer userId;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,6 +52,8 @@ public class AddGoodsActivity extends Activity{
 		fragGoodsPritime = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_goods_pritime);
 		fragGoodsImage = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_goods_image);
 	
+		shop = (Shop) getIntent().getSerializableExtra("shop");
+		
 		findViewById(R.id.submit).setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -80,7 +96,13 @@ public class AddGoodsActivity extends Activity{
 			
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
-				
+			        runOnUiThread(new Runnable() {
+                        
+                        @Override
+                        public void run() {
+                                
+                        }
+                });
 			}
 			
 			@Override
@@ -88,9 +110,67 @@ public class AddGoodsActivity extends Activity{
 				
 			}
 		});
+		
+		
+		//通过shopId找到user
+		Request request2 = Server.requestBuilderWithApi("shop/" + shop.getId() +"/findsubscribe").get().build();
+		Server.getSharedClient().newCall(request2).enqueue(new Callback() {
+                
+                @Override
+                public void onResponse(Call arg0, final Response arg1) throws IOException {
+                        try {
+                                final Page<Subscribe> data = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Subscribe>>(){});; 
+                                runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                                 
+                                                AddGoodsActivity.this.subscribeData = data.getContent();
+                                                 Log.d("size", AddGoodsActivity.this.subscribeData.size() +"");
+                                                for(int i = 0; i < AddGoodsActivity.this.subscribeData.size(); i++) {
+                                                        userId = subscribeData.get(i).getId().getUser().getId();
+                                                        Log.d("userID", userId +"");
+                                                        AddGoodsActivity.this.onSend();
+                                                }
+                                        }
+                                });
+                        } catch (Exception e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                        }
+                }
+                
+                @Override
+                public void onFailure(Call arg0, IOException arg1) {
+                        // TODO Auto-generated method stub
+                        
+                }
+        });
+		
+		
 	}
 
-	@Override
+	protected void onSend() {
+	        MultipartBody body = new MultipartBody.Builder()
+                            .addFormDataPart("shopId", shop.getId() +"")
+                            .addFormDataPart("receiverId", userId + "")
+                            .addFormDataPart("content", shop.getShopName() + "商店发布了新书，点击查看详情").build();
+            
+            Request request3 = Server.requestBuilderWithApi("push").method("post", null).post(body).build();
+            Server.getSharedClient().newCall(request3).enqueue(new Callback() {
+                    
+                    @Override
+                    public void onResponse(Call arg0, Response arg1) throws IOException {
+                            
+                    }
+                    
+                    @Override
+                    public void onFailure(Call arg0, IOException arg1) {
+                            
+                    }
+            });
+        }
+
+        @Override
 	protected void onResume() {
 		super.onResume();
 		fragGoodsName.setLabelText("商品名称");

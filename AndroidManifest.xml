@@ -61,6 +61,7 @@
         <activity android:name="com.example.bbook.SetPayPasswordActivity" />
         <activity android:name="com.example.bbook.AddRewardActivity" />
         <activity android:name="com.example.bbook.MyOrdersActivity" />
+        <activity android:name="com.example.bbook.MessageActivity" />
         
         
     </application>
