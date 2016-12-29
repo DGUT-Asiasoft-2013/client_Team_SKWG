@@ -237,6 +237,7 @@ public class ShoppingCartFragment extends Fragment {
 							Goods goods = cart.getId().getGoods();
 							goods.setQuantity(cart.getQuantity());
 							ShoppingCartFragment.this.selectedGoods.add(goods);
+							
 							setViewText();
 						} else {
 							isCheck= !isCheck;

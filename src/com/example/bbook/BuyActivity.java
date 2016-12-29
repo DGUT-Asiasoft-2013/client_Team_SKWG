@@ -1,6 +1,7 @@
 package com.example.bbook;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.List;
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.entity.CommomInfo;
+import com.example.bbook.api.entity.Orders;
 import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.fragments.NumberPlusAndMinusFrament;
@@ -56,7 +58,7 @@ public class BuyActivity extends Activity {
 	CommomInfo selectedInfo;
 	TitleBarFragment fragOrderConfirm;
 	List<Goods> selectedGoods;		// 需要下单的商品
-
+	List<String> toBePayOrders;
 	NumberPlusAndMinusFrament fragNumberAndMinus;
 	int quantity = 0;
 	double sum = 0;
@@ -194,9 +196,13 @@ public class BuyActivity extends Activity {
 		int orderState = 2;
 
 		quantity = goods.getQuantity();
-
 		final String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + quantity;
-
+		if(toBePayOrders == null) {
+			toBePayOrders = new ArrayList();
+		}
+		if(goods != null) {
+			toBePayOrders.add(orderId);
+		}
 		String name = selectedInfo.getName();
 		String address = selectedInfo.getAddress();
 		String tel = selectedInfo.getTel();
@@ -220,7 +226,7 @@ public class BuyActivity extends Activity {
 					@Override
 					public void run() {
 						try {
-							goPay(orderId);
+							goPay();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -239,10 +245,10 @@ public class BuyActivity extends Activity {
 		new AlertDialog.Builder(this).setTitle("成功").setMessage(responseBody).show();
 	}
 
-	void goPay(String orderId) {
+	void goPay() {
 		Toast.makeText(this, "提交订单成功", Toast.LENGTH_SHORT).show();
 		Intent intent = new Intent(BuyActivity.this, PayActivity.class);
-		intent.putExtra("orderId", orderId);
+		intent.putExtra("toBePayOrders", (Serializable)toBePayOrders);
 		startActivity(intent);
 		finish();
 	}
