@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
-                android:text="论坛" />
+                android:text="发现" />
         </LinearLayout>
 
         <LinearLayout
