@@ -1,14 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ListView
-        android:id="@+id/orders_list"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#aaa" >
-    </ListView>
+        android:layout_height="match_parent" >
+
+        <fragment
+            android:id="@+id/title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            class="com.example.bbook.api.widgets.TitleBarFragment"
+            tools:layout="@layout/fragment_widget_titlebar" />
+
+        <fragment
+            android:id="@+id/frag_tabbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title_bar"
+            class="com.example.bbook.api.widgets.OrderStateTabbarFragment"
+            tools:layout="@layout/fragment_widget_order_select_bar" />
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/frag_tabbar" >
+        </FrameLayout>
+    </RelativeLayout>
+
+    <!-- <ListView -->
+    <!-- android:id="@+id/orders_list" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:background="#aaa" > -->
+    <!-- </ListView> -->
 
 </LinearLayout>
