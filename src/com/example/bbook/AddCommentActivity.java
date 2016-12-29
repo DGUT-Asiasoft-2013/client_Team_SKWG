@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import com.example.bbook.api.Article;
 import com.example.bbook.api.Server;
-
+import com.example.bbook.api.widgets.TitleBarFragment;
+import com.example.bbook.api.widgets.TitleBarFragment.OnGoNextListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -26,42 +28,44 @@ import okhttp3.Response;
 public class AddCommentActivity extends Activity {
 	EditText commentText;
 	Article article;
-	
-
+	ImageButton ibtn_back,ibtn_next;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_addcomment);
-		
+
 		article= (Article)getIntent().getSerializableExtra("data");
-		
 		commentText=(EditText)findViewById(R.id.editText1);
-		ImageView img_addcomment=(ImageView)findViewById(R.id.img_send);
-		img_addcomment.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				addcomment();
-			}
-		});
-		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
+		
+		ibtn_next=(ImageButton)findViewById(R.id.btn_next);
+		ibtn_back=(ImageButton)findViewById(R.id.btn_back);
+		ibtn_back.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View arg0) {
 				finish();
-				overridePendingTransition(0,R.anim.slide_out_left);
+				overridePendingTransition(0, R.anim.slide_out_left);
+			}
+		});
+		ibtn_next.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				addcomment();
 			}
 		});
 	}
-	
+
 	void addcomment(){
 		String text = commentText.getText().toString();
 		if(text==null||text.isEmpty()){
-			 new AlertDialog.Builder(this)
+			new AlertDialog.Builder(this)
 			.setMessage("请输入评论内容!")
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setPositiveButton("OK",null)
 			.show();
-			 return;
+			return;
 		}
 
 		OkHttpClient client = Server.getSharedClient();
@@ -106,7 +110,7 @@ public class AddCommentActivity extends Activity {
 			}
 		});
 	}
-	
+
 	void onResponse(Call arg0, String responseBody) {
 		new AlertDialog.Builder(this)
 		.setTitle("发表成功")

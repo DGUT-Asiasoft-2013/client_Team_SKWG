@@ -10,7 +10,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import inputcells.PictureInputCellFragment;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -23,7 +25,7 @@ import okhttp3.Response;
 
 public class AddNoteActivity extends Activity {
 	PictureInputCellFragment fragArticlesImage;
-
+	ImageButton ibtn_back,ibtn_next;
 	EditText articleTitle;
 	EditText articleText;
 
@@ -34,23 +36,27 @@ public class AddNoteActivity extends Activity {
 		articleTitle= (EditText)findViewById(R.id.editText1);
 		articleText= (EditText)findViewById(R.id.editText2);
 		fragArticlesImage = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_articles_image);
+		fragArticlesImage.setLabelText("添加图片");
 		
-		findViewById(R.id.img_return).setOnClickListener(new View.OnClickListener() {
+		ibtn_back=(ImageButton)findViewById(R.id.btn_back);
+		ibtn_next=(ImageButton)findViewById(R.id.btn_next);
+
+		ibtn_back.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View arg0) {
 				finish();
-				overridePendingTransition(0,R.anim.slide_out_left);
+				overridePendingTransition(0, R.anim.slide_out_left);
 			}
 		});
-		
-		findViewById(R.id.img_send).setOnClickListener(new View.OnClickListener() {
+		ibtn_next.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View arg0) {
 				sendNote();
 			}
 		});
+
 	}
 
 
@@ -59,22 +65,22 @@ public class AddNoteActivity extends Activity {
 		String title = articleTitle.getText().toString();
 		String text = articleText.getText().toString();
 		if(title==null||title.isEmpty()){
-			 new AlertDialog.Builder(this)
+			new AlertDialog.Builder(this)
 			.setMessage("请输入标题!")
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setPositiveButton("OK",null)
 			.show();
-			 return;
+			return;
 		}
 		if(text==null||text.isEmpty()){
-			 new AlertDialog.Builder(this)
+			new AlertDialog.Builder(this)
 			.setMessage("请输入内容!")
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setPositiveButton("OK",null)
 			.show();
-			 return;
+			return;
 		}
-		
+
 		OkHttpClient client = Server.getSharedClient();
 
 		MultipartBody.Builder requestBuilder = new MultipartBody.Builder()

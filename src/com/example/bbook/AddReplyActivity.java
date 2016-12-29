@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import okhttp3.Call;
@@ -25,33 +26,37 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class AddReplyActivity extends Activity {
-	ImageView img_send;
 	EditText editText;
 	Article article;
 	Comment comment;
+	ImageButton ibtn_back,ibtn_next;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_addreply);
 		editText=(EditText)findViewById(R.id.editText1);
-		img_send=(ImageView)findViewById(R.id.img_send);
+		ibtn_back=(ImageButton)findViewById(R.id.btn_back);
+		ibtn_next=(ImageButton)findViewById(R.id.btn_next);
 		
 		article= (Article)getIntent().getSerializableExtra("data");
 		comment= (Comment)getIntent().getSerializableExtra("comment");
 		String content="//@"+comment.getAuthorName()+":"+comment.getText();
 		editText.setText(content);
 		
-		img_send.setOnClickListener(new OnClickListener() {
+		ibtn_back.setOnClickListener(new OnClickListener() {
+
 			@Override
-			public void onClick(View v) {
-				addreply();
+			public void onClick(View arg0) {
+				finish();
+				overridePendingTransition(0, R.anim.slide_out_left);
 			}
 		});
-		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
+		ibtn_next.setOnClickListener(new OnClickListener() {
+
 			@Override
-			public void onClick(View v) {
-				finish();
-				overridePendingTransition(0,R.anim.slide_out_left);
+			public void onClick(View arg0) {
+				addreply();
 			}
 		});
 		
@@ -119,11 +124,11 @@ public class AddReplyActivity extends Activity {
 	}
 
 	void onFailure(Call arg0, Exception arg1) {
-		new AlertDialog.Builder(this)
-		.setTitle("回复失败")
-		.setMessage(arg1.getLocalizedMessage())
-		.setNegativeButton("OK", null)
-		.show();
+//		new AlertDialog.Builder(this)
+//		.setTitle("回复失败")
+//		.setMessage(arg1.getLocalizedMessage())
+//		.setNegativeButton("OK", null)
+//		.show();
 	}
 	
 }

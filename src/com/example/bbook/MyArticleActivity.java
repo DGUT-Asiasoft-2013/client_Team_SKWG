@@ -23,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import okhttp3.Call;
@@ -35,7 +36,7 @@ public class MyArticleActivity extends Activity {
 
 	int page=0;
 	List<Article>data;
-	
+	ImageButton ibtn_back;
 	View btnLoadMore;
 	TextView textLoadMore;
 	
@@ -50,14 +51,14 @@ public class MyArticleActivity extends Activity {
 		listView =(ListView)findViewById(R.id.list);
 		listView.addFooterView(btnLoadMore);
 		listView.setAdapter(listAdapter);
+		
+		ibtn_back=(ImageButton)findViewById(R.id.btn_back);
+		ibtn_back.setOnClickListener(new OnClickListener() {
 
-		findViewById(R.id.img_return).setOnClickListener(new OnClickListener() {
-			
 			@Override
-			public void onClick(View v) {
+			public void onClick(View arg0) {
 				finish();
-				overridePendingTransition(0,R.anim.slide_out_left);
-				
+				overridePendingTransition(0, R.anim.slide_out_left);
 			}
 		});
 		listView.setOnItemClickListener(new  AdapterView.OnItemClickListener() {
