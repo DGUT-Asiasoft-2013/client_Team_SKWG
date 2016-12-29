@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,11 +38,12 @@ import okhttp3.Response;
 
 public class MyProfileFragment extends Fragment {
 
-	View view;
+	View view,menu;
 	TextView txAccount, txName;
 	AvatarView avatar;
 	TitleBarFragment fragMeTitleBar;
-	ItemFragment itemBtnExit, itemBtnOrder, itemBtnChange, itemOpenStore, itemMyStore;
+	PopupWindow bill;
+	ItemFragment itemBtnExit, itemBtnOrder, itemBtnChange, itemOpenStore, itemMyStore, itemBill;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class MyProfileFragment extends Fragment {
 			fragMeTitleBar.setSplitLineState(false);
 			fragMeTitleBar.setBtnNextState(false);
 			fragMeTitleBar.setTitleName("我的", 16);
+			
 
 			// 我要开店
 			itemOpenStore = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_openStore);
@@ -119,7 +122,21 @@ public class MyProfileFragment extends Fragment {
 					exit();
 				}
 			});
-
+			
+			//账单
+			itemBill = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_bill);
+			itemBill.setItemText("账单");
+			//这个图标先用着之后找到了再改
+			itemBill.setItemImage(R.drawable.icon_hot_article);
+			itemBill.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
+				
+				@Override
+				public void onDetailed() {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			
 		}
 
 		// view.findViewById(R.id.btn_openStore).setOnClickListener(new

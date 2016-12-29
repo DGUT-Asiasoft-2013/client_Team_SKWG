@@ -27,9 +27,9 @@
             android:background="@null" />
 
         <LinearLayout
-            android:layout_marginStart="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
@@ -91,13 +91,20 @@
                 tools:layout="@layout/fragment_widget_item" />
         </FrameLayout>
 
-         <fragment
+        <fragment
+            android:id="@+id/btn_bill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            class="com.example.bbook.api.widgets.ItemFragment"
+            tools:layout="@layout/fragment_widget_item" />
+
+        <fragment
             android:id="@+id/btn_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             class="com.example.bbook.api.widgets.ItemFragment"
             tools:layout="@layout/fragment_widget_item" />
-        
+
         <fragment
             android:id="@+id/btn_change_password"
             android:layout_width="wrap_content"
