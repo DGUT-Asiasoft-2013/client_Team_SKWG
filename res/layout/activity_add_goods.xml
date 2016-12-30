@@ -28,12 +28,24 @@
                 class="inputcells.SimpleTextInputcellFragment"
                 tools:layout="@layout/fragment_inputcell_simpleted" />
 
-            <fragment
-                android:id="@+id/input_goods_type"
+            <TextView
+                android:id="@+id/label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                class="inputcells.SimpleTextInputcellFragment"
-                tools:layout="@layout/fragment_inputcell_simpleted" />
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:text="商品种类"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+            <Spinner
+                android:id="@+id/spinner_type"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="2dp"
+                android:paddingBottom="2dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp" />
 
             <fragment
                 android:id="@+id/input_goods_price"
@@ -79,9 +91,9 @@
 
             <Button
                 android:id="@+id/submit"
-                android:text="submit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="submit" />
         </LinearLayout>
     </ScrollView>
 
