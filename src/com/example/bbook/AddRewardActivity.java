@@ -1,6 +1,7 @@
 package com.example.bbook;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import com.example.bbook.api.Article;
 import com.example.bbook.api.Server;
@@ -34,7 +35,7 @@ public class AddRewardActivity extends Activity {
 	TextView txt_author,txt_other;
 	Button reward1,reward2,reward3,reward4,reward5,reward6;
 	ImageButton ibtn_back;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
@@ -113,7 +114,7 @@ public class AddRewardActivity extends Activity {
 			}
 		});
 	}
-	
+
 	void reward(){
 		AlertDialog.Builder builder = new Builder(this);
 		builder.setIcon(android.R.drawable.ic_dialog_alert);
@@ -125,7 +126,7 @@ public class AddRewardActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				EditText edit_num=(EditText)view.findViewById(R.id.edit_num);
 				String str = edit_num.getText().toString();
-//				final double num =Double.valueOf(str);
+				//				final double num =Double.valueOf(str);
 				double num = 0;
 				try{
 					num = Double.parseDouble(str);	
@@ -143,7 +144,7 @@ public class AddRewardActivity extends Activity {
 		});
 		builder.show();
 	}
-	
+
 	void reward(final double sum){
 		AlertDialog.Builder builder = new Builder(this);
 		builder.setIcon(R.drawable.icon_info_article);
@@ -179,7 +180,7 @@ public class AddRewardActivity extends Activity {
 		MultipartBody.Builder requestBody=new MultipartBody.Builder()
 				.addFormDataPart("payPassword", MD5.getMD5(payPassword));
 
-//		Log.d("1321321", payPassword);
+		//		Log.d("1321321", payPassword);
 		Request request=Server.requestBuilderWithApi("payPassword")
 				.method("post",null)
 				.post(requestBody.build())
@@ -198,7 +199,7 @@ public class AddRewardActivity extends Activity {
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-					Toast.makeText(AddRewardActivity.this,"支付密码不正确", Toast.LENGTH_SHORT).show();
+							Toast.makeText(AddRewardActivity.this,"支付密码不正确", Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
@@ -212,48 +213,50 @@ public class AddRewardActivity extends Activity {
 			}
 		});
 	}
-	
+
 	//支付打赏
 	void goPay(double money){
-		
+		UUID uuid=UUID.randomUUID();
+
 		OkHttpClient client=Server.getSharedClient();
 		MultipartBody.Builder requestBody=new MultipartBody.Builder()
-				.addFormDataPart("money", money+"");
-		
-		Request request=Server.requestBuilderWithApi("article/reward")
-				.method("post",null)
-				.post(requestBody.build())
-				.build();
+				.addFormDataPart("money", money+"")
+				.addFormDataPart("uuid", uuid.toString());
 
-		client.newCall(request).enqueue(new Callback() {
+				Request request=Server.requestBuilderWithApi("article/reward")
+						.method("post",null)
+						.post(requestBody.build())
+						.build();
 
-			@Override
-			public void onResponse(Call arg0, Response arg1) throws IOException {
-				String responseStr=arg1.body().string();
-				final Boolean checkPayState=new ObjectMapper().readValue(responseStr, Boolean.class);
-//				Log.d("aaasss",  responseStr);
-				runOnUiThread(new Runnable() {
+				client.newCall(request).enqueue(new Callback() {
+
 					@Override
-					public void run() {
-						if(checkPayState){
-							Toast.makeText(AddRewardActivity.this,"打赏成功", Toast.LENGTH_SHORT).show();
-						}else{
-							Toast.makeText(AddRewardActivity.this,"打赏失败,余额不足", Toast.LENGTH_SHORT).show();
-						}
+					public void onResponse(Call arg0, Response arg1) throws IOException {
+						String responseStr=arg1.body().string();
+						final Boolean checkPayState=new ObjectMapper().readValue(responseStr, Boolean.class);
+						//				Log.d("aaasss",  responseStr);
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								if(checkPayState){
+									Toast.makeText(AddRewardActivity.this,"打赏成功", Toast.LENGTH_SHORT).show();
+								}else{
+									Toast.makeText(AddRewardActivity.this,"打赏失败,余额不足", Toast.LENGTH_SHORT).show();
+								}
+							}
+						});
+
+					}
+
+					@Override
+					public void onFailure(Call arg0, IOException arg1) {
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								Toast.makeText(AddRewardActivity.this,"打赏失败，余额不足", Toast.LENGTH_SHORT).show();
+							}
+						});
 					}
 				});
-
-			}
-
-			@Override
-			public void onFailure(Call arg0, IOException arg1) {
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-				Toast.makeText(AddRewardActivity.this,"打赏失败，余额不足", Toast.LENGTH_SHORT).show();
-					}
-				});
-			}
-		});
 	}
 }
