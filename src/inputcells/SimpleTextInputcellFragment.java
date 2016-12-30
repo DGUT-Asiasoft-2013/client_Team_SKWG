@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 /**
- * @author ÁõÊÀ½Ü »ù±¾ÊäÈë¿ò¿Ø¼şÄ£°å,ÉÏÃæÎªÒ»¸öTextViewÏÂÃæÎªÒ»¸öEeitTextµÄĞ¡¿Ø¼ş×é ¾­³£ÄÜÓÃµ½
+ * @author ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½Ä£ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ÎªÒ»ï¿½ï¿½TextViewï¿½ï¿½ï¿½ï¿½ÎªÒ»ï¿½ï¿½EeitTextï¿½ï¿½Ğ¡ï¿½Ø¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½
  */
 public class SimpleTextInputcellFragment extends BaseInputCellFragment {
 
@@ -40,10 +40,18 @@ public class SimpleTextInputcellFragment extends BaseInputCellFragment {
 		return edit.getText().toString();
 	}
 
-	// ´Ë´¦ÎªÉè¶¨ÊäÈë¿òÄÚµÄÄÚÈİÊÇ·ñÎªÃÜÂëÀàĞÍ
+	// ï¿½Ë´ï¿½Îªï¿½è¶¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public void setEditText(boolean isPassword) {
 		if (isPassword) {
 			edit.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+		} else {
+			edit.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+		}
+	}
+	
+	public void setEditNum(boolean isNum) {
+		if (isNum) {
+			edit.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_CLASS_NUMBER);
 		} else {
 			edit.setInputType(EditorInfo.TYPE_CLASS_TEXT);
 		}
