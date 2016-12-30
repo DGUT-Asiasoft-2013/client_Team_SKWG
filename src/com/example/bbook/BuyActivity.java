@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +42,7 @@ import inputcells.SimpleTextInputcellFragment;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -226,7 +229,8 @@ public class BuyActivity extends Activity {
 					@Override
 					public void run() {
 						try {
-							goPay();
+							//							goPay();
+							checkPayPasswordIsExisted();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -244,13 +248,32 @@ public class BuyActivity extends Activity {
 	void onResponse(Call arg0, String responseBody) {
 		new AlertDialog.Builder(this).setTitle("成功").setMessage(responseBody).show();
 	}
-
-	void goPay() {
+//输入支付密码
+	public void  goInputPayPassword() {
 		Toast.makeText(this, "提交订单成功", Toast.LENGTH_SHORT).show();
-		Intent intent = new Intent(BuyActivity.this, PayActivity.class);
-		intent.putExtra("toBePayOrders", (Serializable)toBePayOrders);
-		startActivity(intent);
-		finish();
+		AlertDialog.Builder builder=new Builder(this);
+		builder.setTitle("请输入支付密码");
+		//把布局文件先填充成View对象
+		View view = View.inflate(BuyActivity.this, R.layout.dialog_password, null);
+		final EditText edt_pwd=(EditText)view.findViewById(R.id.edit_pwd);
+		//把填充得来的view对象设置为对话框显示内容
+		builder.setView(view);
+		builder.setPositiveButton("确认支付", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				String string= edt_pwd.getText().toString();
+				goCheckPayPassword(string);
+			}
+		});
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		});
+		builder.show();
+		//		Intent intent = new Intent(BuyActivity.this, PayActivity.class);
+		//		intent.putExtra("toBePayOrders", (Serializable)toBePayOrders);
+		//		startActivity(intent);
+		//		finish();
 	}
 
 	private class GoodsHolder {
@@ -363,5 +386,139 @@ public class BuyActivity extends Activity {
 		infoPostcode = (TextView) findViewById(R.id.info_postcode);
 		btnSubmit = (Button) findViewById(R.id.submit);
 		info = (LinearLayout) findViewById(R.id.info);
+	}
+//检查支付密码是否存在
+	public void checkPayPasswordIsExisted(){
+		OkHttpClient client=Server.getSharedClient();
+		Request request=Server.requestBuilderWithApi("user/PayPasswordIsExist").get().build();
+		client.newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				final String responseStr=arg1.body().string();
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+					
+					try {
+						 Boolean isExisted = new ObjectMapper().readValue(responseStr,Boolean.class);
+						if(isExisted){
+							//	goCheckPayPassword();
+							goInputPayPassword();
+						}else{
+							goSetPayPassword();
+						}
+					} catch (JsonParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (JsonMappingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					}
+				});
+			}
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+			}
+		});
+	}
+//检查支付密码是否正确
+	public void goCheckPayPassword(String payPassword){
+
+	//String payPassword=fragPayPassword.getText();
+		OkHttpClient client=Server.getSharedClient();
+		MultipartBody.Builder requestBody=new MultipartBody.Builder()
+				.addFormDataPart("payPassword", MD5.getMD5(payPassword));
+		Request request=Server.requestBuilderWithApi("payPassword")
+				.method("post",null)
+				.post(requestBody.build())
+				.build();
+
+		client.newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				final String responseStr=arg1.body().string();
+				runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+
+						Boolean checkPayPassword;
+						try {
+							checkPayPassword = new ObjectMapper().readValue(responseStr, Boolean.class);
+							if(checkPayPassword){
+								for(int i = 0; i < toBePayOrders.size(); i++) {
+									goPay(toBePayOrders.get(i));
+								}
+							}
+						} catch (JsonParseException e) {
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+			}
+		});
+	}
+	
+	//设置支付密码
+	public void goSetPayPassword(){
+		Intent intent=new Intent(BuyActivity.this,SetPayPasswordActivity.class);
+		startActivity(intent);
+	}
+	//支付订单，并修改状态
+	public void goPay(String orderId){
+		int state=3;
+		OkHttpClient client=Server.getSharedClient();
+		MultipartBody.Builder requestBody=new MultipartBody.Builder()
+				.addFormDataPart("state", state+"");
+		Request request=Server.requestBuilderWithApi("order/payfor/"+orderId)
+				.method("post",null)
+				.post(requestBody.build())
+				.build();
+
+		client.newCall(request).enqueue(new Callback() {
+
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				String responseStr=arg1.body().string();
+				final Boolean checkPayState=new ObjectMapper().readValue(responseStr, Boolean.class);
+			//	Log.d("aaasss",  responseStr);
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if(checkPayState){
+							Toast.makeText(BuyActivity.this,"支付成功", Toast.LENGTH_SHORT).show();
+							goMyOrders();
+						}
+					}
+				});
+
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+
+			}
+		});
+	}
+	public void goMyOrders(){
+		new AlertDialog.Builder(this).setMessage("支付成功").setPositiveButton("查看我的订单", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent itnt = new Intent(BuyActivity.this,MyOrdersActivity.class);
+				startActivity(itnt);
+				finish();
+			}
+		}).show();
 	}
 }

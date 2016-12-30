@@ -44,14 +44,14 @@ public class PayActivity extends Activity {
 
 			}
 		});
-
-		findViewById(R.id.text_set_paypassword).setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				goSetPayPassword();
-			}
-		});
+		checkPayPasswordIsExisted();
+//		findViewById(R.id.text_set_paypassword).setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				goSetPayPassword();
+//			}
+//		});
 	}
 
 	@Override
@@ -62,20 +62,41 @@ public class PayActivity extends Activity {
 		fragPayPassword.setEditText(true);
 	}
 
+	public void checkPayPasswordIsExisted(){
+		OkHttpClient client=Server.getSharedClient();
+		Request request=Server.requestBuilderWithApi("user/PayPasswordIsExist").get().build();
+		client.newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				final String responseStr=arg1.body().string();
+				final Boolean isExisted=new ObjectMapper().readValue(responseStr,Boolean.class);
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if(isExisted){
+					//		goCheckPayPassword();
+						}else{
+							goSetPayPassword();
+						}
+					}
+				});
+			}
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+			}
+		});
+	}
 	public void goCheckPayPassword(){
 		String payPassword=fragPayPassword.getText();
-
 		OkHttpClient client=Server.getSharedClient();
 		MultipartBody.Builder requestBody=new MultipartBody.Builder()
 				.addFormDataPart("payPassword", MD5.getMD5(payPassword));
-
 		Request request=Server.requestBuilderWithApi("payPassword")
 				.method("post",null)
 				.post(requestBody.build())
 				.build();
 
 		client.newCall(request).enqueue(new Callback() {
-
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				final String responseStr=arg1.body().string();
@@ -99,16 +120,13 @@ public class PayActivity extends Activity {
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-						
 					}
 				});
 			}
-
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
 			}
 		});
-
 	}
 
 	public void goPay(String orderId){
@@ -150,9 +168,6 @@ public class PayActivity extends Activity {
 	public void goSetPayPassword(){
 		Intent intent=new Intent(PayActivity.this,SetPayPasswordActivity.class);
 		startActivity(intent);
-
-
-
 	}
 	public void goHomePage(){
 		new AlertDialog.Builder(this).setMessage("支付成功").setPositiveButton("返回主页", new DialogInterface.OnClickListener() {
@@ -163,10 +178,6 @@ public class PayActivity extends Activity {
 				finish();
 			}
 		}).show();
-
-
-
-
 	}
 
 }

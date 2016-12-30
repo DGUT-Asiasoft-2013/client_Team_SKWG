@@ -117,10 +117,13 @@ public class HomepageFragment extends Fragment {
 				case R.id.b:
 					sortStyle="goodsName";
 					//	SortStyle(sortStyle);
+					isSorted=true;
 					bookLoad();
 					break;
 				case R.id.c:
-
+					sortStyle="shopName";
+					isSorted=true;
+					bookLoad();
 					break;
 
 				default:
@@ -389,10 +392,7 @@ public class HomepageFragment extends Fragment {
 	}
 
 	public  void Classify(String goodsType){
-
-
 		OkHttpClient client=Server.getSharedClient();
-
 		Request request=Server.requestBuilderWithApi("goods/classify/"+goodsType)
 				.get().build();
 
@@ -441,6 +441,7 @@ public class HomepageFragment extends Fragment {
 
 
 	}
+	//加载书本
 	public void bookLoad(){
 		Request request;
 		request=Server.requestBuilderWithApi("goods/s")
