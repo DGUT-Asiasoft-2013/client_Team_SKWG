@@ -42,7 +42,6 @@ public class OrdersAllFragment extends Fragment {
 	
 	TextView orderState;
 	ImageView ordersDelete;
-	
 	int page = 0;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,9 +75,12 @@ public class OrdersAllFragment extends Fragment {
 			Orders order=listData.get(position);
 			orderState=(TextView) view.findViewById(R.id.order_state);
 			ordersDelete=(ImageView) view.findViewById(R.id.orders_delete);
+			TextView tvOrderId = (TextView) view.findViewById(R.id.order_id);
+			TextView tvOrderType = (TextView) view.findViewById(R.id.type);
 			TextView goodsPrice=(TextView) view.findViewById(R.id.goods_price);
 			TextView goodsCount=(TextView) view.findViewById(R.id.goods_count);
 			TextView goodsSum=(TextView) view.findViewById(R.id.orders_sum);
+			TextView tvName = (TextView) view.findViewById(R.id.name);
 			GoodsPicture goodsPicture=(GoodsPicture) view.findViewById(R.id.goods_picture);
 			switch (order.getOrdersState()) {
 			case 0:
@@ -104,10 +106,12 @@ public class OrdersAllFragment extends Fragment {
 			default:
 				break;
 			}
-
+			tvOrderId.setText("订单号:" + order.getOrdersID());
+			tvOrderType.setText("类型:" + order.getGoods().getGoodsType());
+			tvName.setText(order.getGoods().getGoodsName());
 			goodsPrice.setText("￥"+order.getGoods().getGoodsPrice());
-			goodsCount.setText(order.getGoodsQTY());
-			goodsSum.setText("￥"+order.getGoodsSum()+"");
+			goodsCount.setText("x" + order.getGoodsQTY());
+			goodsSum.setText("合计:￥"+order.getGoodsSum());
 			goodsPicture.load(Server.serverAdress+order.getGoods().getGoodsImage());
 			
 			if(order.getOrdersState()==1){

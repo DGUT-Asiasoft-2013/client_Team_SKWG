@@ -59,7 +59,7 @@ public class OrdersToBeSendFragment extends Fragment{
 	}
 	
 	private class OrdersHolder {
-		TextView tvName, tvType, tvQuantity, tvPrice, tvSum;
+		TextView tvName, tvType, tvQuantity, tvPrice, tvSum, tvOrderId;
 		GoodsPicture imgGoods;
 	}
 	
@@ -79,6 +79,7 @@ public class OrdersToBeSendFragment extends Fragment{
 				oHolder.tvQuantity = (TextView) view.findViewById(R.id.quantity);
 				oHolder.tvType = (TextView) view.findViewById(R.id.type);
 				oHolder.tvSum = (TextView) view.findViewById(R.id.sum);
+				oHolder.tvOrderId = (TextView) view.findViewById(R.id.order_id);
 				view.setTag(oHolder);
 			}else{
 				view = convertView;
@@ -92,6 +93,7 @@ public class OrdersToBeSendFragment extends Fragment{
 			oHolder.imgGoods.load(Server.serverAdress + order.getGoods().getGoodsImage());
 			oHolder.tvName.setText(order.getGoods().getGoodsName());
 			oHolder.tvType.setText(order.getGoods().getGoodsType());
+			oHolder.tvOrderId.setText("订单号:" + order.getOrdersID());
 			return view;
 		}
 

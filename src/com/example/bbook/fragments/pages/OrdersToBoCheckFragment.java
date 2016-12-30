@@ -45,23 +45,23 @@ public class OrdersToBoCheckFragment extends Fragment{
 			view = inflater.inflate(R.layout.fragment_page_to_be_check, null);
 			list = (ListView) view.findViewById(R.id.list);
 		}
-		
+
 		list.setAdapter(listAdapter);
 		list.setDivider(null);
 		return view;
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
 		LoadMyOrders();
 	}
-	
+
 	private class OrdersHolder {
-		TextView tvName, tvType, tvQuantity, tvPrice, tvSum, btnReturn, btnCheck;
+		TextView tvName, tvType, tvQuantity, tvPrice, tvSum, tvOrderId, btnReturn, btnCheck;
 		GoodsPicture imgGoods;
 	}
-	
+
 	BaseAdapter listAdapter=new BaseAdapter() {
 		@SuppressLint("InflateParams")
 		@Override
@@ -78,6 +78,7 @@ public class OrdersToBoCheckFragment extends Fragment{
 				oHolder.tvQuantity = (TextView) view.findViewById(R.id.quantity);
 				oHolder.tvType = (TextView) view.findViewById(R.id.type);
 				oHolder.tvSum = (TextView) view.findViewById(R.id.sum);
+				oHolder.tvOrderId = (TextView) view.findViewById(R.id.order_id);
 				oHolder.btnCheck = (TextView) view.findViewById(R.id.check);
 				oHolder.btnReturn = (TextView) view.findViewById(R.id.btn_return);
 				view.setTag(oHolder);
@@ -93,15 +94,16 @@ public class OrdersToBoCheckFragment extends Fragment{
 			oHolder.imgGoods.load(Server.serverAdress + order.getGoods().getGoodsImage());
 			oHolder.tvName.setText(order.getGoods().getGoodsName());
 			oHolder.tvType.setText(order.getGoods().getGoodsType());
+			oHolder.tvOrderId.setText("订单号:" + order.getOrdersID());
 			oHolder.btnCheck.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					onCheck(order.getOrdersID());
 				}
 			});
 			oHolder.btnReturn.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					onReturn(order.getOrdersID());
@@ -125,17 +127,17 @@ public class OrdersToBoCheckFragment extends Fragment{
 			return listData==null?0:listData.size();
 		}
 	};
-	
+
 	public void onCheck(String orderId) {
 		MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("state", 5 + "");
 		Request request = Server.requestBuilderWithApi("order/" + orderId).post(body.build()).build();
-		
+
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				getActivity().runOnUiThread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						Toast.makeText(getActivity(), "确认收货成功", Toast.LENGTH_SHORT).show();
@@ -143,23 +145,23 @@ public class OrdersToBoCheckFragment extends Fragment{
 					}
 				});
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
 			}
 		});
 	}
-	
+
 	public void onReturn(String orderId) {
 		MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("state", 6 + "");
 		Request request = Server.requestBuilderWithApi("order/" + orderId).post(body.build()).build();
-		
+
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				getActivity().runOnUiThread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						Toast.makeText(getActivity(), "已申请退货", Toast.LENGTH_SHORT).show();
@@ -167,13 +169,13 @@ public class OrdersToBoCheckFragment extends Fragment{
 					}
 				});
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
 			}
 		});
 	}
-	
+
 	public void LoadMyOrders(){
 		OkHttpClient client=Server.getSharedClient();
 		Request request=Server.requestBuilderWithApi("orders/findall/4?page=" + page)
