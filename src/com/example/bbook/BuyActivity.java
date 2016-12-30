@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Server;
@@ -478,9 +479,12 @@ public class BuyActivity extends Activity {
 	//支付订单，并修改状态
 	public void goPay(String orderId){
 		int state=3;
+		UUID uuid=UUID.randomUUID();
 		OkHttpClient client=Server.getSharedClient();
 		MultipartBody.Builder requestBody=new MultipartBody.Builder()
-				.addFormDataPart("state", state+"");
+				.addFormDataPart("state", state+"")
+				.addFormDataPart("uuid", uuid.toString());
+		
 		Request request=Server.requestBuilderWithApi("order/payfor/"+orderId)
 				.method("post",null)
 				.post(requestBody.build())
