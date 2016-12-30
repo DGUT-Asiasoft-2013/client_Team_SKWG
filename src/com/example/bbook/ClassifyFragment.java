@@ -35,10 +35,10 @@ public class ClassifyFragment extends Fragment{
 
 		int[] imageId=new int[] {R.drawable.icon_youoth,R.drawable.icon_history,R.drawable.icon_computers,
 				R.drawable.icon_novel,R.drawable.icon_building,R.drawable.icon_nature,R.drawable.icon_philosophy
-				,R.drawable.icon_sport,R.drawable.icon_literature};
+				,R.drawable.icon_sport,R.drawable.icon_literature,R.drawable.icon_success,R.drawable.icon_health,R.drawable.icon_biography};
 
 		String[] title=new String[]{
-				"青春文学","历史","计算机","小说","建筑","自然科学","哲学","运动","文学"
+				"青春文学","历史","计算机","小说","建筑","自然科学","哲学","运动","文学","成功励志","保健养生","传记"
 		};
 
 		listItems=new ArrayList<Map<String,Object>>();
