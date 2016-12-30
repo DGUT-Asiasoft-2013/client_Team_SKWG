@@ -217,8 +217,8 @@ public class MyProfileFragment extends Fragment {
         @Override
         public void onResume() {
                 super.onResume();
-                itemOpenStore.setItemState(true);
-                itemMyStore.setItemState(true);
+                itemOpenStore.setItemState(false);
+                itemMyStore.setItemState(false);
                 OkHttpClient client = Server.getSharedClient();
                 Request request = Server.requestBuilderWithApi("me").method("get", null).build();
                 client.newCall(request).enqueue(new Callback() {
@@ -259,9 +259,9 @@ public class MyProfileFragment extends Fragment {
                 txName.setText("你好:" + user.getName());
                 avatar.load(user);
                 if (user.getIsStore().equals("0")) {
-                        itemOpenStore.setItemState(false);
+                        itemOpenStore.setItemState(true);
                 } else
-                        itemMyStore.setItemState(false);
+                        itemMyStore.setItemState(true);
         }
 
         void onFailure(Call arg0, Exception ex) {

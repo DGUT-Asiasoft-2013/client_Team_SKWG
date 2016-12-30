@@ -1,5 +1,7 @@
 package com.example.bbook;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.example.bbook.R;
 import com.example.bbook.api.Server;
@@ -37,7 +39,7 @@ public class AddNoteActivity extends Activity {
 		articleText= (EditText)findViewById(R.id.editText2);
 		fragArticlesImage = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_articles_image);
 		fragArticlesImage.setLabelText("添加图片");
-		
+
 		ibtn_back=(ImageButton)findViewById(R.id.btn_back);
 		ibtn_next=(ImageButton)findViewById(R.id.btn_next);
 
@@ -64,6 +66,7 @@ public class AddNoteActivity extends Activity {
 
 		String title = articleTitle.getText().toString();
 		String text = articleText.getText().toString();
+		String articleImgName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 		if(title==null||title.isEmpty()){
 			new AlertDialog.Builder(this)
 			.setMessage("请输入标题!")
@@ -85,7 +88,8 @@ public class AddNoteActivity extends Activity {
 
 		MultipartBody.Builder requestBuilder = new MultipartBody.Builder()
 				.addFormDataPart("title", title)
-				.addFormDataPart("text", text);
+				.addFormDataPart("text", text)
+				.addFormDataPart("articleImgName", articleImgName);
 
 		if(fragArticlesImage.getPngData() != null) {
 			requestBuilder.addFormDataPart("articlesImage", "articlesImage",

@@ -21,7 +21,8 @@ import android.view.KeyEvent;
 public class HelloWorldActivity extends Activity {
 
 	HomepageFragment contentHomepage = new HomepageFragment();
-	SortFragment contentSort = new SortFragment();
+	ClassifyFragment classifyFragment=new ClassifyFragment();
+//	SortFragment contentSort = new SortFragment();
 	ForumFragment contentForum= new ForumFragment();
 	ShoppingCartFragment contentShopping = new ShoppingCartFragment();
 	MyProfileFragment contentMyProfile = new MyProfileFragment();
@@ -58,7 +59,8 @@ public class HelloWorldActivity extends Activity {
 
 		switch (index) {
 		case 0:newFrag = contentHomepage;break;
-		case 1:newFrag = contentSort;break;
+//		case 1:newFrag = contentSort;break;
+		case 1:newFrag = classifyFragment;break;
 		case 2:newFrag = contentForum;break;
 		case 3:newFrag = contentShopping;break;
 		case 4:newFrag = contentMyProfile;break;

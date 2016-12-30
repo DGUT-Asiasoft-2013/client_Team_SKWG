@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/tab_all"
+            android:layout_width="0dp"
+            android:layout_height="63dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="全部" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="10dp"
+                android:src="@drawable/tab_background_order_state"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_to_be_pay"
+            android:layout_width="0dp"
+            android:layout_height="63dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="待付款" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="10dp"
+                 android:src="@drawable/tab_background_order_state" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_to_be_send"
+            android:layout_width="0dp"
+            android:layout_height="63dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="待发货" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="10dp"
+                android:src="@drawable/tab_background_order_state" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_to_be_check"
+            android:layout_width="0dp"
+            android:layout_height="63dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="待收货" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="10dp"
+                android:src="@drawable/tab_background_order_state" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
