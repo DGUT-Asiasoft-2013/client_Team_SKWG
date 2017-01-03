@@ -9,6 +9,14 @@ import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.entity.Orders;
 import com.example.bbook.api.widgets.GoodsPicture;
+import com.example.bbook.api.widgets.OrderStateTabbarFragment;
+import com.example.bbook.api.widgets.OrderStateTabbarFragment.OnTabSelectedListener;
+import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
+import com.example.bbook.api.widgets.TitleBarFragment;
+import com.example.bbook.fragments.pages.OrdersAllFragment;
+import com.example.bbook.fragments.pages.OrdersToBePayFragment;
+import com.example.bbook.fragments.pages.OrdersToBeSendFragment;
+import com.example.bbook.fragments.pages.OrdersToBoCheckFragment;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -18,6 +26,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,7 +49,14 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class MyOrdersActivity extends Activity {
-	ListView ordersList;
+	TitleBarFragment titleBar;
+	OrderStateTabbarFragment tabbar;
+	OrdersAllFragment contentAll = new OrdersAllFragment();
+	OrdersToBePayFragment contentToBePay = new OrdersToBePayFragment();
+	OrdersToBeSendFragment contentToBeSend = new OrdersToBeSendFragment();
+	OrdersToBoCheckFragment contentToBeCheck = new OrdersToBoCheckFragment();
+	
+//	ListView ordersList;
 	List<Orders> ordersData;
 	int Page=0;
 	TextView orderState;
@@ -48,32 +64,69 @@ public class MyOrdersActivity extends Activity {
 	ImageView ordersDelete;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_orders);	
-		ordersList=(ListView) findViewById(R.id.orders_list);
-		ordersList.setAdapter(listAdapter);
+//		ordersList=(ListView) findViewById(R.id.orders_list);
+		
+		titleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
+		titleBar.setTitleName("我的订单", 18);
+		titleBar.setBtnNextState(false);
+		// 返回
+		titleBar.setOnGoBackListener(new OnGoBackListener() {
+
+			@Override
+			public void onGoBack() {
+				finish();
+			}
+		});
+		tabbar = (OrderStateTabbarFragment) getFragmentManager().findFragmentById(R.id.frag_tabbar);
+		tabbar.setOnTabSelectedListener(new OnTabSelectedListener() {
+			
+			@Override
+			public void OnTabSelected(int index) {
+				changeContentFragment(index);
+			}
+		});
+//		ordersList.setAdapter(listAdapter);
 
 
 
+	}
+
+protected void changeContentFragment(int index) {
+		Fragment newFrag = null;
+		
+		switch(index) {
+		case 0 : newFrag = contentAll;break;
+		case 1 : newFrag = contentToBePay;break;
+		case 2 : newFrag = contentToBeSend; break;
+		case 3 : newFrag = contentToBeCheck; break;
+		
+		default: 
+			break;
+		}
+		if(newFrag == null) return;
+		
+		getFragmentManager()
+		.beginTransaction()
+		.replace(R.id.container, newFrag)
+		.commit();
 	}
 
 	BaseAdapter listAdapter=new BaseAdapter() {
 		@SuppressLint("InflateParams")
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
 			View view=null;
 			if(convertView==null){
 				LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-				view=inflater.inflate(R.layout.my_orders_list_item, null);
+				view=inflater.inflate(R.layout.list_item_my_orders, null);
 			}else{
 				view =convertView;
 			}
 			Orders order=ordersData.get(position);
 			orderState=(TextView) view.findViewById(R.id.order_state);
 			ordersDelete=(ImageView) view.findViewById(R.id.orders_delete);
-			shopName=(TextView) view.findViewById(R.id.shop_name);
 			TextView goodsPrice=(TextView) view.findViewById(R.id.goods_price);
 			TextView goodsCount=(TextView) view.findViewById(R.id.goods_count);
 			TextView goodsSum=(TextView) view.findViewById(R.id.orders_sum);
@@ -127,7 +180,6 @@ public class MyOrdersActivity extends Activity {
 				public void onClick(View v) {
 					//删除订单
 					goOrderDelete(position);
-				//	deleteOrder(position);
 				}
 			});
 			
@@ -137,19 +189,16 @@ public class MyOrdersActivity extends Activity {
 
 		@Override
 		public long getItemId(int position) {
-			// TODO Auto-generated method stub
 			return position;
 		}
 
 		@Override
 		public Object getItem(int position) {
-			// TODO Auto-generated method stub
 			return ordersData.get(position);
 		}
 
 		@Override
 		public int getCount() {
-			// TODO Auto-generated method stub
 			return ordersData==null?0:ordersData.size();
 		}
 	};
@@ -157,10 +206,11 @@ public class MyOrdersActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
+		if (tabbar.getSelectedIndex() < 0) {
+			tabbar.setSelectedItem(0);
+		}
 		LoadMyOrders();
-
 	}
 	public void LoadMyOrders(){
 		OkHttpClient client=Server.getSharedClient();
@@ -172,12 +222,10 @@ public class MyOrdersActivity extends Activity {
 
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
-				// TODO Auto-generated method stub
 				final String responseStr=arg1.body().string();
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						try {
 							Page<Orders> data=new ObjectMapper()
 									.readValue(responseStr, new TypeReference<Page<Orders>>() {});
@@ -185,13 +233,10 @@ public class MyOrdersActivity extends Activity {
 							Page=data.getNumber();
 							listAdapter.notifyDataSetInvalidated();
 						} catch (JsonParseException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (JsonMappingException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -201,7 +246,6 @@ public class MyOrdersActivity extends Activity {
 
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -219,7 +263,6 @@ public class MyOrdersActivity extends Activity {
 		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				deleteOrder(position);
 			}
 		});
@@ -234,13 +277,11 @@ public class MyOrdersActivity extends Activity {
 			
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
-				// TODO Auto-generated method stub
 				String responseStr=arg1.body().string();
 				final Boolean isDeleted=new ObjectMapper().readValue(responseStr, Boolean.class);
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						if(isDeleted){
 							Toast.makeText(MyOrdersActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
 							LoadMyOrders();
@@ -251,7 +292,6 @@ public class MyOrdersActivity extends Activity {
 			
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
-				// TODO Auto-generated method stub
 				
 			}
 		});

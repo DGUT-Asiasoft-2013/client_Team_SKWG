@@ -51,6 +51,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import util.AutoLoadListener;
 
 public class HomepageFragment extends Fragment {
 	//书籍展示页面
@@ -58,11 +59,9 @@ public class HomepageFragment extends Fragment {
 	PopupMenu popupMenuClassify,popupMenuSort;
 	Menu menuClassify,menuSort;
 
-	//	View btnLoadMore;
 	TextView textLoadMore;
 	Button btnLoadMore;
 	GridView bookView;
-	//ImageView imageView;
 	AvatarView avatar;
 	GoodsPicture goodsPicture;
 	TextView textview;
@@ -72,9 +71,8 @@ public class HomepageFragment extends Fragment {
 	String goodsType;
 	String keyword;
 	boolean isSearched=false,isSorted=false,isClassified=false;
-	//boolean sortState=false;
 
-	
+
 	Goods goods;
 	EditText editKeyword;
 	ImageView btnSearch;
@@ -89,23 +87,13 @@ public class HomepageFragment extends Fragment {
 		editKeyword=(EditText) view.findViewById(R.id.edit_keyword);
 		bookView=(GridView) view.findViewById(R.id.book_gridView);
 		bookView.setAdapter(bookAdapter);
+		//向下滚动加载更多
+		AutoLoadListener autoLoadListener = new AutoLoadListener(callBack);  
+		bookView.setOnScrollListener(autoLoadListener);  
 
-		//	btnLoadMore=inflater.inflate(R.layout.load_more_btn,null);
-		//	textLoadMore=(TextView) btnLoadMore.findViewById(R.id.load_more_text);
-		//bookView.addView(btnLoadMore, TRIM_MEMORY_UI_HIDDEN);
-
-		//bookView.addView(btnLoadMore,0 );
-		//		view.findViewById(R.id.btn_laodmore).setOnClickListener(new OnClickListener() {
-		//
-		//			@Override
-		//			public void onClick(View v) {
-		//				// TODO Auto-generated method stub
-		//				LoadMore();
-		//			}
-		//		});
-		popupMenuClassify=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu_classify));
-		menuClassify=popupMenuClassify.getMenu();
-		getActivity().getMenuInflater().inflate(R.menu.menu_classify, menuClassify);
+	//	popupMenuClassify=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu_classify));
+	//	menuClassify=popupMenuClassify.getMenu();
+	//	getActivity().getMenuInflater().inflate(R.menu.menu_classify, menuClassify);
 
 		popupMenuSort=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu_sort));
 		menuSort=popupMenuSort.getMenu();
@@ -125,11 +113,14 @@ public class HomepageFragment extends Fragment {
 					break;
 				case R.id.b:
 					sortStyle="goodsName";
-				//	SortStyle(sortStyle);
+					//	SortStyle(sortStyle);
+					isSorted=true;
 					bookLoad();
 					break;
 				case R.id.c:
-
+					sortStyle="shopName";
+					isSorted=true;
+					bookLoad();
 					break;
 
 				default:
@@ -140,58 +131,56 @@ public class HomepageFragment extends Fragment {
 				return false;
 			}
 		});
-		popupMenuClassify.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+//		popupMenuClassify.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+//			@Override
+//			public boolean onMenuItemClick(MenuItem item) {
+//				// TODO Auto-generated method stub
+//				switch (item.getItemId()) {
+//				case R.id.a:
+//					goodsType="novel";
+//					//	Classify(goodsType);
+//					isClassified=true;
+//					bookLoad();
+//					break;
+//				case R.id.b:
+//					goodsType="history";
+//					//	Classify(goodsType);
+//					isClassified=true;
+//					bookLoad();
+//					break;
+//				case R.id.c:
+//					goodsType="youth";
+//					//	Classify(goodsType);
+//					isClassified=true;
+//					bookLoad();
+//					break;
+//				case R.id.d:
+//					goodsType="computer";
+//					//	Classify(goodsType);
+//					isClassified=true;
+//					bookLoad();
+//					break;
+//				case R.id.e:
+//					goodsType="technology";
+//					//	Classify(goodsType);
+//					isClassified=true;
+//					bookLoad();
+//					break;
+//				default:
+//					break;
+//				}
+//				return false;
+//			}
+//		});
 
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				// TODO Auto-generated method stub
-
-				switch (item.getItemId()) {
-				case R.id.a:
-					goodsType="novel";
-				//	Classify(goodsType);
-					isClassified=true;
-					bookLoad();
-					break;
-				case R.id.b:
-					goodsType="history";
-				//	Classify(goodsType);
-					isClassified=true;
-					bookLoad();
-					break;
-				case R.id.c:
-					goodsType="youth";
-				//	Classify(goodsType);
-					isClassified=true;
-					bookLoad();
-					break;
-				case R.id.d:
-					goodsType="computer";
-				//	Classify(goodsType);
-					isClassified=true;
-					bookLoad();
-					break;
-				case R.id.e:
-					goodsType="technology";
-				//	Classify(goodsType);
-					isClassified=true;
-					bookLoad();
-					break;
-				default:
-					break;
-				}
-				return false;
-			}
-		});
-
-		view.findViewById(R.id.pop_menu_classify).setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				popupMenuClassify.show();
-			}
-		});
+//		view.findViewById(R.id.pop_menu_classify).setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				popupMenuClassify.show();
+//			}
+//		});
 
 		view.findViewById(R.id.pop_menu_sort).setOnClickListener(new OnClickListener() {
 
@@ -204,7 +193,7 @@ public class HomepageFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-			//	SearchBooksByKeyword();
+				//	SearchBooksByKeyword();
 				keyword=editKeyword.getText().toString();
 				isSearched=true;
 				bookLoad();
@@ -294,6 +283,7 @@ public class HomepageFragment extends Fragment {
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Toast.makeText(getActivity(), "ID",Toast.LENGTH_SHORT).show();
+					textview.setTextColor(Color.RED);
 					goShopActivity(position);
 				}
 			});
@@ -325,6 +315,15 @@ public class HomepageFragment extends Fragment {
 		}
 	};
 
+	//向下滚动加载
+	AutoLoadListener.AutoLoadCallBack callBack = new AutoLoadListener.AutoLoadCallBack() {  
+
+		public void execute() {  
+			//            Utils.showToast("已经拖动至底部");  
+			LoadMore();//这段代码是用来请求下一页数据的  
+		}  
+
+	};  
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
@@ -335,8 +334,8 @@ public class HomepageFragment extends Fragment {
 		//		else {
 		//			SortStyle(sortStyle);
 		//		}
-	
-		
+
+
 	}
 
 	public void SearchBooksByKeyword(){
@@ -388,10 +387,7 @@ public class HomepageFragment extends Fragment {
 	}
 
 	public  void Classify(String goodsType){
-
-
 		OkHttpClient client=Server.getSharedClient();
-
 		Request request=Server.requestBuilderWithApi("goods/classify/"+goodsType)
 				.get().build();
 
@@ -440,6 +436,7 @@ public class HomepageFragment extends Fragment {
 
 
 	}
+	//加载书本
 	public void bookLoad(){
 		Request request;
 		request=Server.requestBuilderWithApi("goods/s")
@@ -467,7 +464,7 @@ public class HomepageFragment extends Fragment {
 		if(isClassified&&isSorted){
 			request=Server.requestBuilderWithApi("goods/classify/"+goodsType+"/sort/"+sortStyle)
 					.get().build();
-			
+
 		}
 		if(isSearched&&isClassified&&isSorted){
 			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/classify/"+goodsType+"/sort/"+sortStyle)
@@ -475,7 +472,7 @@ public class HomepageFragment extends Fragment {
 		}
 		OkHttpClient client=Server.getSharedClient();
 
-		
+
 
 		client.newCall(request).enqueue(new Callback() {
 
@@ -523,22 +520,30 @@ public class HomepageFragment extends Fragment {
 	public void LoadMore(){
 
 
-		btnLoadMore.setEnabled(false);
-		textLoadMore.setText("加载更多");
-
-		Request request=Server.requestBuilderWithApi("goods/s?page="+(page+1)).get().build();
+		//	btnLoadMore.setEnabled(false);
+		//	textLoadMore.setText("加载更多");
+		Request request;
+		request=Server.requestBuilderWithApi("goods/s?page="+(page+1)).get().build();
+		if(isSearched){
+			request=Server.requestBuilderWithApi("goods/search/"+keyword+"?page="+(page+1))
+					.get().build();
+		}
+		if(isSorted){
+			request=Server.requestBuilderWithApi("goods/sort/"+sortStyle+"?page="+(page+1))
+					.get().build();
+		}
+		if(isSearched&&isSorted){
+			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/sort/"+sortStyle+"?page="+(page+1))
+					.get().build();
+		}
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
 
 			@Override
 			public void onResponse(Call arg0, final Response arg1) throws IOException {
-				// TODO Auto-generated method stub
 				getActivity().runOnUiThread(new Runnable() {
 
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
-						btnLoadMore.setEnabled(true);
-						textLoadMore.setText("加载中");
 						try {
 							Page<Goods> feeds=new ObjectMapper()
 									.readValue(arg1.body().string(),
@@ -579,9 +584,6 @@ public class HomepageFragment extends Fragment {
 
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
-						btnLoadMore.setEnabled(true);
-						textLoadMore.setText("���ظ���");
 					}
 				});
 			}

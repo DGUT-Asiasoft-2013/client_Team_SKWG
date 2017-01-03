@@ -28,12 +28,24 @@
                 class="inputcells.SimpleTextInputcellFragment"
                 tools:layout="@layout/fragment_inputcell_simpleted" />
 
-            <fragment
-                android:id="@+id/input_goods_type"
+            <TextView
+                android:id="@+id/label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                class="inputcells.SimpleTextInputcellFragment"
-                tools:layout="@layout/fragment_inputcell_simpleted" />
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:text="商品种类"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+            <Spinner
+                android:id="@+id/spinner_type"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="2dp"
+                android:paddingBottom="2dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp" />
 
             <fragment
                 android:id="@+id/input_goods_price"
@@ -63,25 +75,41 @@
                 class="inputcells.SimpleTextInputcellFragment"
                 tools:layout="@layout/fragment_inputcell_simpleted" />
 
-            <fragment
-                android:id="@+id/input_goods_pubdate"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                class="inputcells.SimpleTextInputcellFragment"
-                tools:layout="@layout/fragment_inputcell_simpleted" />
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:text="出版时间"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
 
-            <fragment
-                android:id="@+id/input_goods_pritime"
+            <EditText
+                android:id="@+id/edit_pubdate"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="点击选择日期" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                class="inputcells.SimpleTextInputcellFragment"
-                tools:layout="@layout/fragment_inputcell_simpleted" />
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:text="印刷时间"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/edit_pritime"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="点击选择日期" />
 
             <Button
                 android:id="@+id/submit"
-                android:text="submit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="submit" />
         </LinearLayout>
     </ScrollView>
 

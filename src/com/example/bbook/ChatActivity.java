@@ -243,12 +243,12 @@ public class ChatActivity extends Activity {
                                         runOnUiThread(new Runnable() {
                                                 public void run() {
                                                         ChatActivity.this.page = pageData.getNumber();
-                                                        List<Chat> reverse = new ArrayList<Chat>();
+//                                                        List<Chat> reverse = new ArrayList<Chat>();
                                                         List<Chat> content = pageData.getContent();
-                                                        for (int i = content.size() - 1; i >= 0; i--) {
-                                                                reverse.add(content.get(i));
-                                                        }
-                                                        ChatActivity.this.chatData = reverse;
+//                                                        for (int i = content.size() - 1; i >= 0; i--) {
+//                                                                reverse.add(content.get(i));
+//                                                        }
+                                                        ChatActivity.this.chatData = content;
 
                                                         adapter.notifyDataSetInvalidated();
                                                 }
@@ -292,7 +292,7 @@ public class ChatActivity extends Activity {
                                         refresh();
                                         chatList.setSelection(chatData.size()-1);
                                 }
-                        }, 2000);   
+                        }, 1000);   
                 }
         }
 

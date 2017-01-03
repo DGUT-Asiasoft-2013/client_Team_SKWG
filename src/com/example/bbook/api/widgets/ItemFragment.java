@@ -64,9 +64,17 @@ public class ItemFragment extends Fragment {
         // 设置控件是否可见
         public void setItemState(boolean is) {
                 if (is) {
-                        item.setVisibility(View.GONE);
-                } else {
                         item.setVisibility(View.VISIBLE);
+                } else {
+                        item.setVisibility(View.GONE);
+                }
+        }
+        
+        public void setItemImageState(boolean is){
+                if(is){
+                        itemImage.setVisibility(View.VISIBLE);
+                }else{
+                        itemImage.setVisibility(View.GONE);
                 }
         }
 }
