@@ -139,7 +139,7 @@ public class MyProfileFragment extends Fragment {
                                 }
                         });
 
-                        // 我的订单(没实现)
+                        // 我的订单
                         itemBtnOrder = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_order);
                         itemBtnOrder.setItemText("我的订单");
                         itemBtnOrder.setItemImage(R.drawable.icon_order);

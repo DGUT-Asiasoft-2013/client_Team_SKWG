@@ -83,6 +83,7 @@ public class OpenStoreActivity extends Activity {
 		MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("shopName", shopName)
 				.addFormDataPart("description", description);
 
+		
 		if (fragStoreImg.getPngData() != null) {
 			body.addFormDataPart("shopImage", "shopImage",
 					RequestBody.create(MediaType.parse("image/png"), fragStoreImg.getPngData()));
