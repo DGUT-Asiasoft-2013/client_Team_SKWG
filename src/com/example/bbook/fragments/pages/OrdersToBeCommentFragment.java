@@ -5,8 +5,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.bbook.AddBookCommentActivity;
 import com.example.bbook.PayActivity;
 import com.example.bbook.R;
+import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.entity.Orders;
@@ -40,8 +42,8 @@ public class OrdersToBeCommentFragment extends Fragment {
 	View view;
 	ListView list;
 	List<Orders> listData;
-	
-//	ImageView ordersDelete;
+
+	//	ImageView ordersDelete;
 	List<Orders> toBePayOrders;
 	int page = 0;
 	@Override
@@ -50,23 +52,23 @@ public class OrdersToBeCommentFragment extends Fragment {
 			view = inflater.inflate(R.layout.fragment_page_to_be_comment, null);
 			list = (ListView) view.findViewById(R.id.list);
 		}
-		
+
 		list.setAdapter(listAdapter);
 		list.setDivider(null);
 		return view;
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
 		LoadMyOrders();
 	}
-	
+
 	private class OrdersHolder {
 		TextView tvName, tvType, tvQuantity, tvPrice, tvSum, tvOrderId, tvComment, tvDelete;
 		GoodsPicture imgGoods;
 	}
-	
+
 	BaseAdapter listAdapter=new BaseAdapter() {
 		@SuppressLint("InflateParams")
 		@Override
@@ -101,14 +103,14 @@ public class OrdersToBeCommentFragment extends Fragment {
 			oHolder.tvType.setText(order.getGoods().getGoodsType());
 			oHolder.tvOrderId.setText("订单号:" + order.getOrdersID());
 			oHolder.tvComment.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					onComment();
+					goComment(order.getGoods());
 				}
 			});
 			oHolder.tvDelete.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					onDelete(order);
@@ -132,11 +134,13 @@ public class OrdersToBeCommentFragment extends Fragment {
 			return listData==null?0:listData.size();
 		}
 	};
-	
-	public void onComment() {
-		
+
+	public void goComment(Goods goods) {
+		Intent itnt = new Intent(getActivity(), AddBookCommentActivity.class);
+		itnt.putExtra("goods", goods);
+		startActivity(itnt);
 	}
-	
+
 	public void onDelete(final Orders order) {
 		new AlertDialog.Builder(getActivity()).setTitle("确认删除订单？")
 		.setPositiveButton("确认", new DialogInterface.OnClickListener() {
@@ -144,19 +148,20 @@ public class OrdersToBeCommentFragment extends Fragment {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				goDelete(order);
-			}})
-		.setPositiveButton("取消", new DialogInterface.OnClickListener() {
-			
+			}
+		})
+		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 			}
-		});
+		}).show();
 	}
 	protected void goDelete(Orders order) {
-		Request request = Server.requestBuilderWithApi("orders/delete/" + order.getId()).get().build();
+		Request request = Server.requestBuilderWithApi("orders/delete/" + order.getOrdersID()).get().build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				String responseStr=arg1.body().string();
@@ -171,7 +176,7 @@ public class OrdersToBeCommentFragment extends Fragment {
 					}
 				});
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
 			}
@@ -180,7 +185,7 @@ public class OrdersToBeCommentFragment extends Fragment {
 
 	public void LoadMyOrders(){
 		OkHttpClient client=Server.getSharedClient();
-		Request request=Server.requestBuilderWithApi("orders/findall/2?page=" + page)
+		Request request=Server.requestBuilderWithApi("orders/findall/5?page=" + page)
 				.get().build();
 
 		client.newCall(request).enqueue(new Callback() {
