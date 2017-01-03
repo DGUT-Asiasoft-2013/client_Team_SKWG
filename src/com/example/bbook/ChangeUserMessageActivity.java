@@ -11,11 +11,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -26,9 +30,11 @@ public class ChangeUserMessageActivity extends Activity {
 	ChangeItemFragment changeName,changeEmail,changeAddress,changePhone;
 	AvatarView avatar;
 	TitleBarFragment fragTitleBar;
+	TextView txtake,txpick,txcancel;
 	float textSize = 16;
 	int color = Color.GRAY;
 	private String value = null;
+	private Context mycontext = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,7 @@ public class ChangeUserMessageActivity extends Activity {
 		changeAddress=(ChangeItemFragment) fg.findFragmentById(R.id.change_Address);
 		changePhone=(ChangeItemFragment) fg.findFragmentById(R.id.change_Phone);
 		avatar=(AvatarView) findViewById(R.id.avatar);
+		
 		
 		fragTitleBar = (TitleBarFragment) fg.findFragmentById(R.id.changeUserMessage_titlebar);
 		fragTitleBar.setBtnNextState(false);
@@ -99,6 +106,19 @@ public class ChangeUserMessageActivity extends Activity {
 				goChange(change,value);
 			}
 		});
+		
+		//修改头像(未完成)
+		
+		avatar.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				PopupWindow P = new PopupWindow();
+				
+				showWindow(v);
+			}
+		});
 	}
 	
 	@Override
@@ -147,7 +167,20 @@ public class ChangeUserMessageActivity extends Activity {
 	}
 	
 	
-	
+	void showWindow(View v){
+		
+		mycontext = this;
+		View p = LayoutInflater.from(mycontext).inflate
+				(R.layout.popupwindows_change_avatar, null);
+		txtake = (TextView) p.findViewById(R.id.change_useravatar_takephoto);
+		txpick = (TextView) p.findViewById(R.id.change_useravatar_pick);
+		txcancel = (TextView) p.findViewById(R.id.chang_useravatar_cancel);
+		final PopupWindow popupWindow = new PopupWindow(p);
+		popupWindow.setTouchable(true);
+		popupWindow.setAnimationStyle(R.anim.slide_in_buttom);
+		popupWindow.showAsDropDown(v);
+		
+	}
 	
 	
 	

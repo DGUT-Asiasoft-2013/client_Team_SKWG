@@ -41,7 +41,7 @@ import okhttp3.Response;
 public class MyProfileFragment extends Fragment {
 
 	View view,menu;
-	TextView txAccount, txName;
+	TextView txMoney, txName;
 	AvatarView avatar;
 	TitleBarFragment fragMeTitleBar;
 	PopupWindow bill;
@@ -51,7 +51,7 @@ public class MyProfileFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (view == null) {
 			view = inflater.inflate(R.layout.fragment_page_myprofile, null);
-			txAccount = (TextView) view.findViewById(R.id.showAccount);
+			txMoney = (TextView) view.findViewById(R.id.showMoney);
 			txName = (TextView) view.findViewById(R.id.showName);
 			avatar = (AvatarView) view.findViewById(R.id.avatar);
 
@@ -166,6 +166,7 @@ public class MyProfileFragment extends Fragment {
 		// }
 		// });
 
+		//修改用户信息
 		view.findViewById(R.id.btn_change_userMessage).setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -207,7 +208,6 @@ public class MyProfileFragment extends Fragment {
 					@Override
 					public void run() {
 						// TODO Auto-generated method
-						// stub
 						MyProfileFragment.this.onFailure(arg0, arg1);
 					}
 				});
@@ -216,9 +216,9 @@ public class MyProfileFragment extends Fragment {
 	}
 
 	void onResponse(Call arg0, User user) {
-		txAccount.setVisibility(View.VISIBLE);
+		txMoney.setVisibility(View.VISIBLE);
 		txName.setVisibility(View.VISIBLE);
-		txAccount.setText("用户:" + user.getAccount());
+		txMoney.setText("余额:" + user.getMoney());
 		txName.setText("你好:" + user.getName());
 		avatar.load(user);
 		if (user.getIsStore().equals("0")) {
@@ -228,11 +228,11 @@ public class MyProfileFragment extends Fragment {
 	}
 
 	void onFailure(Call arg0, Exception ex) {
-		txAccount.setVisibility(View.VISIBLE);
+		txMoney.setVisibility(View.VISIBLE);
 		txName.setVisibility(View.VISIBLE);
-		txAccount.setTextColor(color.holo_red_dark);
+		txMoney.setTextColor(color.holo_red_dark);
 		txName.setTextColor(color.holo_red_dark);
-		txAccount.setText(ex.getMessage());
+		txMoney.setText(ex.getMessage());
 		txName.setText(ex.getMessage());
 	}
 
