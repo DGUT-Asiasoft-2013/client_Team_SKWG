@@ -73,6 +73,7 @@ public class AddBookCommentActivity extends Activity {
 			tvGoodsType.setText(goods.getGoodsType());
 		}
 	}
+	
 	void setEvent() {
 		btnSubmit.setOnClickListener(new OnClickListener() {
 			
