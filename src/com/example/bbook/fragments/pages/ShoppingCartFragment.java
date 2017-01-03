@@ -5,14 +5,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.example.bbook.BuyActivity;
 import com.example.bbook.R;
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
+import com.example.bbook.api.Shop;
 import com.example.bbook.api.entity.ShoppingCart;
 import com.example.bbook.api.entity.ShoppingCart.Key;
+import com.example.bbook.api.widgets.AvatarView;
 import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -22,15 +25,19 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -45,65 +52,106 @@ public class ShoppingCartFragment extends Fragment {
 
 	View view;
 	TitleBarFragment titleBar;
-	ListView list;
+	ExpandableListView list;
 	CheckBox selectAll;
 	TextView tvSum;
 	Button btnPay;
 	int page = 0;
 	int selectedCount = 0;
-	double sum = 00.00;;
+	double sum = 00.00;
 	boolean isAllSelected;
-	List<Goods> selectedGoods = new ArrayList<Goods>();
-	List<ShoppingCart>  listData;
+	List<Goods> selectedGoods;
+	List<ShoppingCart>  listData = new ArrayList<ShoppingCart>();
+	List<Shop> groupList = new ArrayList<Shop>();
+	//	List<ShoppingCart> childrenList;
+	Map<String,List<ShoppingCart>> dataset = new HashMap<String,List<ShoppingCart>>();
+	//	ExpandableListView exList;
+	BaseExpandableListAdapter exlistAdapter;
+	void initData() {
+		for(int i = 0; i < listData.size(); i++) {
+			if(groupList == null) {
+				groupList = new ArrayList<Shop>();
+			} else {
+				Shop shop = listData.get(i).getId().getGoods().getShop();
+				shop.setSelected(false);
+				groupList.add(shop);
+			}
+		}
+		for(int i = 0; i < groupList.size(); i++) {
+			for(int j = groupList.size() - 1; j > i; j--) {
+				if(groupList.get(i).getShopName().equals(groupList.get(j).getShopName())) {
+					groupList.remove(j);
+					Log.d("removegroupListSize", groupList.size() + "");
+				}
+			}
+		}
+		for(int i = 0; i < groupList.size(); i++) {
+			ShoppingCart cart = null;
+			List<ShoppingCart> childrenList = new ArrayList<ShoppingCart>();
+			for(int j = 0; j < listData.size(); j++) {
+				if(listData.get(j).getId().getGoods().getShop().getShopName().equals(groupList.get(i).getShopName())) {
+					cart = listData.get(j);
+					if(cart != null) {
+						cart.getId().getGoods().setSelected(false);
+						childrenList.add(cart);
+						Log.d("cL", childrenList.size() + "");
+					}
+				}
+			}
+			dataset.put(groupList.get(i).getShopName(), childrenList);
+			Log.d("datasetSize", dataset.size() + "");
+		}
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (view==null) {
-			view=inflater.inflate(R.layout.fragment_page_shoppingcart, null);
+			view=inflater.inflate(R.layout.fragment_page_shopping_cart, null);
 
-			titleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.shoppingcart_titlebar);
+			titleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
 			titleBar.setBtnBackState(false);
 			titleBar.setBtnNextState(false);
 			titleBar.setSplitLineState(false);
 			titleBar.setTitleName("购物车", 16);
 		}
-		list = (ListView) view.findViewById(R.id.list);
+		exlistAdapter = new myAdapter();
+		initData();
+		list =  (ExpandableListView) view.findViewById(R.id.list);
+		list.setGroupIndicator(null);
 		list.setDivider(null);
+
 		selectAll = (CheckBox) view.findViewById(R.id.select_all);
 		tvSum = (TextView) view.findViewById(R.id.sum);
 		btnPay = (Button) view.findViewById(R.id.pay);
 		tvSum.setText(sum + "");
-		list.setAdapter(listAdapter);
+		list.setAdapter(exlistAdapter);
+		list.setOnGroupClickListener(new OnGroupClickListener() {
+
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+				return true;
+			}
+		});
 		btnPay.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				goBuy();
 			}
 		});
-		selectAll.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		selectAll.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if(isChecked == true) {
-					for(int i = 0; i < list.getChildCount(); i++) {
-						View view = list.getChildAt(i);
-						 CheckBox cbCheckEatch = (CheckBox) view.findViewById(R.id.check_eatch);
-						 cbCheckEatch.setChecked(true);
-						 isAllSelected = true;
-					}
-				} else if (isChecked == false && isAllSelected == true){
-					for(int i = 0; i < list.getChildCount(); i++) {
-						 View view = list.getChildAt(i);
-						 CheckBox cbCheckEatch = (CheckBox) view.findViewById(R.id.check_eatch);
-						 cbCheckEatch.setChecked(false);
-						 isAllSelected = false;
-					}
-				} else {
-					
+			public void onClick(View v) {
+				for(int i = 0; i < groupList.size(); i++) {
+					isAllSelected = selectAll.isChecked();
+					groupList.get(i).setSelected(isAllSelected);
+					selectShop(i, isAllSelected);
 				}
+				exlistAdapter.notifyDataSetChanged();
 			}
 		});
-		
+
 		return view;
 	}
 
@@ -112,30 +160,60 @@ public class ShoppingCartFragment extends Fragment {
 		itnt.putExtra("selectedGoods", (Serializable)selectedGoods);
 		
 		startActivity(itnt);
-		
+
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-//		sum = 00.00;
-//		selectedCount = 0;
-//		setViewText();
-//		selectAll.setChecked(false);
 		reload();
+		initData();
+		calculate();
 	}
 
+	void expand() {
+		int count = exlistAdapter.getGroupCount();
+		Log.d("listCOunt", count + "");
+		for(int i = 0; i < count; i++) {
+			list.expandGroup(i);
+		}
+	};
+	
+	
 	private void init(View view) {
-		list = (ListView) view.findViewById(R.id.list);
+		//		list = (ListView) view.findViewById(R.id.list);
 		selectAll = (CheckBox) view.findViewById(R.id.select_all);
 		tvSum = (TextView) view.findViewById(R.id.sum);
 		btnPay = (Button) view.findViewById(R.id.pay);
 	}
-	
+
 	private void setViewText() {
 		tvSum.setText(sum + "");
 		btnPay.setText("结算(" + selectedCount + ")");
 	}
+
+	private void calculate() {
+		sum = 0;
+		selectedCount = 0;
+		selectedGoods = new ArrayList<>();
+		for(int i = 0; i < groupList.size(); i++) {
+			List<ShoppingCart> cartList = dataset.get(groupList.get(i).getShopName());
+			for(int j = 0; j < cartList.size(); j++) {
+				ShoppingCart cart = cartList.get(j);
+				Goods goods = cart.getId().getGoods();
+				int quantity = cartList.get(j).getQuantity();
+				if(goods.isSelected()) {
+					goods.setQuantity(quantity);
+					selectedCount++;
+					sum+=(Double.parseDouble(goods.getGoodsPrice())*quantity);
+					selectedGoods.add(goods);
+				}
+			}
+		}
+		tvSum.setText(sum + "");
+		btnPay.setText("结算(" + selectedCount + ")");
+	}
+
 	
 	private void reload() {
 		Request request = Server.requestBuilderWithApi("shoppingcart/get/" + page).get().build();
@@ -154,7 +232,10 @@ public class ShoppingCartFragment extends Fragment {
 						public void run() {
 							ShoppingCartFragment.this.listData = data.getContent();
 							ShoppingCartFragment.this.page = data.getNumber();
-							listAdapter.notifyDataSetChanged();
+							ShoppingCartFragment.this.initData();
+							ShoppingCartFragment.this.exlistAdapter.notifyDataSetChanged();
+							ShoppingCartFragment.this.expand();
+							//							listAdapter.notifyDataSetChanged();
 						}
 					});
 				} catch (final Exception e) {
@@ -178,7 +259,7 @@ public class ShoppingCartFragment extends Fragment {
 		});
 	}
 
-	private class GoodsInfoHolder{
+	private static class GoodsInfoHolder{
 		GoodsPicture imgGoods;
 		TextView tvGoodsName;
 		TextView tvGoodsType;
@@ -188,108 +269,300 @@ public class ShoppingCartFragment extends Fragment {
 		ImageView ivDelete;
 	}
 
-	BaseAdapter listAdapter = new BaseAdapter() {
-		View view = null;
-		GoodsInfoHolder infoHolder;
-		HashMap<Integer, Boolean> isSelected;
+	private static class ShopInfoHolder {
+		CheckBox cbShopAll;
+		TextView tvShopName;
+		AvatarView imgAvatar;
+	}
+
+	public class myAdapter extends BaseExpandableListAdapter {
+		View shopView = null;
+		View goodsView = null;
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public int getGroupCount() {
+			return dataset.size();
+		}
+
+		@Override
+		public int getChildrenCount(int groupPosition) {
+			return dataset.get(groupList.get(groupPosition).getShopName()).size();
+		}
+
+		@Override
+		public Object getGroup(int groupPosition) {
+			return dataset.get(groupList.get(groupPosition).getShopName());
+		}
+
+		@Override
+		public Object getChild(int groupPosition, int childPosition) {
+			return dataset.get(groupList.get(groupPosition).getShopName()).get(childPosition);
+		}
+
+		@Override
+		public long getGroupId(int groupPosition) {
+			return groupPosition;
+		}
+
+		@Override
+		public long getChildId(int groupPosition, int childPosition) {
+			return childPosition;
+		}
+
+		@Override
+		public boolean hasStableIds() {
+			return false;
+		}
+
+		@Override
+		public View getGroupView(final int groupPosition, boolean isExpanded, final View convertView, final ViewGroup parent) {
+			ShopInfoHolder sHolder;
 			if(convertView == null) {
-				infoHolder = new GoodsInfoHolder();
-				LayoutInflater inflater= LayoutInflater.from(parent.getContext());
-				view =inflater.inflate(R.layout.list_item_cart_goods_info, null);
-				infoHolder.imgGoods = (GoodsPicture) view.findViewById(R.id.goods_image);
-				infoHolder.tvGoodsName = (TextView) view.findViewById(R.id.goods_name);
-				infoHolder.tvGoodsType = (TextView) view.findViewById(R.id.goods_type);
-				infoHolder.tvGoodsQuantity = (TextView) view.findViewById(R.id.goods_quantity);
-				infoHolder.tvGoodsPrice = (TextView) view.findViewById(R.id.goods_price);
-				infoHolder.cbCheck = (CheckBox) view.findViewById(R.id.check_eatch);
-				infoHolder.ivDelete = (ImageView) view.findViewById(R.id.delete);
-				view.setTag(infoHolder);
+				sHolder = new ShopInfoHolder();
+				LayoutInflater inflater = LayoutInflater.from(getActivity());
+				shopView = inflater.inflate(R.layout.list_item_cart_shop, null);
+				sHolder.cbShopAll = (CheckBox) shopView.findViewById(R.id.select_shop_all);
+				sHolder.tvShopName = (TextView) shopView.findViewById(R.id.label_shop_name);
+				sHolder.imgAvatar = (AvatarView) shopView.findViewById(R.id.avatar);
+				shopView.setTag(sHolder);
 			} else {
-				view = convertView;
-				infoHolder = (GoodsInfoHolder) view.getTag();
+				shopView = convertView;
+				sHolder = (ShopInfoHolder) shopView.getTag();
 			}
-			final ShoppingCart cart = listData.get(position);
-			if(cart != null) {
-				infoHolder.imgGoods.load(Server.serverAdress + cart.getId().getGoods().getGoodsImage());
-				infoHolder.tvGoodsName.setText(cart.getId().getGoods().getGoodsName());
-				infoHolder.tvGoodsType.setText("类型： " + cart.getId().getGoods().getGoodsType());
-				infoHolder.tvGoodsPrice.setText("￥" + cart.getId().getGoods().getGoodsPrice());
-				infoHolder.tvGoodsQuantity.setText("×" + cart.getQuantity());
-				infoHolder.ivDelete.setOnClickListener(new OnClickListener() {
-					
+			final Shop shop = groupList.get(groupPosition);
+			if(shop != null) {
+				sHolder.tvShopName.setText(groupList.get(groupPosition).getShopName());
+//				sHolder.imgAvatar.load(Server.serverAdress + groupList.get(groupPosition).getShopImage());
+				sHolder.cbShopAll.setOnClickListener(new OnClickListener() {
+
 					@Override
 					public void onClick(View v) {
-						ShoppingCartFragment.this.onDelete(cart.getId().getGoods().getId());
+						View view = null;
+						shop.setSelected(((CheckBox)v).isChecked());
+						selectShop(groupPosition, ((CheckBox)v).isChecked());
+						Log.d("goupSelect", ((CheckBox)v).isChecked() + "");
 					}
 				});
-				infoHolder.cbCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					boolean isCheck = false;
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-						if(isCheck) {
-							sum -= Double.parseDouble(cart.getId().getGoods().getGoodsPrice()) * cart.getQuantity();
-							isCheck = !isCheck;
-							selectedCount -= 1;
-							ShoppingCartFragment.this.isAllSelected = false;
-							ShoppingCartFragment.this.selectAll.setChecked(false);
-							Goods goods = cart.getId().getGoods();
-							goods.setQuantity(cart.getQuantity());
-							ShoppingCartFragment.this.selectedGoods.add(goods);
-							
-							setViewText();
-						} else {
-							isCheck= !isCheck;
-							selectedCount +=1;
-							sum += Double.parseDouble(cart.getId().getGoods().getGoodsPrice()) * cart.getQuantity();
-							Goods goods = cart.getId().getGoods();
-							goods.setQuantity(cart.getQuantity());
-							ShoppingCartFragment.this.selectedGoods.add(goods);
-							if(selectedCount == ShoppingCartFragment.this.listData.size()) {
-								ShoppingCartFragment.this.selectAll.setChecked(true);
-							}
-							setViewText();
-						}
-					}
-				});
+				sHolder.cbShopAll.setChecked(shop.isSelected());
 			}
-			return view;
+			return shopView;
 		}
 
 		@Override
-		public long getItemId(int position) {
-			return position;
+		public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView,
+				ViewGroup parent) {
+			final GoodsInfoHolder gHolder;
+			if(convertView == null) {
+				gHolder = new GoodsInfoHolder();
+				LayoutInflater inflater = LayoutInflater.from(getActivity());
+				goodsView = inflater.inflate(R.layout.list_item_cart_goods_info, null);
+				gHolder.imgGoods = (GoodsPicture) goodsView.findViewById(R.id.goods_image);
+				gHolder.tvGoodsName = (TextView) goodsView.findViewById(R.id.goods_name);
+				gHolder.tvGoodsType = (TextView) goodsView.findViewById(R.id.goods_type);
+				gHolder.tvGoodsQuantity = (TextView) goodsView.findViewById(R.id.goods_quantity);
+				gHolder.tvGoodsPrice = (TextView) goodsView.findViewById(R.id.goods_price);
+				gHolder.cbCheck = (CheckBox) goodsView.findViewById(R.id.check_eatch);
+				gHolder.ivDelete = (ImageView) goodsView.findViewById(R.id.delete);
+				goodsView.setTag(gHolder);
+			} else {
+				goodsView = convertView;
+				gHolder = (GoodsInfoHolder) goodsView.getTag();
+			}
+
+
+			final ShoppingCart cart = ShoppingCartFragment.this.dataset.get(ShoppingCartFragment.this.groupList.get(groupPosition).getShopName()).get(childPosition);
+
+			gHolder.imgGoods.load(Server.serverAdress + cart.getId().getGoods().getGoodsImage());
+			gHolder.tvGoodsName.setText(cart.getId().getGoods().getGoodsName());
+			gHolder.tvGoodsType.setText("类型： " + cart.getId().getGoods().getGoodsType());
+			gHolder.tvGoodsPrice.setText("￥" + cart.getId().getGoods().getGoodsPrice());
+			gHolder.tvGoodsQuantity.setText("×" + cart.getQuantity());
+			gHolder.cbCheck.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					cart.getId().getGoods().setSelected(((CheckBox)v).isChecked());
+					gHolder.cbCheck.setChecked(((CheckBox)v).isChecked());
+					selectGoods(groupPosition, childPosition, ((CheckBox)v).isChecked());
+				}
+			});
+			gHolder.cbCheck.setChecked(cart.getId().getGoods().isSelected());
+			gHolder.ivDelete.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+
+				}
+			});
+
+			return goodsView;
 		}
 
 		@Override
-		public Object getItem(int position) {
-			return listData.get(position);
+		public boolean isChildSelectable(int groupPosition, int childPosition) {
+			return false;
 		}
 
-		@Override
-		public int getCount() {
-			return listData == null ? 0 : listData.size();
-		}
+	}
 
-		public HashMap<Integer, Boolean> getIsSelected() {
-			return isSelected;
+	void selectGoods(int groupPosition, int childPosition, boolean isSelected) {
+		boolean isAllSameState = true;
+		boolean isAllGroupSameState = true;
+		List<ShoppingCart> cartList = dataset.get(groupList.get(groupPosition).getShopName());
+		for(int i = 0; i < cartList.size(); i++) {
+			if(isSelected != cartList.get(i).getId().getGoods().isSelected()) {
+				isAllSameState = false;
+				break;
+			}
 		}
+		Log.d("isAllS", isAllSameState + "");
+		Log.d("isAllISSelec", isSelected + "");
+		if(isAllSameState) {
+			groupList.get(groupPosition).setSelected(isSelected);
+			for(int i = 0; i < groupList.size(); i++) {
+				if(groupList.get(i).isSelected() != true) {
+					isAllGroupSameState = false;
+				}
+			}
+			if(isAllGroupSameState) {
+				isAllSelected = true;
+				selectAll.setChecked(isAllSelected);
+			} else {
+				selectAll.setChecked(isAllSelected);
+			}
+		} else {
+			groupList.get(groupPosition).setSelected(false);
+			isAllSelected = false;
+			selectAll.setChecked(false);
+		}
+		exlistAdapter.notifyDataSetChanged();
+		calculate();
+	}
 
-		public void setIsSelected(HashMap<Integer, Boolean> isSelected) {
-			this.isSelected = isSelected;
+	void selectShop(int groupPosition, boolean isSelected) {
+		boolean isAllGroupSameState = true;
+		Shop shop = groupList.get(groupPosition);
+		List<ShoppingCart> cartList = dataset.get(shop.getShopName());
+		for(int i = 0; i < cartList.size(); i++) {
+			cartList.get(i).getId().getGoods().setSelected(isSelected);
+			Log.d("cartIsSelect", isSelected + "");
 		}
-		
-		
-	};
+		for(int i = 0; i < groupList.size(); i++) {
+			if(groupList.get(i).isSelected() != true) {
+				isAllGroupSameState = false;
+			}
+		}
+		if(isAllGroupSameState) {
+			isAllSelected = true;
+			selectAll.setChecked(isAllSelected);
+		} else {
+			selectAll.setChecked(isAllSelected);
+		}
+		exlistAdapter.notifyDataSetChanged();
+		calculate();
+	}
+	
+//	BaseAdapter listAdapter = new BaseAdapter() {
+//		View view = null;
+//		GoodsInfoHolder infoHolder;
+//		HashMap<Integer, Boolean> isSelected;
+//		@Override
+//		public View getView(int position, View convertView, ViewGroup parent) {
+//			if(convertView == null) {
+//				infoHolder = new GoodsInfoHolder();
+//				LayoutInflater inflater= LayoutInflater.from(parent.getContext());
+//				view =inflater.inflate(R.layout.list_item_cart_goods_info, null);
+//				infoHolder.imgGoods = (GoodsPicture) view.findViewById(R.id.goods_image);
+//				infoHolder.tvGoodsName = (TextView) view.findViewById(R.id.goods_name);
+//				infoHolder.tvGoodsType = (TextView) view.findViewById(R.id.goods_type);
+//				infoHolder.tvGoodsQuantity = (TextView) view.findViewById(R.id.goods_quantity);
+//				infoHolder.tvGoodsPrice = (TextView) view.findViewById(R.id.goods_price);
+//				infoHolder.cbCheck = (CheckBox) view.findViewById(R.id.check_eatch);
+//				infoHolder.ivDelete = (ImageView) view.findViewById(R.id.delete);
+//				view.setTag(infoHolder);
+//			} else {
+//				view = convertView;
+//				infoHolder = (GoodsInfoHolder) view.getTag();
+//			}
+//			final ShoppingCart cart = listData.get(position);
+//			if(cart != null) {
+//				infoHolder.imgGoods.load(Server.serverAdress + cart.getId().getGoods().getGoodsImage());
+//				infoHolder.tvGoodsName.setText(cart.getId().getGoods().getGoodsName());
+//				infoHolder.tvGoodsType.setText("类型： " + cart.getId().getGoods().getGoodsType());
+//				infoHolder.tvGoodsPrice.setText("￥" + cart.getId().getGoods().getGoodsPrice());
+//				infoHolder.tvGoodsQuantity.setText("×" + cart.getQuantity());
+//				infoHolder.ivDelete.setOnClickListener(new OnClickListener() {
+//
+//					@Override
+//					public void onClick(View v) {
+//						ShoppingCartFragment.this.onDelete(cart.getId().getGoods().getId());
+//					}
+//				});
+//				infoHolder.cbCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+//					boolean isCheck = false;
+//					@Override
+//					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//						if(isCheck) {
+//							sum -= Double.parseDouble(cart.getId().getGoods().getGoodsPrice()) * cart.getQuantity();
+//							isCheck = !isCheck;
+//							selectedCount -= 1;
+//							ShoppingCartFragment.this.isAllSelected = false;
+//							ShoppingCartFragment.this.selectAll.setChecked(false);
+//							Goods goods = cart.getId().getGoods();
+//							goods.setQuantity(cart.getQuantity());
+//							ShoppingCartFragment.this.selectedGoods.add(goods);
+//
+//							setViewText();
+//						} else {
+//							isCheck= !isCheck;
+//							selectedCount +=1;
+//							sum += Double.parseDouble(cart.getId().getGoods().getGoodsPrice()) * cart.getQuantity();
+//							Goods goods = cart.getId().getGoods();
+//							goods.setQuantity(cart.getQuantity());
+//							ShoppingCartFragment.this.selectedGoods.add(goods);
+//							if(selectedCount == ShoppingCartFragment.this.listData.size()) {
+//								ShoppingCartFragment.this.selectAll.setChecked(true);
+//							}
+//							setViewText();
+//						}
+//					}
+//				});
+//			}
+//			return view;
+//		}
+//
+//		@Override
+//		public long getItemId(int position) {
+//			return position;
+//		}
+//
+//		@Override
+//		public Object getItem(int position) {
+//			return listData.get(position);
+//		}
+//
+//		@Override
+//		public int getCount() {
+//			return listData == null ? 0 : listData.size();
+//		}
+//
+//		public HashMap<Integer, Boolean> getIsSelected() {
+//			return isSelected;
+//		}
+//
+//		public void setIsSelected(HashMap<Integer, Boolean> isSelected) {
+//			this.isSelected = isSelected;
+//		}
+//
+//
+//	};
 	protected void onDelete(int goodsId) {
 		Request request = Server.requestBuilderWithApi("shoppingcart/delete/" + goodsId).get().build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				getActivity().runOnUiThread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
@@ -297,11 +570,11 @@ public class ShoppingCartFragment extends Fragment {
 					}
 				});
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 	}
