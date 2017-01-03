@@ -47,6 +47,7 @@ public class RegisterActivity extends Activity {
 		fragEmail = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_email);
 		fragAddress = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_address);
 		fragPhoneNum = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_phoneNum);
+		fragPhoneNum.setEditNum(true);
 		fragName = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_name);
 
 		fragImg = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_img);
@@ -113,6 +114,7 @@ public class RegisterActivity extends Activity {
 		String account = fragAccount.getText();
 		if(account.isEmpty()){
 			Toast toast = Toast.makeText(RegisterActivity.this, "用户名不能为空", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 			return;
 		}
@@ -160,6 +162,7 @@ public class RegisterActivity extends Activity {
 		String email = fragEmail.getText();
 		if(email.isEmpty()){
 			Toast toast = Toast.makeText(RegisterActivity.this, "邮箱不能为空", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 			return;
 		}
@@ -207,11 +210,14 @@ public class RegisterActivity extends Activity {
 		String passwordrepeat = fragRepeatPassword.getText();
 		if(password.isEmpty()){
 			Toast toast = Toast.makeText(RegisterActivity.this, "密码不能为空", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 			return;
 		}
 		if (!password.equals(passwordrepeat)) {
-			Toast.makeText(RegisterActivity.this, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
+			Toast toast=Toast.makeText(RegisterActivity.this, "两次密码输入不一致", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
 			return;
 		}
 		password = MD5.getMD5(password);
@@ -224,16 +230,18 @@ public class RegisterActivity extends Activity {
 		String phoneNum = fragPhoneNum.getText();
 		if(address.isEmpty()){
 			Toast toast = Toast.makeText(RegisterActivity.this, "地址不能为空", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 			return;
 		}
-		
+
 		if(phoneNum.isEmpty()){
 			Toast toast = Toast.makeText(RegisterActivity.this, "联系电话不能为空", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 			return;
 		}
-		
+
 		OkHttpClient client = Server.getSharedClient();
 		// 构造发送内容
 		MultipartBody.Builder requestbody = new MultipartBody.Builder().addFormDataPart("account", account)

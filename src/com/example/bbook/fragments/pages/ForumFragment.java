@@ -45,6 +45,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
+import util.AutoLoadListener;
 
 public class ForumFragment extends Fragment {
 
@@ -54,8 +55,8 @@ public class ForumFragment extends Fragment {
 	int page=0;
 	List<Article>data;
 
-	View btnLoadMore;
-	TextView textLoadMore;
+	//	View btnLoadMore;
+	//	TextView textLoadMore;
 
 	ListView listView;
 	View view;
@@ -63,8 +64,8 @@ public class ForumFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (view==null) {
 			view=inflater.inflate(R.layout.fragment_page_forum, null);
-			btnLoadMore= inflater.inflate(R.layout.load_more_button, null);
-			textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
+			//			btnLoadMore= inflater.inflate(R.layout.load_more_button, null);
+			//			textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
 
 			myMenu=new PopupMenu(getActivity(),view.findViewById(R.id.img_aboutme));
 			menu=myMenu.getMenu();
@@ -72,7 +73,10 @@ public class ForumFragment extends Fragment {
 
 			listView =(ListView)view.findViewById(R.id.list);
 			listView.setAdapter(listAdapter);
-			listView.addFooterView(btnLoadMore);
+			//向下滚动加载更多
+			AutoLoadListener autoLoadListener = new AutoLoadListener(callBack);  
+			listView.setOnScrollListener(autoLoadListener);  
+			//			listView.addFooterView(btnLoadMore);
 
 			ImageView img_myart=(ImageView)view.findViewById(R.id.img_aboutme);
 			ImageView img_addnote=(ImageView)view.findViewById(R.id.img_addnote);
@@ -134,13 +138,13 @@ public class ForumFragment extends Fragment {
 				}
 			});
 
-			btnLoadMore.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					loadmore();
-				}
-			});
+			//			btnLoadMore.setOnClickListener(new View.OnClickListener() {
+			//
+			//				@Override
+			//				public void onClick(View v) {
+			//					loadmore();
+			//				}
+			//			});
 		}
 		return view;
 	}
@@ -151,6 +155,16 @@ public class ForumFragment extends Fragment {
 		super.onResume();
 		reload();
 	}
+
+	//向下滚动加载
+	AutoLoadListener.AutoLoadCallBack callBack = new AutoLoadListener.AutoLoadCallBack() {  
+
+		public void execute() {  
+			//            Utils.showToast("已经拖动至底部");  
+			loadmore();//这段代码是用来请求下一页数据的  
+		}  
+
+	}; 
 
 	//适配器为listview填充data文章内容
 	BaseAdapter listAdapter = new BaseAdapter() {
@@ -260,8 +274,8 @@ public class ForumFragment extends Fragment {
 
 	//加载更多
 	void loadmore(){
-		btnLoadMore.setEnabled(false);
-		textLoadMore.setText("载入中…");
+		//		btnLoadMore.setEnabled(false);
+		//		textLoadMore.setText("载入中…");
 
 		Request request = Server.requestBuilderWithApi("forums/"+(page+1)).get().build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
@@ -269,8 +283,8 @@ public class ForumFragment extends Fragment {
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				getActivity().runOnUiThread(new Runnable() {
 					public void run() {
-						btnLoadMore.setEnabled(true);
-						textLoadMore.setText("加载更多");
+						//						btnLoadMore.setEnabled(true);
+						//						textLoadMore.setText("加载更多");
 					}
 				});
 
@@ -299,8 +313,8 @@ public class ForumFragment extends Fragment {
 			public void onFailure(Call arg0, IOException arg1) {
 				getActivity().runOnUiThread(new Runnable() {
 					public void run() {
-						btnLoadMore.setEnabled(true);
-						textLoadMore.setText("加载更多");
+						//						btnLoadMore.setEnabled(true);
+						//						textLoadMore.setText("加载更多");
 					}
 				});
 			}
@@ -309,7 +323,7 @@ public class ForumFragment extends Fragment {
 
 
 
-	//点击listview跳转到这条文章的详情并传参
+	//点击listview跳转到这条帖子的详情并传参
 	public void onItemClicked( int position){
 		String title = data.get(position).getTitle();
 		String text = data.get(position).getText();
@@ -344,7 +358,7 @@ public class ForumFragment extends Fragment {
 		getActivity().overridePendingTransition(R.anim.slide_in_left,0);
 
 	}
-	//跳到对我的文章的评论页面
+	//跳到对我的帖子的评论页面
 	void gocommentTome(){
 		Intent itnt =new Intent(getActivity(),CommentTomeActivity.class);
 		startActivity(itnt);
