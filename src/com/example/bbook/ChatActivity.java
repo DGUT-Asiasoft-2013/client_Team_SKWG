@@ -56,7 +56,7 @@ public class ChatActivity extends Activity {
                         
                         @Override
                         public void onGoBack() {
-                                finish();
+                                goBack();
                         }
                 });
 
@@ -75,6 +75,10 @@ public class ChatActivity extends Activity {
                         }
                 });
 
+        }
+
+        void goBack() {
+                finish();
         }
 
         class ViewHolderMe {
