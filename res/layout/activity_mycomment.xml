@@ -53,7 +53,7 @@
         android:layout_height="20dp"
         android:layout_marginTop="40dp"
         android:gravity="center"
-        android:text="点击直接删除该评论" />
+        android:text="点击可以删除评论" />
 
     <ListView
         android:id="@+id/list"

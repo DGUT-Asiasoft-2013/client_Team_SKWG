@@ -46,6 +46,9 @@ import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
 import util.AutoLoadListener;
+import util.MyListener;
+import util.PullToRefreshLayout;
+import util.PullableListView;
 
 public class ForumFragment extends Fragment {
 
@@ -57,8 +60,8 @@ public class ForumFragment extends Fragment {
 
 	//	View btnLoadMore;
 	//	TextView textLoadMore;
-
-	ListView listView;
+	PullToRefreshLayout pullToRefreshLayout;
+	PullableListView listView;
 	View view;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,11 +74,13 @@ public class ForumFragment extends Fragment {
 			menu=myMenu.getMenu();
 			getActivity().getMenuInflater().inflate(R.menu.menu_article, menu);
 
-			listView =(ListView)view.findViewById(R.id.list);
+			pullToRefreshLayout=(PullToRefreshLayout)view.findViewById(R.id.refresh_view);   //获取自定义layout
+
+			listView =(PullableListView)view.findViewById(R.id.content_view);
 			listView.setAdapter(listAdapter);
 			//向下滚动加载更多
-			AutoLoadListener autoLoadListener = new AutoLoadListener(callBack);  
-			listView.setOnScrollListener(autoLoadListener);  
+			//			AutoLoadListener autoLoadListener = new AutoLoadListener(callBack);  
+			//			listView.setOnScrollListener(autoLoadListener);  
 			//			listView.addFooterView(btnLoadMore);
 
 			ImageView img_myart=(ImageView)view.findViewById(R.id.img_aboutme);
@@ -138,13 +143,22 @@ public class ForumFragment extends Fragment {
 				}
 			});
 
-			//			btnLoadMore.setOnClickListener(new View.OnClickListener() {
-			//
-			//				@Override
-			//				public void onClick(View v) {
-			//					loadmore();
-			//				}
-			//			});
+			//自定义布局上拉下拉操作监听
+			pullToRefreshLayout.setOnRefreshListener(new MyListener(){
+				//下拉刷新操作
+				@Override
+				public void onRefresh(final PullToRefreshLayout pullToRefreshLayout){
+					reload();
+					pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+				}
+				//上拉加载更多操作
+				@Override
+				public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout)
+				{
+					loadmore();
+					pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+				}
+			});
 		}
 		return view;
 	}
@@ -156,15 +170,15 @@ public class ForumFragment extends Fragment {
 		reload();
 	}
 
-	//向下滚动加载
-	AutoLoadListener.AutoLoadCallBack callBack = new AutoLoadListener.AutoLoadCallBack() {  
-
-		public void execute() {  
-			//            Utils.showToast("已经拖动至底部");  
-			loadmore();//这段代码是用来请求下一页数据的  
-		}  
-
-	}; 
+	//	//向下滚动加载
+	//	AutoLoadListener.AutoLoadCallBack callBack = new AutoLoadListener.AutoLoadCallBack() {  
+	//
+	//		public void execute() {  
+	//			//            Utils.showToast("已经拖动至底部");  
+	//			loadmore();//这段代码是用来请求下一页数据的  
+	//		}  
+	//
+	//	}; 
 
 	//适配器为listview填充data文章内容
 	BaseAdapter listAdapter = new BaseAdapter() {

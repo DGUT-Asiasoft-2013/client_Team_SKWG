@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -227,8 +228,22 @@ public class MyCommentActivity extends Activity{
 		});
 	}
 
-	//点击listview删除评论
-	public void onItemClicked( int position){
+	//点击listview删除评论提示
+	public void onItemClicked(final int position){
+		AlertDialog.Builder builder=new Builder(this);
+		builder.setMessage("确定删除该评论？");
+		builder.setNegativeButton("取消",null);
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				deleteComment(position);
+			}
+		});
+		builder.show();
+	}
+	
+	//delete评论
+	void deleteComment(int position){
 		Comment comment = data.get(position);
 		
 		Request request = Server.requestBuilderWithApi("deletecomment/"+comment.getId())
@@ -267,6 +282,7 @@ public class MyCommentActivity extends Activity{
 			}
 		});
 
+	
 	}
 	void onResponsed(Call arg0, String responseBody) {
 		new AlertDialog.Builder(this)
