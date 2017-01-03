@@ -37,13 +37,21 @@
         android:layout_gravity="right"
         android:orientation="horizontal" >
 
- <!--     <ImageView
+        <!--
+          <ImageView
             android:id="@+id/pop_menu_classify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:src="@drawable/icon_classify" />
--->    
+            android:src="@drawable/icon_classify" />        -->
+
+<ImageView
+    android:id="@+id/change_view"
+    android:layout_width="20dp"
+    android:layout_height="20dp"
+    android:layout_margin="2dp"
+     />
+
         <ImageView
             android:id="@+id/pop_menu_sort"
             android:layout_width="20dp"
@@ -58,5 +66,11 @@
         android:layout_height="wrap_content"
         android:numColumns="3" >
     </GridView>
+
+    <ListView
+        android:id="@+id/book_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>
