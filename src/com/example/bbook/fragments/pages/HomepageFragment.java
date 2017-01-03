@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.http.cookie.CookieIdentityComparator;
 
 import com.example.bbook.BookDetailActivity;
+import com.example.bbook.BuyActivity;
 import com.example.bbook.R;
 import com.example.bbook.ShopActivity;
 import com.example.bbook.api.Goods;
@@ -22,11 +23,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.R.raw;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.style.UpdateLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,12 +40,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
@@ -48,6 +56,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -79,6 +88,11 @@ public class HomepageFragment extends Fragment {
 	Button sortByName;
 	List<Goods> data;
 	int page=0;
+	
+	//切换GridView和Listview标志
+	boolean isGridview=true;
+	ImageView changeView;
+	ListView listView;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view=inflater.inflate(R.layout.fragment_home_page, null);
@@ -86,14 +100,24 @@ public class HomepageFragment extends Fragment {
 		btnSearch=(ImageView) view.findViewById(R.id.btn_search);
 		editKeyword=(EditText) view.findViewById(R.id.edit_keyword);
 		bookView=(GridView) view.findViewById(R.id.book_gridView);
-		bookView.setAdapter(bookAdapter);
+		//bookView.setAdapter(bookAdapter);
+		listView=(ListView) view.findViewById(R.id.book_listview);
+		
 		//向下滚动加载更多
 		AutoLoadListener autoLoadListener = new AutoLoadListener(callBack);  
 		bookView.setOnScrollListener(autoLoadListener);  
-
-	//	popupMenuClassify=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu_classify));
-	//	menuClassify=popupMenuClassify.getMenu();
-	//	getActivity().getMenuInflater().inflate(R.menu.menu_classify, menuClassify);
+		
+		changeView=(ImageView) view.findViewById(R.id.change_view);
+		changeView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				isGridview=!isGridview;
+				updateLayout();
+			}
+		});
+		
 
 		popupMenuSort=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu_sort));
 		menuSort=popupMenuSort.getMenu();
@@ -131,56 +155,6 @@ public class HomepageFragment extends Fragment {
 				return false;
 			}
 		});
-//		popupMenuClassify.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-//			@Override
-//			public boolean onMenuItemClick(MenuItem item) {
-//				// TODO Auto-generated method stub
-//				switch (item.getItemId()) {
-//				case R.id.a:
-//					goodsType="novel";
-//					//	Classify(goodsType);
-//					isClassified=true;
-//					bookLoad();
-//					break;
-//				case R.id.b:
-//					goodsType="history";
-//					//	Classify(goodsType);
-//					isClassified=true;
-//					bookLoad();
-//					break;
-//				case R.id.c:
-//					goodsType="youth";
-//					//	Classify(goodsType);
-//					isClassified=true;
-//					bookLoad();
-//					break;
-//				case R.id.d:
-//					goodsType="computer";
-//					//	Classify(goodsType);
-//					isClassified=true;
-//					bookLoad();
-//					break;
-//				case R.id.e:
-//					goodsType="technology";
-//					//	Classify(goodsType);
-//					isClassified=true;
-//					bookLoad();
-//					break;
-//				default:
-//					break;
-//				}
-//				return false;
-//			}
-//		});
-
-//		view.findViewById(R.id.pop_menu_classify).setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				popupMenuClassify.show();
-//			}
-//		});
 
 		view.findViewById(R.id.pop_menu_sort).setOnClickListener(new OnClickListener() {
 
@@ -258,7 +232,12 @@ public class HomepageFragment extends Fragment {
 
 			if(convertView==null){
 				LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-				view = inflater.inflate(R.layout.fragment_picture_name, null);	
+				if(isGridview){
+					view = inflater.inflate(R.layout.goods_grid_item, null);	
+				}
+				else {
+					view=inflater.inflate(R.layout.goods_list_item,null);
+				}
 			}else{
 				view = convertView;
 			}
@@ -285,6 +264,14 @@ public class HomepageFragment extends Fragment {
 					Toast.makeText(getActivity(), "ID",Toast.LENGTH_SHORT).show();
 					textview.setTextColor(Color.RED);
 					goShopActivity(position);
+				}
+			});
+			
+			view.findViewById(R.id.shopping_car).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					//chooseNum(position);
+					addToShopCar(position);
 				}
 			});
 			return view;
@@ -330,12 +317,11 @@ public class HomepageFragment extends Fragment {
 		super.onResume();
 		//		if(!sortState){
 		bookLoad();
+		updateLayout();
 		//		}
 		//		else {
 		//			SortStyle(sortStyle);
 		//		}
-
-
 	}
 
 	public void SearchBooksByKeyword(){
@@ -608,4 +594,94 @@ public class HomepageFragment extends Fragment {
 	}
 
 
+	public void updateLayout(){
+	
+		AutoLoadListener autoLoadListener = new AutoLoadListener(callBack);  
+		if(isGridview){
+			bookView.setOnScrollListener(autoLoadListener);  
+			changeView.setImageResource(R.drawable.icon_list_view);
+			bookView.setVisibility(View.VISIBLE);
+			bookView.setAdapter(bookAdapter);
+			listView.setVisibility(View.GONE);
+		}else {
+			listView.setOnScrollListener(autoLoadListener);
+			changeView.setImageResource(R.drawable.icon_grid_view);
+			listView.setVisibility(View.VISIBLE);
+			listView.setAdapter(bookAdapter);
+			bookView.setVisibility(View.GONE);
+		}
+	
+	}
+
+//	public void chooseNum(final int position){
+//		
+//		AlertDialog.Builder builder=new Builder(getActivity());
+//		builder.setTitle("请输入支付密码");
+//		//把布局文件先填充成View对象
+//		View view = View.inflate(getActivity(), R.layout.fragment_widget_number_plus_sub, null);
+//		final TextView chooseNum=(TextView) view.findViewById(R.id.quantity);
+//		//把填充得来的view对象设置为对话框显示内容
+//		builder.setView(view);
+//		builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//			public void onClick(DialogInterface dialog, int which) {
+//				String string= chooseNum.getText().toString();
+//				int quantity=Integer.parseInt(string);
+//				addToShopCar(quantity, position);
+//			}
+//		});
+//		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//			public void onClick(DialogInterface dialog, int which) {
+//
+//			}
+//		});
+//		builder.show();
+//	//	int quantity=1;
+//
+//}
+	public void addToShopCar(int position){
+		int quantity=1;
+		goods=data.get(position);
+		MultipartBody body = new MultipartBody.Builder()
+				.addFormDataPart("quantity", quantity + "").build();
+
+
+		Request request = Server.requestBuilderWithApi("shoppingcart/add/" + goods.getId())
+				.method("post", null).post(body).build();
+
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+
+			@Override
+			public void onResponse(final Call arg0, final Response arg1) throws IOException {
+				final String body = arg1.body().string();
+				getActivity().runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						HomepageFragment.this.onResponse(arg0, body);
+					}
+				});
+			}
+
+			@Override
+			public void onFailure(final Call arg0, final IOException arg1) {
+				getActivity().runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						onFailture(arg0, arg1);
+					}
+				});
+			}
+		});
+	}
+void onResponse(Call arg0, String responseBody){
+	Toast.makeText(getActivity(), "加入购物车成功", Toast.LENGTH_SHORT).show();;
+}
+
+void onFailture(Call arg0, Exception arg1) {
+	new AlertDialog.Builder(getActivity())
+	.setTitle("失败")
+	.setMessage(arg1.getLocalizedMessage())
+	.show();
+}
 }

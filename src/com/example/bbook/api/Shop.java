@@ -10,7 +10,7 @@ public class Shop implements Serializable {
 	String description; // 简介
 	String shopImage; // 店铺图片
 	User owner;
-
+	boolean isSelected;
 	public User getOwner() {
 		return owner;
 	}
@@ -50,4 +50,14 @@ public class Shop implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	public boolean isSelected() {
+		return isSelected;
+	}
+
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
+	}
+	
+	
 }

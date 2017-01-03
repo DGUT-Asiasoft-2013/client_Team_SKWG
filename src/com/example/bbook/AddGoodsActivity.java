@@ -5,7 +5,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
+import com.example.bbook.api.Shop;
+import com.example.bbook.api.entity.Subscribe;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,255 +40,319 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class AddGoodsActivity extends Activity{
-	Spinner spinner;
-	List<String> type_list;
-	ArrayAdapter<String> type_adapter;
-	String selectedType;
-	EditText pubDate,priTime;
+public class AddGoodsActivity extends Activity {
+        Spinner spinner;
+        List<String> type_list;
+        ArrayAdapter<String> type_adapter;
+        String selectedType;
+        EditText pubDate, priTime;
+        Shop shop;
+        List<Subscribe> subscribeData;
+        Integer userId;
 
-	SimpleTextInputcellFragment fragGoodsName,
-	fragGoodsType,fragGoodsPrice,fragGoodsCount,
-	fragGoodsPublisher,fragGoodsAuthor,fragGoodsPubDate,
-	fragGoodsPritime;
-	PictureInputCellFragment fragGoodsImage;
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add_goods);
-		fragGoodsName = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_goods_name);
-		fragGoodsPrice = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_goods_price);
-		fragGoodsPrice.setEditNum(true);    //设置价格输入为整型
-		fragGoodsCount = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_goods_count);
-		fragGoodsCount.setEditNum(true);    //设置数量输入为整型
-		fragGoodsPublisher = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_goods_publisher);
-		fragGoodsAuthor = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_goods_author);
-		fragGoodsImage = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_goods_image);
+        SimpleTextInputcellFragment fragGoodsName, fragGoodsType, fragGoodsPrice, fragGoodsCount, fragGoodsPublisher,
+                        fragGoodsAuthor, fragGoodsPubDate, fragGoodsPritime;
+        PictureInputCellFragment fragGoodsImage;
 
-		//出版时间
-		pubDate = (EditText) findViewById(R.id.edit_pubdate);  
-		pubDate.setOnTouchListener(new OnTouchListener() {  
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.activity_add_goods);
+                fragGoodsName = (SimpleTextInputcellFragment) getFragmentManager()
+                                .findFragmentById(R.id.input_goods_name);
+                fragGoodsPrice = (SimpleTextInputcellFragment) getFragmentManager()
+                                .findFragmentById(R.id.input_goods_price);
+                fragGoodsPrice.setEditNum(true); // 设置价格输入为整型
+                fragGoodsCount = (SimpleTextInputcellFragment) getFragmentManager()
+                                .findFragmentById(R.id.input_goods_count);
+                fragGoodsCount.setEditNum(true); // 设置数量输入为整型
+                fragGoodsPublisher = (SimpleTextInputcellFragment) getFragmentManager()
+                                .findFragmentById(R.id.input_goods_publisher);
+                fragGoodsAuthor = (SimpleTextInputcellFragment) getFragmentManager()
+                                .findFragmentById(R.id.input_goods_author);
+                fragGoodsImage = (PictureInputCellFragment) getFragmentManager()
+                                .findFragmentById(R.id.input_goods_image);
 
-			@Override  
-			public boolean onTouch(View v, MotionEvent event) {  
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {  
-					showPubDatePickDlg();  
-					return true;  
-				}  
-				return false;  
-			}  
-		});  
-		pubDate.setOnFocusChangeListener(new OnFocusChangeListener() {  
+                shop = (Shop) getIntent().getSerializableExtra("shop");
+                
+                // 出版时间
+                pubDate = (EditText) findViewById(R.id.edit_pubdate);
+                pubDate.setOnTouchListener(new OnTouchListener() {
 
-			@Override  
-			public void onFocusChange(View v, boolean hasFocus) {  
-				if (hasFocus) {  
-					showPubDatePickDlg();  
-				}  
-			}  
-		});  
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                        showPubDatePickDlg();
+                                        return true;
+                                }
+                                return false;
+                        }
+                });
+                pubDate.setOnFocusChangeListener(new OnFocusChangeListener() {
 
-		//印刷时间
-		priTime = (EditText) findViewById(R.id.edit_pritime);  
-		priTime.setOnTouchListener(new OnTouchListener() {  
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                                if (hasFocus) {
+                                        showPubDatePickDlg();
+                                }
+                        }
+                });
 
-			@Override  
-			public boolean onTouch(View v, MotionEvent event) {  
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {  
-					showPriDatePickDlg();  
-					return true;  
-				}  
-				return false;  
-			}  
-		});  
-		priTime.setOnFocusChangeListener(new OnFocusChangeListener() {  
+                // 印刷时间
+                priTime = (EditText) findViewById(R.id.edit_pritime);
+                priTime.setOnTouchListener(new OnTouchListener() {
 
-			@Override  
-			public void onFocusChange(View v, boolean hasFocus) {  
-				if (hasFocus) {  
-					showPriDatePickDlg();  
-				}  
-			}  
-		}); 
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                        showPriDatePickDlg();
+                                        return true;
+                                }
+                                return false;
+                        }
+                });
+                priTime.setOnFocusChangeListener(new OnFocusChangeListener() {
 
-		spinner=(Spinner)findViewById(R.id.spinner_type);
-		//种类下拉框数据 "青春文学","历史","计算机","小说","建筑","自然科学","哲学","运动","文学","成功励志","保健养生","传记"
-		type_list = new ArrayList<String>();
-		type_list.add("青春文学");
-		type_list.add("历史");
-		type_list.add("计算机");
-		type_list.add("小说");
-		type_list.add("建筑");
-		type_list.add("自然科学");
-		type_list.add("哲学");
-		type_list.add("运动");
-		type_list.add("文学");
-		type_list.add("成功励志");
-		type_list.add("保健养生");
-		type_list.add("传记");
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                                if (hasFocus) {
+                                        showPriDatePickDlg();
+                                }
+                        }
+                });
 
-		//下拉框适配器
-		type_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, type_list);
-		//设置样式
-		type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		//加载适配器
-		spinner.setAdapter(type_adapter);
-		//
-		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			// parent： 为控件Spinner view：显示文字的TextView position：下拉选项的位置从0开始 
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				//获取Spinner选择position的值
-				selectedType=type_adapter.getItem(position);
-			}
-			//没有选中时的处理
-			public void onNothingSelected(AdapterView<?> parent) {
-			}
-		});
+                spinner = (Spinner) findViewById(R.id.spinner_type);
+                // 种类下拉框数据
+                // "青春文学","历史","计算机","小说","建筑","自然科学","哲学","运动","文学","成功励志","保健养生","传记"
+                type_list = new ArrayList<String>();
+                type_list.add("青春文学");
+                type_list.add("历史");
+                type_list.add("计算机");
+                type_list.add("小说");
+                type_list.add("建筑");
+                type_list.add("自然科学");
+                type_list.add("哲学");
+                type_list.add("运动");
+                type_list.add("文学");
+                type_list.add("成功励志");
+                type_list.add("保健养生");
+                type_list.add("传记");
 
-		findViewById(R.id.submit).setOnClickListener(new OnClickListener() {
+                // 下拉框适配器
+                type_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, type_list);
+                // 设置样式
+                type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                // 加载适配器
+                spinner.setAdapter(type_adapter);
+                //
+                spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+                        // parent： 为控件Spinner view：显示文字的TextView
+                        // position：下拉选项的位置从0开始
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                // 获取Spinner选择position的值
+                                selectedType = type_adapter.getItem(position);
+                        }
 
-			@Override
-			public void onClick(View v) {
-				onSubmit();
-			}
-		});
-	}
+                        // 没有选中时的处理
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                });
 
-	protected void onSubmit() {
-		String goodsName = fragGoodsName.getText();
-		String goodsType = selectedType;
-		String goodsPrice = fragGoodsPrice.getText();
-		String goodsCount = fragGoodsCount.getText();
-		String goodsPublisher = fragGoodsPublisher.getText();
-		String goodsAuthor = fragGoodsAuthor.getText();
-		String goodsPubDate = pubDate.getText().toString();
-		String goodsPritime = priTime.getText().toString();
-		//		isNulltips(goodsName, "请输入商品名称!");
-		//		isNulltips(goodsPrice, "请输入商品价格!");
-		//		isNulltips(goodsCount, "请输入商品库存!");
-		//		isNulltips(goodsPublisher, "请输入商品出版社!");
-		//		isNulltips(goodsAuthor, "请输入商品作者!");
+                findViewById(R.id.submit).setOnClickListener(new OnClickListener() {
 
-		MultipartBody.Builder body = new MultipartBody.Builder()
-				.addFormDataPart("goodsName", goodsName)
-				.addFormDataPart("goodsType", goodsType)
-				.addFormDataPart("goodsPrice", goodsPrice)
-				.addFormDataPart("goodsCount", goodsCount)
-				.addFormDataPart("publisher", goodsPublisher)
-				.addFormDataPart("author", goodsAuthor)
-				.addFormDataPart("pubDate", goodsPubDate)
-				.addFormDataPart("pritime", goodsPritime);
-		if(fragGoodsImage.getPngData() != null) {
-			body.addFormDataPart("goodsImage", "goodsImage",
-					RequestBody.create(MediaType.parse("image/png"), fragGoodsImage.getPngData()));
-		}
+                        @Override
+                        public void onClick(View v) {
+                                onSubmit();
+                        }
+                });
+        }
 
-		Request request = Server.requestBuilderWithApi("goods")
-				.method("post",null)
-				.post(body.build())
-				.build();
+        protected void onSubmit() {
+                String goodsName = fragGoodsName.getText();
+                String goodsType = selectedType;
+                String goodsPrice = fragGoodsPrice.getText();
+                String goodsCount = fragGoodsCount.getText();
+                String goodsPublisher = fragGoodsPublisher.getText();
+                String goodsAuthor = fragGoodsAuthor.getText();
+                String goodsPubDate = pubDate.getText().toString();
+                String goodsPritime = priTime.getText().toString();
+                // isNulltips(goodsName, "请输入商品名称!");
+                // isNulltips(goodsPrice, "请输入商品价格!");
+                // isNulltips(goodsCount, "请输入商品库存!");
+                // isNulltips(goodsPublisher, "请输入商品出版社!");
+                // isNulltips(goodsAuthor, "请输入商品作者!");
 
-		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+                MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("goodsName", goodsName)
+                                .addFormDataPart("goodsType", goodsType).addFormDataPart("goodsPrice", goodsPrice)
+                                .addFormDataPart("goodsCount", goodsCount).addFormDataPart("publisher", goodsPublisher)
+                                .addFormDataPart("author", goodsAuthor).addFormDataPart("pubDate", goodsPubDate)
+                                .addFormDataPart("pritime", goodsPritime);
+                if (fragGoodsImage.getPngData() != null) {
+                        body.addFormDataPart("goodsImage", "goodsImage",
+                                        RequestBody.create(MediaType.parse("image/png"), fragGoodsImage.getPngData()));
+                }
 
-			@Override
-			public void onResponse(final Call arg0, Response arg1) throws IOException {
-				try{	     
-					final String responString = arg1.body().toString();
-					runOnUiThread(new Runnable() {
-						public void run() {
-							AddGoodsActivity.this.onResponse(arg0,responString);
-						}
-					});
-				}catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						public void run() {
-							AddGoodsActivity.this.onFailure(arg0, e);
-						}
-					});
-				}
-			}
+                Request request = Server.requestBuilderWithApi("goods").method("post", null).post(body.build()).build();
 
-			@Override
-			public void onFailure(final Call arg0, final IOException arg1) {
-				runOnUiThread(new Runnable() {
-					public void run() {
-						AddGoodsActivity.this.onFailure(arg0, arg1);
-					}
-				});
-			}
-		});
-	}
+                Server.getSharedClient().newCall(request).enqueue(new Callback() {
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		fragGoodsName.setLabelText("商品名称");
-		fragGoodsName.setHintText("请输入商品名称");
-		fragGoodsPrice.setLabelText("价格");
-		fragGoodsPrice.setHintText("请输入价格");
-		fragGoodsCount.setLabelText("商品库存");
-		fragGoodsCount.setHintText("请输入商品库存");
-		fragGoodsPublisher.setLabelText("出版社");
-		fragGoodsPublisher.setHintText("请输入出版社");
-		fragGoodsAuthor.setLabelText("作者");
-		fragGoodsAuthor.setHintText("请输入作者");
-	}
+                        @Override
+                        public void onResponse(final Call arg0, Response arg1) throws IOException {
+                                try {
+                                        final String responString = arg1.body().toString();
+                                        runOnUiThread(new Runnable() {
+                                                public void run() {
+                                                        AddGoodsActivity.this.onResponse(arg0, responString);
+                                                }
+                                        });
+                                } catch (final Exception e) {
+                                        runOnUiThread(new Runnable() {
+                                                public void run() {
+                                                        AddGoodsActivity.this.onFailure(arg0, e);
+                                                }
+                                        });
+                                }
+                        }
 
-	void onResponse(Call arg0, String responseBody) {
-		new AlertDialog.Builder(this)
-		.setTitle("发布成功")
-		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
-				overridePendingTransition(0,R.anim.slide_out_right);
-			}
-		})
-		.show();
-	}
+                        @Override
+                        public void onFailure(final Call arg0, final IOException arg1) {
+                                runOnUiThread(new Runnable() {
+                                        public void run() {
+                                                AddGoodsActivity.this.onFailure(arg0, arg1);
+                                        }
+                                });
+                        }
+                });
+                
+              //通过shopId找到user
+                Request request2 = Server.requestBuilderWithApi("shop/" + shop.getId() +"/findsubscribe").get().build();
+                Server.getSharedClient().newCall(request2).enqueue(new Callback() {
+                        
+                        @Override
+                        public void onResponse(Call arg0, final Response arg1) throws IOException {
+                                try {
+                                        final Page<Subscribe> data = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Subscribe>>(){});; 
+                                        runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                         
+                                                        AddGoodsActivity.this.subscribeData = data.getContent();
+                                                        for(int i = 0; i < AddGoodsActivity.this.subscribeData.size(); i++) {
+                                                                userId = subscribeData.get(i).getId().getUser().getId();
+                                                                AddGoodsActivity.this.onSend();
+                                                        }
+                                                }
+                                        });
+                                } catch (Exception e) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                }
+                        }
+                        
+                        @Override
+                        public void onFailure(Call arg0, IOException arg1) {
+                                // TODO Auto-generated method stub
+                                
+                        }
+                });
+                
+        }
 
-	void onFailure(Call arg0, Exception arg1) {
-		new AlertDialog.Builder(this)
-		.setTitle("发布失败")
-		.setMessage(arg1.getLocalizedMessage())
-		.setNegativeButton("OK", null)
-		.show();
-	}
+        void onSend() {
+                MultipartBody body = new MultipartBody.Builder()
+                                .addFormDataPart("shopId", shop.getId() +"")
+                                .addFormDataPart("receiverId", userId + "")
+                                .addFormDataPart("content", shop.getShopName() + "商店发布了新书，点击查看详情").build();
+                
+                Request request3 = Server.requestBuilderWithApi("push").method("post", null).post(body).build();
+                Server.getSharedClient().newCall(request3).enqueue(new Callback() {
+                        
+                        @Override
+                        public void onResponse(Call arg0, Response arg1) throws IOException {
+                                
+                        }
+                        
+                        @Override
+                        public void onFailure(Call arg0, IOException arg1) {
+                                
+                        }
+                });
+            }
+        
+        @Override
+        protected void onResume() {
+                super.onResume();
+                fragGoodsName.setLabelText("商品名称");
+                fragGoodsName.setHintText("请输入商品名称");
+                fragGoodsPrice.setLabelText("价格");
+                fragGoodsPrice.setHintText("请输入价格");
+                fragGoodsCount.setLabelText("商品库存");
+                fragGoodsCount.setHintText("请输入商品库存");
+                fragGoodsPublisher.setLabelText("出版社");
+                fragGoodsPublisher.setHintText("请输入出版社");
+                fragGoodsAuthor.setLabelText("作者");
+                fragGoodsAuthor.setHintText("请输入作者");
+        }
 
-	//选择出版日期对话框
-	protected void showPubDatePickDlg() {  
-		Calendar calendar = Calendar.getInstance();  
-		DatePickerDialog datePickerDialog = new DatePickerDialog(AddGoodsActivity.this, new OnDateSetListener() {  
+        void onResponse(Call arg0, String responseBody) {
+                new AlertDialog.Builder(this).setTitle("发布成功")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                                finish();
+                                                overridePendingTransition(0, R.anim.slide_out_right);
+                                        }
+                                }).show();
+        }
 
-			@Override  
-			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {  
-				AddGoodsActivity.this.pubDate.setText(year + "-" + (monthOfYear+1) + "-" + dayOfMonth);  
-			}  
-		}, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));  
-		datePickerDialog.show();  
+        void onFailure(Call arg0, Exception arg1) {
+                new AlertDialog.Builder(this).setTitle("发布失败").setMessage(arg1.getLocalizedMessage())
+                                .setNegativeButton("OK", null).show();
+        }
 
-	}
-	//选择印刷日期对话框
-	protected void showPriDatePickDlg() {  
-		Calendar calendar = Calendar.getInstance();  
-		DatePickerDialog datePickerDialog = new DatePickerDialog(AddGoodsActivity.this, new OnDateSetListener() {  
+        // 选择出版日期对话框
+        protected void showPubDatePickDlg() {
+                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddGoodsActivity.this,
+                                new OnDateSetListener() {
 
-			@Override  
-			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {  
-				AddGoodsActivity.this.priTime.setText(year + "-" + (monthOfYear+1) + "-" + dayOfMonth);  
-			}  
-		}, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));  
-		datePickerDialog.show();  
+                                        @Override
+                                        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                                        int dayOfMonth) {
+                                                AddGoodsActivity.this.pubDate.setText(
+                                                                year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                                        }
+                                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
 
-	}
-	//	void isNulltips(String str,String tips){
-	//		if(str==null||str.isEmpty()){
-	//			new AlertDialog.Builder(getParent())
-	//			.setMessage(tips)
-	//			.setIcon(android.R.drawable.ic_dialog_alert)
-	//			.setPositiveButton("OK",null)
-	//			.show();
-	//			return;
-	//		}
-	//	}
+        }
+
+        // 选择印刷日期对话框
+        protected void showPriDatePickDlg() {
+                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddGoodsActivity.this,
+                                new OnDateSetListener() {
+
+                                        @Override
+                                        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                                        int dayOfMonth) {
+                                                AddGoodsActivity.this.priTime.setText(
+                                                                year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                                        }
+                                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+
+        }
+        // void isNulltips(String str,String tips){
+        // if(str==null||str.isEmpty()){
+        // new AlertDialog.Builder(getParent())
+        // .setMessage(tips)
+        // .setIcon(android.R.drawable.ic_dialog_alert)
+        // .setPositiveButton("OK",null)
+        // .show();
+        // return;
+        // }
+        // }
 }

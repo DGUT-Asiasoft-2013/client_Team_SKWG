@@ -66,7 +66,7 @@ public class LoginActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				goHello();
+				isUser();
 			}
 		});
 
@@ -82,10 +82,110 @@ public class LoginActivity extends Activity {
 		fragPassword.setEditText(true);
 	}
 
+	//判断用户是否存在
+	void isUser(){
+		String account = fragAccount.getText();
+		if(account.isEmpty()){
+			Toast toast = Toast.makeText(LoginActivity.this, "用户名不能为空", Toast.LENGTH_SHORT);
+			toast.show();
+			return;
+		}
+		MultipartBody.Builder requestBody=new MultipartBody.Builder()
+				.addFormDataPart("account",account);
+
+		Request request=Server.requestBuilderWithApi("/isuser")
+				.method("post",null)
+				.post(requestBody.build())
+				.build();
+
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(final Call arg0, Response arg1) throws IOException {
+				try{
+					final String responseString = arg1.body().string();
+					final Boolean result = new ObjectMapper().readValue(responseString, Boolean.class);
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							if(result==true){			 //用户名存在,跳转判断用户密码是否一致
+								isMatch();
+							}
+							else{						//用户名不存在
+								LoginActivity.this.onIsUserd(arg0, responseString);
+							}
+						}
+					});
+				}catch(final Exception e){
+					e.printStackTrace();
+
+				}
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException e) {
+				e.printStackTrace();			
+			}
+		});
+
+	}
+
+	//判断用户名密码是否匹配
+	void isMatch(){
+		String account = fragAccount.getText();
+		String password = fragPassword.getText();
+		if(password.isEmpty()){
+			Toast toast = Toast.makeText(LoginActivity.this, "密码不能为空", Toast.LENGTH_SHORT);
+			toast.show();
+			return;
+		}
+
+		password = MD5.getMD5(password);
+
+		MultipartBody.Builder requestBody=new MultipartBody.Builder()
+				.addFormDataPart("account",account)
+				.addFormDataPart("passwordHash",password);
+
+		Request request=Server.requestBuilderWithApi("/ismatch")
+				.method("post",null)
+				.post(requestBody.build())
+				.build();
+
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(final Call arg0, Response arg1) throws IOException {
+				try{
+					final String responseString = arg1.body().string();
+					final Boolean result = new ObjectMapper().readValue(responseString, Boolean.class);
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							if(result==true){			//用户名密码匹配一致
+								goHello();
+							}
+							else{						//用户名密码不一致
+								LoginActivity.this.onIsMatch(arg0, responseString);
+							}
+						}
+					});
+				}catch(final Exception e){
+					e.printStackTrace();
+
+				}
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException e) {
+				e.printStackTrace();			
+			}
+		});
+
+	}
+
 	// 登陆
 	void goHello() {
 		String account = fragAccount.getText();
 		String password = fragPassword.getText();
+
 		password = MD5.getMD5(password);
 
 		OkHttpClient client = Server.getSharedClient();
@@ -145,7 +245,7 @@ public class LoginActivity extends Activity {
 		// public void onClick(DialogInterface dialog, int which) {
 		// TODO Auto-generated method
 		// stub
-//		Toast.makeText(LoginActivity.this, "欢迎使用BBook", Toast.LENGTH_SHORT).show();
+		//		Toast.makeText(LoginActivity.this, "欢迎使用BBook", Toast.LENGTH_SHORT).show();
 		Intent itnt = new Intent(LoginActivity.this, HelloWorldActivity.class);
 		startActivity(itnt);
 		MainActivity.mInstace.finish();
@@ -158,12 +258,24 @@ public class LoginActivity extends Activity {
 
 	void onFailture(Call arg0, Exception arg1) {
 		new AlertDialog.Builder(this).setTitle("登陆失败").setMessage(arg1.getLocalizedMessage())
-				.setNegativeButton("OK", null).show();
+		.setNegativeButton("OK", null).show();
 	}
 
 	void goFotpassword() {
 		Intent itnt = new Intent(this, PasswordRecoverActivity.class);
 		startActivity(itnt);
 		overridePendingTransition(R.anim.slide_in_right, R.anim.none);
+	}
+
+	protected void onIsUserd(Call arg0, String responseBody) {
+		new AlertDialog.Builder(this).setTitle("温馨提示")
+		.setMessage("该用户名不存在,请检查输入是否正确")
+		.setNegativeButton("确定", null).show();
+	}
+	
+	protected void onIsMatch(Call arg0, String responseBody) {
+		new AlertDialog.Builder(this).setTitle("温馨提示")
+		.setMessage("密码输入错误,请检查输入是否正确")
+		.setNegativeButton("确定", null).show();
 	}
 }

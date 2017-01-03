@@ -5,6 +5,7 @@ import java.util.concurrent.RunnableFuture;
 
 import com.example.bbook.api.Server;
 import com.example.bbook.api.widgets.TitleBarFragment;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,9 +30,9 @@ import okhttp3.Response;
 
 public class RegisterActivity extends Activity {
 	SimpleTextInputcellFragment fragAccount, fragPassword, fragEmail, fragAddress, fragPhoneNum, fragRepeatPassword,
-			fragName;
+	fragName;
 	PictureInputCellFragment fragImg;
-	
+
 	TitleBarFragment fragTitleBar;
 
 	@Override
@@ -49,34 +50,34 @@ public class RegisterActivity extends Activity {
 		fragName = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_name);
 
 		fragImg = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_img);
-		
+
 		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.register_titlebar);
 		fragTitleBar.setTitleState(false);
 		fragTitleBar.setNullViewState(true);
 		fragTitleBar.setSplitLineState(false);
 		fragTitleBar.setBtnNextText("注册", 16);
 		fragTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
-                
-                @Override
-                public void onGoBack() {
-                        finish();
-                }
-        });
+
+			@Override
+			public void onGoBack() {
+				finish();
+			}
+		});
 
 		fragTitleBar.setOnGoNextListener(new TitleBarFragment.OnGoNextListener() {
-                
-                @Override
-                public void onGoNext() {
-                        submit();
-                }
-        });
-		
-//		findViewById(R.id.submit).setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				submit();
-//			}
-//		});
+
+			@Override
+			public void onGoNext() {
+				submit();
+			}
+		});
+
+		//		findViewById(R.id.submit).setOnClickListener(new OnClickListener() {
+		//			@Override
+		//			public void onClick(View v) {
+		//				submit();
+		//			}
+		//		});
 	}
 
 	@Override
@@ -104,27 +105,135 @@ public class RegisterActivity extends Activity {
 	}
 
 	void submit() {
+		isUser();   		//判断用户是否存在
+	}
+
+	//判断用户是否存在
+	void isUser(){
+		String account = fragAccount.getText();
+		if(account.isEmpty()){
+			Toast toast = Toast.makeText(RegisterActivity.this, "用户名不能为空", Toast.LENGTH_SHORT);
+			toast.show();
+			return;
+		}
+		MultipartBody.Builder requestBody=new MultipartBody.Builder()
+				.addFormDataPart("account",account);
+
+		Request request=Server.requestBuilderWithApi("/isuser")
+				.method("post",null)
+				.post(requestBody.build())
+				.build();
+
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(final Call arg0, Response arg1) throws IOException {
+				try{
+					final String responseString = arg1.body().string();
+					final Boolean result = new ObjectMapper().readValue(responseString, Boolean.class);
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							if(result==true){			//用户名已存在
+								RegisterActivity.this.onIsUserd(arg0, responseString);
+							}
+							else{
+								isEmail();
+							}
+						}
+					});
+				}catch(final Exception e){
+					e.printStackTrace();
+
+				}
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException e) {
+				e.printStackTrace();			
+			}
+		});
+
+	}
+
+	//判断邮箱是否被使用
+	void isEmail(){
+		String email = fragEmail.getText();
+		if(email.isEmpty()){
+			Toast toast = Toast.makeText(RegisterActivity.this, "邮箱不能为空", Toast.LENGTH_SHORT);
+			toast.show();
+			return;
+		}
+		MultipartBody.Builder requestBody=new MultipartBody.Builder()
+				.addFormDataPart("email", email);
+
+		Request request=Server.requestBuilderWithApi("/isemail")
+				.method("post",null)
+				.post(requestBody.build())
+				.build();
+
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(final Call arg0, Response arg1) throws IOException {
+				try{
+					final String responseString = arg1.body().string();
+					final Boolean result = new ObjectMapper().readValue(responseString, Boolean.class);
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							if(result==true){			//邮箱已存在
+								RegisterActivity.this.onIsEmail(arg0, responseString);
+							}
+							else{
+								register();
+							}
+						}
+					});
+				}catch(final Exception e){
+					e.printStackTrace();
+
+				}
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException e) {
+				e.printStackTrace();			
+			}
+		});
+
+	}
+
+	void register(){
 		String password = fragPassword.getText();
 		String passwordrepeat = fragRepeatPassword.getText();
+		if(password.isEmpty()){
+			Toast toast = Toast.makeText(RegisterActivity.this, "密码不能为空", Toast.LENGTH_SHORT);
+			toast.show();
+			return;
+		}
 		if (!password.equals(passwordrepeat)) {
-			Toast.makeText(RegisterActivity.this, "两次密码输入不一致", Toast.LENGTH_LONG).show();
+			Toast.makeText(RegisterActivity.this, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
 			return;
 		}
 		password = MD5.getMD5(password);
 
 		String account = fragAccount.getText();
-		if(account.isEmpty()){
-		        Toast toast = Toast.makeText(RegisterActivity.this, "用户名不能为空", Toast.LENGTH_SHORT);
-		        toast.setGravity(Gravity.CENTER, 0, 0);
-		        toast.show();
-		        return;
-		}
-		
+
 		String name = fragName.getText();
 		String email = fragEmail.getText();
 		String address = fragAddress.getText();
 		String phoneNum = fragPhoneNum.getText();
-
+		if(address.isEmpty()){
+			Toast toast = Toast.makeText(RegisterActivity.this, "地址不能为空", Toast.LENGTH_SHORT);
+			toast.show();
+			return;
+		}
+		
+		if(phoneNum.isEmpty()){
+			Toast toast = Toast.makeText(RegisterActivity.this, "联系电话不能为空", Toast.LENGTH_SHORT);
+			toast.show();
+			return;
+		}
+		
 		OkHttpClient client = Server.getSharedClient();
 		// 构造发送内容
 		MultipartBody.Builder requestbody = new MultipartBody.Builder().addFormDataPart("account", account)
@@ -154,11 +263,11 @@ public class RegisterActivity extends Activity {
 					responseString = arg1.body().string();
 					runOnUiThread(new Runnable() {
 						@Override
-						
+
 						public void run() {
-								progressDialog.dismiss();
-								RegisterActivity.this.onResponse(arg0, responseString);
-							
+							progressDialog.dismiss();
+							RegisterActivity.this.onResponse(arg0, responseString);
+
 						}
 					});
 				} catch (final Exception e1) {
@@ -167,13 +276,10 @@ public class RegisterActivity extends Activity {
 						@Override
 						public void run() {
 							RegisterActivity.this.onFailure(arg0, e1);
-							
+
 						}
 					});
 				}
-				
-				
-
 			}
 
 			@Override
@@ -187,22 +293,34 @@ public class RegisterActivity extends Activity {
 				});
 			}
 		});
+
 	}
 
 	protected void onResponse(Call arg0, String responseBody) {
 		new AlertDialog.Builder(this).setTitle("注册成功")
-				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						finish();
-					}
-				}).show();
+		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				finish();
+			}
+		}).show();
 
 	}
 
 	protected void onFailure(Call arg0, Exception arg1) {
 		new AlertDialog.Builder(this).setTitle("注册失败")
-				.setNegativeButton("确定", null).show();
+		.setNegativeButton("确定", null).show();
+	}
+
+	protected void onIsUserd(Call arg0, String responseBody) {
+		new AlertDialog.Builder(this).setTitle("温馨提示")
+		.setMessage("当前输入用户名已被使用,请重新输入")
+		.setNegativeButton("确定", null).show();
+	}
+
+	protected void onIsEmail(Call arg0, String responseBody) {
+		new AlertDialog.Builder(this).setTitle("温馨提示")
+		.setMessage("当前输入邮箱已被使用,请重新输入")
+		.setNegativeButton("确定", null).show();
 	}
 }
