@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -87,6 +88,7 @@ public class LoginActivity extends Activity {
 		String account = fragAccount.getText();
 		if(account.isEmpty()){
 			Toast toast = Toast.makeText(LoginActivity.this, "用户名不能为空", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 			return;
 		}
@@ -135,6 +137,7 @@ public class LoginActivity extends Activity {
 		String password = fragPassword.getText();
 		if(password.isEmpty()){
 			Toast toast = Toast.makeText(LoginActivity.this, "密码不能为空", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 			return;
 		}
@@ -275,7 +278,7 @@ public class LoginActivity extends Activity {
 	
 	protected void onIsMatch(Call arg0, String responseBody) {
 		new AlertDialog.Builder(this).setTitle("温馨提示")
-		.setMessage("密码输入错误,请检查输入是否正确")
+		.setMessage("密码输入错误,请重新输入")
 		.setNegativeButton("确定", null).show();
 	}
 }

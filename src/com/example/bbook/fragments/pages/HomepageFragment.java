@@ -93,12 +93,34 @@ public class HomepageFragment extends Fragment {
 	boolean isGridview=true;
 	ImageView changeView;
 	ListView listView;
+	
+	//
+	EditText minPrice,maxPrice;
+	ImageView btnPricce;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view=inflater.inflate(R.layout.fragment_home_page, null);
 
 		btnSearch=(ImageView) view.findViewById(R.id.btn_search);
 		editKeyword=(EditText) view.findViewById(R.id.edit_keyword);
+		
+		
+		minPrice=(EditText) view.findViewById(R.id.min_price);
+		maxPrice=(EditText) view.findViewById(R.id.max_price);
+		btnPricce =(ImageView) view.findViewById(R.id.btn_price);
+		btnPricce.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				String min=minPrice.getText().toString();
+				String max=maxPrice.getText().toString();
+				goodsLoad(min,max);
+			}
+		});
+		
+		
+		
 		bookView=(GridView) view.findViewById(R.id.book_gridView);
 		//bookView.setAdapter(bookAdapter);
 		listView=(ListView) view.findViewById(R.id.book_listview);
@@ -503,6 +525,56 @@ public class HomepageFragment extends Fragment {
 
 	}
 	//
+	
+	//按金额搜索
+	public void goodsLoad(String min,String max){
+	Request request=Server.requestBuilderWithApi("goods/search/"+min+"/"+max)
+			.get().build();
+	OkHttpClient client=Server.getSharedClient();
+
+	client.newCall(request).enqueue(new Callback() {
+
+		@Override
+		public void onResponse(Call arg0, final Response arg1) throws IOException {
+			// TODO Auto-generated method stub
+			final String responseStr=arg1.body().string();
+
+
+			getActivity().runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					try {
+						Page<Goods> data=new ObjectMapper()
+								.readValue(responseStr, new TypeReference<Page<Goods>>() {
+								});
+						//Log.d("aaa",data.toString());
+						HomepageFragment.this.data=data.getContent();
+
+						HomepageFragment.this.page=data.getNumber();
+						bookAdapter.notifyDataSetInvalidated();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+
+
+
+				}
+			});
+		}
+
+		@Override
+		public void onFailure(Call arg0, IOException arg1) {
+			// TODO Auto-generated method stub
+
+		}
+	});
+		
+	}
+	
 	public void LoadMore(){
 
 
@@ -567,7 +639,6 @@ public class HomepageFragment extends Fragment {
 			public void onFailure(Call arg0, IOException arg1) {
 				// TODO Auto-generated method stub
 				getActivity().runOnUiThread(new Runnable() {
-
 					@Override
 					public void run() {
 					}

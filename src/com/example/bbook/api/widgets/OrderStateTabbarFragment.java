@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 public class OrderStateTabbarFragment extends Fragment {
-	View tabAll, tabToBePay, tabToBeSend, tabToBeCheck;
+	View tabAll, tabToBePay, tabToBeSend, tabToBeCheck, tabToBeComment;
 	View[] tabs;
 
 	@Override
@@ -20,8 +20,9 @@ public class OrderStateTabbarFragment extends Fragment {
 		tabToBePay = view.findViewById(R.id.tab_to_be_pay);
 		tabToBeSend = view.findViewById(R.id.tab_to_be_send);
 		tabToBeCheck = view.findViewById(R.id.tab_to_be_check);
+		tabToBeComment = view.findViewById(R.id.tab_to_be_comment);
 		tabs = new View[] {
-				tabAll, tabToBePay, tabToBeSend, tabToBeCheck	
+				tabAll, tabToBePay, tabToBeSend, tabToBeCheck, tabToBeComment
 		};
 
 		for(final View tab : tabs) {
