@@ -14,6 +14,7 @@ import com.example.bbook.api.widgets.OrderStateTabbarFragment.OnTabSelectedListe
 import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.fragments.pages.OrdersAllFragment;
+import com.example.bbook.fragments.pages.OrdersToBeCommentFragment;
 import com.example.bbook.fragments.pages.OrdersToBePayFragment;
 import com.example.bbook.fragments.pages.OrdersToBeSendFragment;
 import com.example.bbook.fragments.pages.OrdersToBoCheckFragment;
@@ -55,7 +56,7 @@ public class MyOrdersActivity extends Activity {
 	OrdersToBePayFragment contentToBePay = new OrdersToBePayFragment();
 	OrdersToBeSendFragment contentToBeSend = new OrdersToBeSendFragment();
 	OrdersToBoCheckFragment contentToBeCheck = new OrdersToBoCheckFragment();
-	
+	OrdersToBeCommentFragment contentToBeComment = new OrdersToBeCommentFragment();
 //	ListView ordersList;
 	List<Orders> ordersData;
 	int Page=0;
@@ -101,7 +102,7 @@ protected void changeContentFragment(int index) {
 		case 1 : newFrag = contentToBePay;break;
 		case 2 : newFrag = contentToBeSend; break;
 		case 3 : newFrag = contentToBeCheck; break;
-		
+		case 4 : newFrag = contentToBeComment; break;
 		default: 
 			break;
 		}

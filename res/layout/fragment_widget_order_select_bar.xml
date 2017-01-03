@@ -86,6 +86,25 @@
                 android:layout_height="10dp"
                 android:src="@drawable/tab_background_order_state" />
         </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/tab_to_be_comment"
+            android:layout_width="0dp"
+            android:layout_height="63dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="待评价" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="10dp"
+                android:src="@drawable/tab_background_order_state" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

@@ -34,6 +34,8 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import util.AutoLoadListener;
+import util.AutoLoadListener.AutoLoadCallBack;
 
 public class OrdersAllFragment extends Fragment {
 	View view;
@@ -49,7 +51,7 @@ public class OrdersAllFragment extends Fragment {
 			view = inflater.inflate(R.layout.fragment_page_all_orders, null);
 			list = (ListView) view.findViewById(R.id.list);
 		}
-		
+		list.setOnScrollListener(new AutoLoadListener(callback));
 		list.setAdapter(listAdapter);
 		list.setDivider(null);
 		return view;
@@ -198,6 +200,15 @@ public class OrdersAllFragment extends Fragment {
 		});
 	}
 	
+	// 下滑加载更多
+	AutoLoadListener.AutoLoadCallBack callback = new AutoLoadCallBack() {
+		
+		@Override
+		public void execute() {
+			loadMore();
+		}
+	};
+	
 	
 	
 	public void LoadMyOrders(){
@@ -239,5 +250,48 @@ public class OrdersAllFragment extends Fragment {
 		});
 	}
 	
-	
+	private void loadMore() {
+		OkHttpClient client=Server.getSharedClient();
+
+		Request request=Server.requestBuilderWithApi("orders/findall?page=" + (page+1))
+				.get().build();
+
+		client.newCall(request).enqueue(new Callback() {
+
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				final String responseStr=arg1.body().string();
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Page<Orders> data=new ObjectMapper()
+									.readValue(responseStr, new TypeReference<Page<Orders>>() {});
+							if(data.getNumber() > page) {
+								if(listData == null) {
+									listData=data.getContent();
+								} else {
+									listData.addAll(data.getContent());
+								}
+							}
+							page=data.getNumber();
+							listAdapter.notifyDataSetInvalidated();
+						} catch (JsonParseException e) {
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+
+			}
+		});
+	}
 }

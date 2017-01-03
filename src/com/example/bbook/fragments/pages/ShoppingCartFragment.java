@@ -140,7 +140,7 @@ public class ShoppingCartFragment extends Fragment {
 			}
 		});
 		selectAll.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				isAllSelected = ((CheckBox)v).isChecked();
@@ -150,9 +150,9 @@ public class ShoppingCartFragment extends Fragment {
 					selectShop(i, ((CheckBox)v).isChecked());
 				}
 				Log.d("isAll", isAllSelected + "");
-//				for(int i = 0; i < groupList.size(); i++) {
-//					
-//				}
+				//				for(int i = 0; i < groupList.size(); i++) {
+				//					
+				//				}
 				exlistAdapter.notifyDataSetChanged();
 			}
 		});
@@ -161,16 +161,21 @@ public class ShoppingCartFragment extends Fragment {
 	}
 
 	protected void goBuy() {
-		Intent itnt = new Intent(getActivity(), BuyActivity.class);
-		itnt.putExtra("selectedGoods", (Serializable)selectedGoods);
-		
-		startActivity(itnt);
+		if(selectedCount == 0) {
+			Toast.makeText(getActivity(), "请选择要购买的商品", Toast.LENGTH_SHORT).show();
+		} else {
+			Intent itnt = new Intent(getActivity(), BuyActivity.class);
+			itnt.putExtra("selectedGoods", (Serializable)selectedGoods);
 
+			startActivity(itnt);
+		}
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		isAllSelected = false;
+		selectAll.setChecked(isAllSelected);
 		reload();
 		initData();
 		calculate();
@@ -183,8 +188,8 @@ public class ShoppingCartFragment extends Fragment {
 			list.expandGroup(i);
 		}
 	};
-	
-	
+
+
 	private void init(View view) {
 		//		list = (ListView) view.findViewById(R.id.list);
 		selectAll = (CheckBox) view.findViewById(R.id.select_all);
@@ -219,7 +224,7 @@ public class ShoppingCartFragment extends Fragment {
 		btnPay.setText("结算(" + selectedCount + ")");
 	}
 
-	
+
 	private void reload() {
 		Request request = Server.requestBuilderWithApi("shoppingcart/get/" + page).get().build();
 
@@ -336,7 +341,7 @@ public class ShoppingCartFragment extends Fragment {
 			final Shop shop = groupList.get(groupPosition);
 			if(shop != null) {
 				sHolder.tvShopName.setText(groupList.get(groupPosition).getShopName());
-//				sHolder.imgAvatar.load(Server.serverAdress + groupList.get(groupPosition).getShopImage());
+				//				sHolder.imgAvatar.load(Server.serverAdress + groupList.get(groupPosition).getShopImage());
 				sHolder.cbShopAll.setOnClickListener(new OnClickListener() {
 
 					@Override
@@ -347,7 +352,7 @@ public class ShoppingCartFragment extends Fragment {
 						Log.d("goupSelect", ((CheckBox)v).isChecked() + "");
 						Log.d("isAllSelectedAAA", isAllSelected + "");
 						if(isAllSelected == false) {
-							
+
 							selectAll.setChecked(isAllSelected);
 						}
 					}
@@ -471,7 +476,7 @@ public class ShoppingCartFragment extends Fragment {
 		exlistAdapter.notifyDataSetChanged();
 		calculate();
 	}
-	
+
 	protected void onDelete(int goodsId) {
 		Request request = Server.requestBuilderWithApi("shoppingcart/delete/" + goodsId).get().build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
