@@ -146,6 +146,7 @@ public class MyBillActivity extends Activity {
 			date.setText(dateFormat.format(bill.getCreateDate()));
 			if(state==1){
 			item.setText("+"+bill.getItem().toString());
+			item.setTextColor(Color.rgb(51, 204, 51));
 			}else {item.setText("-"+bill.getItem().toString());
 			item.setTextColor(Color.RED);}
 			return view;

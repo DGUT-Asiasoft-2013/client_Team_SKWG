@@ -8,6 +8,7 @@ import com.example.bbook.LoginActivity;
 import com.example.bbook.MessageActivity;
 import com.example.bbook.MyBillActivity;
 import com.example.bbook.MyOrdersActivity;
+import com.example.bbook.MyWalletActivity;
 import com.example.bbook.MystoreActivity;
 import com.example.bbook.OpenStoreActivity;
 import com.example.bbook.R;
@@ -15,6 +16,7 @@ import com.example.bbook.api.Server;
 import com.example.bbook.api.User;
 import com.example.bbook.api.widgets.AvatarView;
 import com.example.bbook.api.widgets.ItemFragment;
+import com.example.bbook.api.widgets.ItemFragment.OnDetailedListener;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.fragments.pages.PasswordRecoverStep1Fragment.OnGoNextListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,7 +53,7 @@ public class MyProfileFragment extends Fragment {
         AvatarView avatar;
         TitleBarFragment fragMeTitleBar;
         PopupWindow bill;
-        ItemFragment itemBtnExit, itemBtnOrder, itemBtnChange, itemOpenStore, itemMyStore, itemBill;
+        ItemFragment itemBtnExit, itemBtnOrder, itemBtnChange, itemOpenStore, itemMyStore, itemBill, itemWallet;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -166,7 +168,7 @@ public class MyProfileFragment extends Fragment {
                         itemBill = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_bill);
                         itemBill.setItemText("账单");
                         // 这个图标先用着之后找到了再改
-                        itemBill.setItemImage(R.drawable.icon_hot_article);
+                        itemBill.setItemImage(R.drawable.icon_bill);
                         itemBill.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                                 @Override
@@ -176,7 +178,18 @@ public class MyProfileFragment extends Fragment {
                                         startActivity(intent);
                                 }
                         });
-
+                        
+                        itemWallet = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_wallet);
+                        itemWallet.setItemText("我的钱包");
+                        itemWallet.setItemImage(R.drawable.icon_wallet);
+                        itemWallet.setOnDetailedListener(new OnDetailedListener() {
+							
+							@Override
+							public void onDetailed() {
+								Intent itnt = new Intent(getActivity(), MyWalletActivity.class);
+								startActivity(itnt);
+							}
+						});
                 }
 
                 // view.findViewById(R.id.btn_openStore).setOnClickListener(new

@@ -21,18 +21,18 @@
 
         <ImageView
             android:id="@+id/menu_me"
-            android:layout_gravity="center"
             android:layout_width="0dp"
             android:layout_height="25dp"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:src="@drawable/icon_menu" />
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/btn_change_userMessage"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:background="@android:color/white"
         android:orientation="horizontal" >
 
         <com.example.bbook.api.widgets.AvatarView
@@ -110,6 +110,13 @@
 
         <fragment
             android:id="@+id/btn_bill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            class="com.example.bbook.api.widgets.ItemFragment"
+            tools:layout="@layout/fragment_widget_item" />
+
+        <fragment
+            android:id="@+id/btn_wallet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             class="com.example.bbook.api.widgets.ItemFragment"

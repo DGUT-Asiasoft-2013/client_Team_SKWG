@@ -65,6 +65,7 @@
         <activity android:name="com.example.bbook.MessageActivity" />
         <activity android:name="com.example.bbook.MyBillActivity" />
         <activity android:name="com.example.bbook.ClassifyActivity" />
+        <activity android:name="com.example.bbook.MyWalletActivity" />
     </application>
 
 </manifest>
