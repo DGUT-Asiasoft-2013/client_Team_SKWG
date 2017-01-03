@@ -56,7 +56,7 @@ public class ChatActivity extends Activity {
                         
                         @Override
                         public void onGoBack() {
-                                finish();
+                                goBack();
                         }
                 });
 
@@ -75,6 +75,10 @@ public class ChatActivity extends Activity {
                         }
                 });
 
+        }
+
+        void goBack() {
+                finish();
         }
 
         class ViewHolderMe {
@@ -284,13 +288,13 @@ public class ChatActivity extends Activity {
 
         void refresh() {
                 reload();
-                chatList.setSelection(chatData.size()-1);
                 if (isVisible) {
                         handler.postDelayed(new Runnable() {
 
                                 @Override
                                 public void run() {
                                         refresh();
+                                        chatList.setSelection(chatData.size()-1);
                                 }
                         }, 1000);   
                 }
