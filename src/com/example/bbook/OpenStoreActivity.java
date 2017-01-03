@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.Toast;
 import inputcells.PictureInputCellFragment;
 import inputcells.SimpleTextInputcellFragment;
 import okhttp3.Call;
@@ -62,6 +63,7 @@ public class OpenStoreActivity extends Activity {
 		super.onResume();
 		fragInputStoreName.setLabelText("店名");
 		fragInputStoreName.setHintText("为你的新店起个名字吧");
+		fragInputStoreName.setBackGround(true);
 		fragStoreImg.setLabelText("店铺头像");
 		fragStoreImg.setHintText("选择图片");
 	}
@@ -69,12 +71,24 @@ public class OpenStoreActivity extends Activity {
 	void createStore() {
 		String shopName = fragInputStoreName.getText();
 		String description = storeIntroduce.getText().toString();
+		if (shopName.isEmpty()) {
+			Toast.makeText(OpenStoreActivity.this, "店名不能为空", Toast.LENGTH_LONG).show();
+			return;
+		}
+		if(description.isEmpty()){
+			Toast.makeText(OpenStoreActivity.this, "总要写点什么介绍一下吧", Toast.LENGTH_LONG).show();
+			return;
+		}
 		OkHttpClient client = Server.getSharedClient();
 		MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("shopName", shopName)
 				.addFormDataPart("description", description);
+
 		if (fragStoreImg.getPngData() != null) {
 			body.addFormDataPart("shopImage", "shopImage",
 					RequestBody.create(MediaType.parse("image/png"), fragStoreImg.getPngData()));
+		} else {
+			Toast.makeText(OpenStoreActivity.this, "头像不能为空", Toast.LENGTH_LONG).show();
+			return;
 		}
 
 		Request request = Server.requestBuilderWithApi("openshop").method("post", null).post(body.build()).build();
@@ -82,27 +96,40 @@ public class OpenStoreActivity extends Activity {
 
 			@Override
 			public void onResponse(final Call arg0, final Response arg1) throws IOException {
-				try{
+				try {
 					final String responseBody = arg1.body().string();
 					Log.d("open store result", responseBody);
-					
+
 					final Shop shop = new ObjectMapper().readValue(responseBody, Shop.class);
-					
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							OpenStoreActivity.this.onResponse(arg0, shop.getOwner().getAccount());
-						}
-					});
-				}catch(final Exception e){
+					if (!shop.getDescription().equals(storeIntroduce.getText().toString())) {
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								OpenStoreActivity.this.onFailure(arg0, shop.getDescription());
+							}
+						});
+					} else{
+
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								OpenStoreActivity.this.onResponse(arg0, shop.getOwner().getAccount());
+							}
+						});
+					}
+				}
+				catch (final Exception e) {
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
 							OpenStoreActivity.this.onFailure(arg0, e);
 						}
 					});
-				}				
+				}
+				
+				
 			}
+				
 
 			@Override
 			public void onFailure(final Call arg0, final IOException arg1) {
@@ -110,7 +137,7 @@ public class OpenStoreActivity extends Activity {
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						OpenStoreActivity.this.onFailure(arg0, arg1);	
+						OpenStoreActivity.this.onFailure(arg0, arg1);
 					}
 				});
 			}
@@ -124,21 +151,43 @@ public class OpenStoreActivity extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
-						
+
 						isCreate = 1;
 						becomeSeller();
 					}
 				}).show();
 	}
 
-	void onFailure(Call arg0, Exception e1) {
-		new AlertDialog.Builder(this).setTitle("开店失败").setMessage(e1.getMessage())
-				.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						finish();
-					}
-				}).show();
+	void onFailure(Call arg0, final Exception e1) {
+		runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				new AlertDialog.Builder(OpenStoreActivity.this).setTitle("开店失败").setMessage(e1.getMessage())
+						.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
+							}
+						}).show();
+			}
+		});
+	}
+
+	void onFailure(Call arg0, final String response) {
+		runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				new AlertDialog.Builder(OpenStoreActivity.this).setTitle("开店失败").setMessage(response)
+						.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
+							}
+						}).show();
+			}
+		});
 	}
 
 	void becomeSeller() {

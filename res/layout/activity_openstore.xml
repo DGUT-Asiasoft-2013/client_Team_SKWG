@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EEEEEE"
     android:orientation="vertical" >
 
     <ScrollView
@@ -26,6 +27,7 @@
                 android:id="@+id/input_storeimg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/white"
                 class="inputcells.PictureInputCellFragment"
                 tools:layout="@layout/fragment_inputcell_picture" />
 
@@ -37,7 +39,9 @@
             <EditText
                 android:id="@+id/input_storeintroduce"
                 android:layout_width="match_parent"
+                android:background="@android:color/white"
                 android:layout_height="200dp"
+                android:layout_margin="8dp"
                 android:hint="来介绍一下你的店铺吧"
                 tools:layout="@layout/fragment_inputcell_simpleted" />
 

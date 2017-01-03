@@ -2,6 +2,7 @@ package inputcells;
 
 import com.example.bbook.R;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,13 @@ public class SimpleTextInputcellFragment extends BaseInputCellFragment {
 			edit.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_CLASS_NUMBER);
 		} else {
 			edit.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+		}
+	}
+	
+	//将输入框背景设置为白色
+	public void setBackGround(boolean isWite){
+		if(isWite){
+			edit.setBackgroundColor(Color.WHITE);
 		}
 	}
 }
