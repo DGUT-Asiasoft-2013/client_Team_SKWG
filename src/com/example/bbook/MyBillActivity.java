@@ -14,12 +14,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -60,6 +62,15 @@ public class MyBillActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				loadMore();
+			}
+		});
+		
+		myBillList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				onItemClicked(position);
 			}
 		});
 	}
@@ -168,6 +179,7 @@ public class MyBillActivity extends Activity {
 		}
 	};
 	
+	
 	void load(){
 		billTitleBar.setBtnBackState(true);
 		billTitleBar.setBtnNextState(false);
@@ -212,5 +224,32 @@ public class MyBillActivity extends Activity {
 		.setMessage(arg1.getLocalizedMessage())
 		.setNegativeButton("OK", null)
 		.show();
+	}
+	
+	void onItemClicked(int position){
+		int state = dataList.get(position).getBillState();
+		
+		String moneyType;
+		String moneyItem = dataList.get(position).getItem().toString();
+		String createDate = dataList.get(position).getCreateDate().toString();
+		String billNumber = dataList.get(position).getBillNumber().toString();
+		String remain = dataList.get(position).getMoney().toString();
+		String detial = dataList.get(position).getDetial();
+		if(state==1){
+			if(detial.equals("充值")){
+				moneyType = "充值";
+			}else {moneyType = "收入";}
+		}else{moneyType = "支出";}
+		
+		Intent itnt =new Intent(MyBillActivity.this,BillItemDetialActivity.class);
+		itnt.putExtra("MoneyItem", moneyItem);
+		itnt.putExtra("MoneyType", moneyType);
+		itnt.putExtra("CreateDate", createDate);
+		itnt.putExtra("BillNumber", billNumber);
+		itnt.putExtra("Remain", remain);
+		itnt.putExtra("Detial",detial);
+		
+		startActivity(itnt);
+		MyBillActivity.this.overridePendingTransition(R.anim.slide_in_right,0);
 	}
 }
