@@ -1,6 +1,7 @@
 package com.example.bbook.fragments.pages;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -11,11 +12,13 @@ import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.widgets.AvatarView;
+import com.example.bbook.api.widgets.GoodsPicture;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -56,7 +59,7 @@ public class BookCommentFragment extends Fragment {
 
 
 	BaseAdapter commentAdapter=new BaseAdapter() {
-
+		@SuppressLint("InflateParams")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
@@ -71,6 +74,12 @@ public class BookCommentFragment extends Fragment {
 			BookComment bookComment=bookCommentData.get(position);
 			TextView bookCommentView=(TextView) view.findViewById(R.id.book_comment);
 			bookCommentView.setText(bookComment.getText());
+			
+			TextView commentCreateDate=(TextView) view.findViewById(R.id.book_comment_date);
+			commentCreateDate.setText("评论时间:"+new SimpleDateFormat("yyyy-mm-dd").format(bookComment.getCreateDate()).toString());
+			
+			GoodsPicture authorAvatar=(GoodsPicture) view.findViewById(R.id.user_picture);
+			authorAvatar.load(Server.serverAdress+bookComment.getAuthorAvatar());
 			
 			
 			return view;

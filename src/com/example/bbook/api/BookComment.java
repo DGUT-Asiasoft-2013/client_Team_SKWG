@@ -11,8 +11,17 @@ public class BookComment  implements Serializable {
 	Integer id;
 	Date createDate;
 	Date editDate;
+	String text;//评论
+	String authorName;//评论者
+	Integer goodsId;
+	String authorAvatar;
 
-
+	public String getAuthorAvatar() {
+		return authorAvatar;
+	}
+	public void setAuthorAvatar(String authorAvatar) {
+		this.authorAvatar = authorAvatar;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -31,9 +40,7 @@ public class BookComment  implements Serializable {
 	public void setEditDate(Date editDate) {
 		this.editDate = editDate;
 	}
-	String text;//评论
-	String authorName;//评论者
-	Integer goodsId;
+	
 	public String getText() {
 		return text;
 	}
