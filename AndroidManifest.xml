@@ -68,6 +68,7 @@
         <activity android:name="com.example.bbook.MyWalletActivity" />
         <activity android:name="com.example.bbook.PushMessageActivity" />
         <activity android:name="com.example.bbook.BillItemDetialActivity" />
+        <activity android:name="com.example.bbook.AddBookCommentActivity" />
     </application>
 
 </manifest>

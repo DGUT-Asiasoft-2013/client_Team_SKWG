@@ -49,7 +49,8 @@ public class ForumContentActivity extends Activity {
 	ImageView img_like;
 
 	TitleBarFragment fragTitleBar;
-	View btnLoadMore,listViewHead;
+	View listViewHead;
+	View btnLoadMore;
 	TextView textLoadMore;
 
 	List<Comment> data;
@@ -94,8 +95,6 @@ public class ForumContentActivity extends Activity {
 		AvatarView avatar = (AvatarView)listViewHead.findViewById(R.id.avatar);
 		avatar.load(Server.serverAdress+getIntent().getStringExtra("AuthorAvatar"));
 
-		//内容滚动显示
-		//		txt_text.setMovementMethod(ScrollingMovementMethod.getInstance());
 
 		//图片不为空显示图片
 		RectangleView articleImage = (RectangleView)listViewHead.findViewById(R.id.articleImage);
@@ -106,10 +105,10 @@ public class ForumContentActivity extends Activity {
 			articleImage.setVisibility(RectangleView.GONE);
 		}
 
-		txt_title.setText(title);         //文章标题
-		txt_author.setText(authorName);   //文章作者
-		txt_text.setText(text);           //文章内容
-		txt_date.setText(date);           //文章日期
+		txt_title.setText(title);         //帖子标题
+		txt_author.setText(authorName);   //帖子作者
+		txt_text.setText(text);           //帖子内容
+		txt_date.setText(date);           //帖子日期
 
 		fraLike=(FrameLayout)listViewHead.findViewById(R.id.fra_like);
 		fraComment=(FrameLayout)listViewHead.findViewById(R.id.fra_comment);
