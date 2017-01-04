@@ -99,14 +99,44 @@ public class OrdersToBoCheckFragment extends Fragment{
 
 				@Override
 				public void onClick(View v) {
-					onCheck(order.getOrdersID());
+					new AlertDialog.Builder(getActivity()).setMessage("确认收货？")
+					.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+						
+					})
+					.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							onCheck(order.getOrdersID());
+						}
+					}).show();
 				}
 			});
 			oHolder.btnReturn.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					onReturn(order.getOrdersID());
+					new AlertDialog.Builder(getActivity()).setMessage("确认退货？")
+					.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+						
+					})
+					.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							onReturn(order.getOrdersID());
+						}
+					}).show();
 				}
 			});
 			return view;
@@ -164,7 +194,7 @@ public class OrdersToBoCheckFragment extends Fragment{
 
 					@Override
 					public void run() {
-						Toast.makeText(getActivity(), "已申请退货", Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity(), "已申请退货，请与卖家联系退款。", Toast.LENGTH_SHORT).show();
 						OrdersToBoCheckFragment.this.LoadMyOrders();
 					}
 				});

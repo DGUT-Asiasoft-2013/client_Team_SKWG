@@ -27,6 +27,9 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import okhttp3.Call;
@@ -38,7 +41,7 @@ public class ManageCommomInfoActivity extends Activity{
 	final static int SELECTED_INFO_CODE = 1;
 	List<CommomInfo> dataList;
 	ListView infoList;
-	TextView infoName, infoAddress, infoTel, infoPostcode;
+	TextView infoName, infoAddress, infoTel;
 	CommomInfo defaultInfo;
 	CommomInfo selectedInfo;
 	int page = 0;
@@ -49,7 +52,7 @@ public class ManageCommomInfoActivity extends Activity{
 		init();
 		infoList.setAdapter(listAdapter);
 		findViewById(R.id.add_info).setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				goAdd();
@@ -73,20 +76,26 @@ public class ManageCommomInfoActivity extends Activity{
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		getDefault();
+		reload();
+	}
+
+	void getDefault() {
 		Request request = Server.requestBuilderWithApi("commominfo/default").get().build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(Call arg0, final Response arg1) throws IOException {
 				runOnUiThread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						try {
 							ManageCommomInfoActivity.this.defaultInfo = new ObjectMapper()
 									.readValue(arg1.body().string(), CommomInfo.class);
 							runOnUiThread(new Runnable() {
-								
+
 								@Override
 								public void run() {
 									ManageCommomInfoActivity.this.setInfo();
@@ -102,14 +111,12 @@ public class ManageCommomInfoActivity extends Activity{
 					}
 				});
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
-				
+
 			}
 		});
-		
-		reload();
 	}
 	
 	void reload() {
@@ -157,28 +164,59 @@ public class ManageCommomInfoActivity extends Activity{
 			}
 		});
 	}
-	
+
+	private static class InfoHolder {
+		TextView tvName, tvAddress, tvTel, tvEdit, tvDelete;
+		CheckBox cbSetDefault;
+	}
 	BaseAdapter listAdapter = new BaseAdapter() {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = null;
+			InfoHolder infoHolder;
 			if(convertView==null){
+				infoHolder = new InfoHolder();
 				LayoutInflater inflater= LayoutInflater.from(parent.getContext());
 				view =inflater.inflate(R.layout.list_item_commom_info, null);
+				infoHolder.tvName = (TextView) view.findViewById(R.id.name);
+				infoHolder.tvAddress = (TextView) view.findViewById(R.id.address);
+				infoHolder.tvTel = (TextView) view.findViewById(R.id.tel);
+				infoHolder.tvEdit = (TextView) view.findViewById(R.id.edit);
+				infoHolder.tvDelete = (TextView) view.findViewById(R.id.delete);
+				infoHolder.cbSetDefault = (CheckBox) view.findViewById(R.id.set_default);
+				view.setTag(infoHolder);
 			}else{
 				view = convertView;
+				infoHolder = (InfoHolder) view.getTag();
 			}
-			TextView name = (TextView)view.findViewById(R.id.name);
-			TextView address = (TextView)view.findViewById(R.id.address);
-			TextView tel = (TextView)view.findViewById(R.id.tel);
-			TextView postcode = (TextView)view.findViewById(R.id.postcode);
 
-			CommomInfo info = dataList.get(position);
-			name.setText("收货人： " + info.getName());
-			address.setText("收货地址: " + info.getAddress());
-			tel.setText("联系电话: " + info.getTel());
-			postcode.setText("邮编：" + info.getPostCode());
+			final CommomInfo info = dataList.get(position);
+			infoHolder.tvName.setText("收货人： " + info.getName());
+			infoHolder.tvAddress.setText("收货地址: " + info.getAddress());
+			infoHolder.tvTel.setText("联系电话: " + info.getTel());
+			infoHolder.tvDelete.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					onDelete(info);
+				}
+			});
+			infoHolder.tvEdit.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					onEdit(info);
+				}
+			});
+			infoHolder.cbSetDefault.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					setDefault(info);
+				}
+			});
+			infoHolder.cbSetDefault.setChecked(info.isDefaultInfo());
 			return view;
 		}
 
@@ -197,24 +235,73 @@ public class ManageCommomInfoActivity extends Activity{
 			return dataList == null ? 0 : dataList.size();
 		}
 	};
-	
+
 	void init() {
-		infoName = (TextView)findViewById(R.id.info_name);
-		infoAddress = (TextView) findViewById(R.id.info_address);
-		infoTel = (TextView) findViewById(R.id.info_tel);
-		infoPostcode = (TextView) findViewById(R.id.info_postcode);
+		infoName = (TextView)findViewById(R.id.name);
+		infoAddress = (TextView) findViewById(R.id.address);
+		infoTel = (TextView) findViewById(R.id.tel);
 		infoList = (ListView) findViewById(R.id.list);
 	}
-	
+
 	void setInfo() {
-		infoName.setText("收货人： " + defaultInfo.getName());
-		infoAddress.setText("收货地址: " + defaultInfo.getAddress());
-		infoTel.setText("联系电话: " + defaultInfo.getTel());
-		infoPostcode.setText("邮编：" + defaultInfo.getPostCode());
-		Log.d("info", defaultInfo.getName() + "   " + defaultInfo.getAddress() + "    " + defaultInfo.getTel() + "   " + defaultInfo.getPostCode());
+		if(defaultInfo != null) {
+			infoName.setText("收货人： " + defaultInfo.getName());
+			infoAddress.setText("收货地址: " + defaultInfo.getAddress());
+			infoTel.setText("联系电话: " + defaultInfo.getTel());
+			Log.d("info", defaultInfo.getName() + "   " + defaultInfo.getAddress() + "    " + defaultInfo.getTel() + "   " + defaultInfo.getPostCode());
+		}
 	}
 	protected void goAdd() {
 		Intent itnt = new Intent(ManageCommomInfoActivity.this, AddCommomInfoActivity.class);
+		startActivity(itnt);
+	}
+
+	void setDefault(CommomInfo info) {
+		Request request = Server.requestBuilderWithApi("/commominfo/setdefault/" + info.getId()).get().build();
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						ManageCommomInfoActivity.this.listAdapter.notifyDataSetChanged();
+					}
+				});
+			}
+			
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				
+			}
+		});
+	}
+
+	void onDelete(CommomInfo info) {
+		Request request = Server.requestBuilderWithApi("/commominfo/delete/" + info.getId()).get().build();
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						ManageCommomInfoActivity.this.reload();
+					}
+				});
+			}
+			
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				
+			}
+		});
+	}
+
+	void onEdit(CommomInfo info) {
+		Intent itnt = new Intent(ManageCommomInfoActivity.this, EditCommomInfoActivity.class);
 		startActivity(itnt);
 	}
 }

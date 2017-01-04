@@ -162,11 +162,7 @@ public class BuyActivity extends Activity {
 									BuyActivity.this.setInfo();
 								}
 							});
-						} catch (JsonParseException e) {
-							e.printStackTrace();
-						} catch (JsonMappingException e) {
-							e.printStackTrace();
-						} catch (IOException e) {
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
