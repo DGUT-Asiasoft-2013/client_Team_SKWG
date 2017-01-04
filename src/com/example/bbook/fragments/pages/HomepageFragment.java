@@ -2,6 +2,7 @@ package com.example.bbook.fragments.pages;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.cookie.CookieIdentityComparator;
@@ -29,9 +30,15 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.style.UpdateLayout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,6 +47,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -97,13 +106,24 @@ public class HomepageFragment extends Fragment {
 	//
 	EditText minPrice,maxPrice;
 	ImageView btnPricce;
+	List<View> viewList;
 
+	//viewPage
+	View view1,view2,view3;
+	ViewPager viewPager;
+	ImageView cursor;
+	int bmpWidth=0;
+	int offset=0;
+	int curIndex=0;
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view=inflater.inflate(R.layout.fragment_home_page, null);
-
 		btnSearch=(ImageView) view.findViewById(R.id.btn_search);
 		editKeyword=(EditText) view.findViewById(R.id.edit_keyword);
+		
+		
 		
 		
 		minPrice=(EditText) view.findViewById(R.id.min_price);
@@ -199,6 +219,8 @@ public class HomepageFragment extends Fragment {
 		return view;		
 	}
 
+	
+	
 	public void SortStyle(String sortStyle){
 		String keyword=editKeyword.getText().toString();
 		OkHttpClient client=Server.getSharedClient();
@@ -648,8 +670,8 @@ public class HomepageFragment extends Fragment {
 
 
 	}
-
-
+	
+	//--------------------------------------------
 	public void goBookDetailActivity(int position){
 		goods=data.get(position);
 		Intent intent=new Intent(getActivity(),BookDetailActivity.class);
