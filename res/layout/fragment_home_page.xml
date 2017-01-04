@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -33,7 +32,7 @@
     </LinearLayout>
 
     <fragment
-        android:id="@+id/fragment_viewpager"
+        android:id="@+id/fragment_viewpager_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         class="com.example.bbook.fragments.ViewPagerFragment" />
@@ -51,8 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:src="@drawable/icon_classify" />
-        -->
+            android:src="@drawable/icon_classify" />        -->
 
         <ImageView
             android:id="@+id/change_view"

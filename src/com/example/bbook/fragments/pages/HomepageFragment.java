@@ -115,11 +115,14 @@ public class HomepageFragment extends Fragment {
 	int bmpWidth=0;
 	int offset=0;
 	int curIndex=0;
-	
+	View view;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view=inflater.inflate(R.layout.fragment_home_page, null);
+		if(view!=null){
+			return view;
+		}
+		view=inflater.inflate(R.layout.fragment_home_page, null);
 		btnSearch=(ImageView) view.findViewById(R.id.btn_search);
 		editKeyword=(EditText) view.findViewById(R.id.edit_keyword);
 		

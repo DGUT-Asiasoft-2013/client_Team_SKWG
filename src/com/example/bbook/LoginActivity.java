@@ -212,13 +212,13 @@ public class LoginActivity extends Activity {
 				// final User user = mapper.readValue(response,
 				// User.class);
 				dlg.dismiss();
+				final String response = arg1.body().string();
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 
 						try {
 							ObjectMapper mapper = new ObjectMapper();
-							String response = arg1.body().string();
 							Log.e("OK", response);
 							final User user = mapper.readValue(response, User.class);
 							LoginActivity.this.onResponse(arg0, user.getAccount());
