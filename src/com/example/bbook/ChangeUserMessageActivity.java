@@ -302,14 +302,14 @@ public class ChangeUserMessageActivity extends Activity {
 
 				@Override
 				public void onResponse(final Call arg0, final Response arg1) throws IOException {
-					final String responseString;
+					final User user;
 					try {
-						responseString = arg1.body().string();
+						user = new ObjectMapper().readValue(arg1.body().bytes(), User.class);
 						runOnUiThread(new Runnable() {
 							@Override
 
 							public void run() {
-								ChangeUserMessageActivity.this.onResponse(arg0, responseString);
+								ChangeUserMessageActivity.this.onResponseAvatar(arg0, user);
 
 							}
 						});
@@ -338,12 +338,13 @@ public class ChangeUserMessageActivity extends Activity {
 		}
 	}
 	
-	protected void onResponse(Call arg0, String responseBody) {
+	protected void onResponseAvatar(Call arg0,final User user) {
 		new AlertDialog.Builder(this).setTitle("修改成功")
 		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				finish();
+				avatar.load(user);
+				P.dismiss();
 			}
 		}).show();
 
