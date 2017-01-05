@@ -114,8 +114,7 @@ public class BuyActivity extends Activity {
 	}
 
 	protected void goManageInfo() {
-		Intent itnt = new Intent(BuyActivity.this, ManageCommomInfoActivity.class);
-		//		startActivity(itnt);
+		Intent itnt = new Intent(BuyActivity.this, SelectCommomInfoActivity.class);
 		startActivityForResult(itnt, SELECTED_INFO_CODE);
 	}
 

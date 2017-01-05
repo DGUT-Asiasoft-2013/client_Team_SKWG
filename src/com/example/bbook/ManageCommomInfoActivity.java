@@ -8,6 +8,8 @@ import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.entity.CommomInfo;
 import com.example.bbook.api.widgets.AvatarView;
+import com.example.bbook.api.widgets.TitleBarFragment;
+import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
 import com.example.bbook.fragments.pages.ForumFragment;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -38,6 +40,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class ManageCommomInfoActivity extends Activity{
+	TitleBarFragment fragTitleBar;
 	final static int SELECTED_INFO_CODE = 1;
 	List<CommomInfo> dataList;
 	ListView infoList;
@@ -51,6 +54,11 @@ public class ManageCommomInfoActivity extends Activity{
 		setContentView(R.layout.activity_info_manage);
 		init();
 		infoList.setAdapter(listAdapter);
+		setEvent();
+		
+	}
+
+	private void setEvent() {
 		findViewById(R.id.add_info).setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -71,6 +79,15 @@ public class ManageCommomInfoActivity extends Activity{
 				}
 			}
 		});
+		fragTitleBar.setOnGoBackListener(new OnGoBackListener() {
+			
+			@Override
+			public void onGoBack() {
+				finish();
+			}
+		});
+		fragTitleBar.setTitleName("管理收货地址", 16);
+		fragTitleBar.setBtnNextState(false);
 	}
 
 	@Override
@@ -241,6 +258,7 @@ public class ManageCommomInfoActivity extends Activity{
 		infoAddress = (TextView) findViewById(R.id.address);
 		infoTel = (TextView) findViewById(R.id.tel);
 		infoList = (ListView) findViewById(R.id.list);
+		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
 	}
 
 	void setInfo() {
@@ -266,7 +284,7 @@ public class ManageCommomInfoActivity extends Activity{
 					
 					@Override
 					public void run() {
-						ManageCommomInfoActivity.this.listAdapter.notifyDataSetChanged();
+						ManageCommomInfoActivity.this.reload();
 					}
 				});
 			}

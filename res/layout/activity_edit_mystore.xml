@@ -58,7 +58,6 @@
                 android:layout_height="wrap_content"
                 android:text="关注数：0"
                 android:textSize="13sp" />
-
         </LinearLayout>
     </LinearLayout>
 
@@ -68,6 +67,12 @@
         android:layout_gravity="bottom"
         android:layout_margin="1dp"
         android:background="#eee" />
+
+    <Button
+        android:id="@+id/btn_manage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="订单管理" />
 
     <GridView
         android:id="@+id/goods_gridview"
