@@ -1,7 +1,5 @@
 package com.example.bbook.api.widgets;
 
-import java.util.zip.Inflater;
-
 import com.example.bbook.R;
 
 import android.app.Fragment;

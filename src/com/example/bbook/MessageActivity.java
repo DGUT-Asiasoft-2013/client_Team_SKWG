@@ -15,14 +15,17 @@ import com.example.bbook.api.widgets.ItemFragment;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jauker.widget.BadgeView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +43,7 @@ public class MessageActivity extends Activity {
         Boolean isOwn;
         AvatarView avatar;
         int page, temp, othersId;
-        List<Chat> chatData;
+        List<Chat> chatData, check=null;
         TitleBarFragment fragMessageTitleBar;
         ItemFragment fragMessageItem;
         ListView chatList;
@@ -96,7 +99,7 @@ public class MessageActivity extends Activity {
                         View view = null;
                         if (convertView == null) {
                                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                                view = inflater.inflate(R.layout.chat_list_item, null);
+                                view = inflater.inflate(R.layout.list_item_chat, null);
                         } else {
                                 view = convertView;
                         }
@@ -112,14 +115,26 @@ public class MessageActivity extends Activity {
 
                         messageContent = (TextView) view.findViewById(R.id.tv_list_content);
                         messageContent.setText(data.getContent());
-
+                        
                         editTime = (TextView) view.findViewById(R.id.editTime);
                         String dateStr = DateFormat.format("hh:mm", data.getCreateDate()).toString();
                         editTime.setText(dateStr);
 
-                        avatar = (AvatarView) view.findViewById(R.id.avatar);
-                        avatar.load(Server.serverAdress + data.getReceiver().getAvatar());
+                        if (data.getSender().getId().equals(me.getId())) {
+                                avatar = (AvatarView) view.findViewById(R.id.avatar);
+                                avatar.load(Server.serverAdress + data.getReceiver().getAvatar());
+                        } else {
+                                avatar = (AvatarView) view.findViewById(R.id.avatar);
+                                avatar.load(Server.serverAdress + data.getSender().getAvatar());
+                        }
 
+                        //设置数字提醒(未实现)
+//                        BadgeView bv = new BadgeView(MessageActivity.this);
+//                        bv.setTargetView(avatar);
+//                        bv.setBadgeCount(1);
+//                        bv.setBackground(10, Color.RED);
+//                        bv.setBadgeGravity(Gravity.END);
+//                        
                         return view;
                 }
 
@@ -206,8 +221,12 @@ public class MessageActivity extends Activity {
                                                                 }
                                                         }
 
+                                                        if(check == null){
+                                                                check = reverse;
+                                                        }
                                                         MessageActivity.this.chatData = reverse;
                                                         adapter.notifyDataSetInvalidated();
+                                                        
                                                 }
                                         });
                                 } catch (Exception e) {

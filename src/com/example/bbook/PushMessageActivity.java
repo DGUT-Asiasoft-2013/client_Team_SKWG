@@ -6,6 +6,7 @@ import java.util.List;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.entity.Push;
+import com.example.bbook.api.widgets.AvatarView;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,7 +71,7 @@ public class PushMessageActivity extends Activity {
                         View view = null;
                         if(convertView == null){
                                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                                view = inflater.inflate(R.layout.chat_list_item, null);
+                                view = inflater.inflate(R.layout.list_item_chat, null);
                         }else{
                                 view = convertView;
                         }
@@ -86,6 +87,9 @@ public class PushMessageActivity extends Activity {
                         
                         messageContent = (TextView) view.findViewById(R.id.tv_list_content);
                         messageContent.setText(data.getContent());
+                        
+                        AvatarView avatar = (AvatarView) view.findViewById(R.id.avatar);
+                        avatar.load(Server.serverAdress + data.getShop().getShopImage());
                         
                         return view;
                 }
