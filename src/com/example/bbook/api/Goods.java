@@ -21,6 +21,7 @@ public class Goods   implements Serializable {
 	String pubDate;
 	String pritime;
 	Shop shop;
+	int goodsSales; // 商品销量
 	int quantity;	// 购买数量
 	boolean isSelected;		// 添加购物车的商品是否被选中
 //	User seller;
@@ -28,6 +29,12 @@ public class Goods   implements Serializable {
 	
 	public Shop getShop() {
 		return shop;
+	}
+	public int getGoodsSales() {
+		return goodsSales;
+	}
+	public void setGoodsSales(int goodsSales) {
+		this.goodsSales = goodsSales;
 	}
 	public void setShop(Shop shop) {
 		this.shop = shop;
