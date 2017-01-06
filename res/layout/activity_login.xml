@@ -5,17 +5,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <fragment 
+    <fragment
         android:id="@+id/login_titlebar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         class="com.example.bbook.api.widgets.TitleBarFragment"
-        tools:layout="@layout/fragment_widget_titlebar"/>
-    
+        tools:layout="@layout/fragment_widget_titlebar" />
+
     <fragment
         android:id="@+id/input_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         class="inputcells.SimpleTextInputcellFragment"
         tools:layout="@layout/fragment_inputcell_simpleted" />
 
@@ -23,17 +26,22 @@
         android:id="@+id/input_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         class="inputcells.SimpleTextInputcellFragment"
         tools:layout="@layout/fragment_inputcell_simpleted" />
 
     <Button
         android:id="@+id/btn_log"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/login_button"
-        android:textColor="@android:color/white"
-        android:text="登陆" />
+        android:text="登陆"
+        android:textSize="15sp"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

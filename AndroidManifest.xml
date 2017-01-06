@@ -70,6 +70,7 @@
         <activity android:name="com.example.bbook.BillItemDetialActivity" />
         <activity android:name="com.example.bbook.AddBookCommentActivity" />
         <activity android:name="com.example.bbook.EditCommomInfoActivity" />
+        <activity android:name="com.example.bbook.MySubscribeActivity" />
         <activity android:name="com.example.bbook.SelectCommomInfoActivity" />
         <activity android:name="com.example.bbook.ManageOrderActivity" />
         <activity android:name="com.example.bbook.OrderDetailActivity" />

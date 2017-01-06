@@ -21,36 +21,56 @@
                 class="inputcells.PictureInputCellFragment"
                 tools:layout="@layout/fragment_inputcell_picture" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:background="#8ccc" />
+            
             <fragment
                 android:id="@+id/input_goods_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 class="inputcells.SimpleTextInputcellFragment"
                 tools:layout="@layout/fragment_inputcell_simpleted" />
 
-            <TextView
-                android:id="@+id/label"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:paddingLeft="8dp"
-                android:text="商品种类"
-                android:textColor="@android:color/black"
-                android:textSize="12sp" />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:padding="8dp" >
 
-            <Spinner
-                android:id="@+id/spinner_type"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="商品种类"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/spinner_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_weight="6" />
+            </LinearLayout>
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="2dp"
-                android:paddingBottom="2dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp" />
+                android:layout_height="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:background="#8ccc" />
 
             <fragment
                 android:id="@+id/input_goods_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 class="inputcells.SimpleTextInputcellFragment"
                 tools:layout="@layout/fragment_inputcell_simpleted" />
 
@@ -58,6 +78,7 @@
                 android:id="@+id/input_goods_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 class="inputcells.SimpleTextInputcellFragment"
                 tools:layout="@layout/fragment_inputcell_simpleted" />
 
@@ -65,6 +86,7 @@
                 android:id="@+id/input_goods_publisher"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 class="inputcells.SimpleTextInputcellFragment"
                 tools:layout="@layout/fragment_inputcell_simpleted" />
 
@@ -72,43 +94,83 @@
                 android:id="@+id/input_goods_author"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 class="inputcells.SimpleTextInputcellFragment"
                 tools:layout="@layout/fragment_inputcell_simpleted" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:paddingLeft="8dp"
-                android:text="出版时间"
-                android:textColor="@android:color/black"
-                android:textSize="12sp" />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:padding="8dp" >
 
-            <EditText
-                android:id="@+id/edit_pubdate"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="出版时间"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/edit_pubdate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_weight="6"
+                    android:background="@null"
+                    android:hint="点击选择日期"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:hint="点击选择日期" />
+                android:layout_height="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:background="#8ccc" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:paddingLeft="8dp"
-                android:text="印刷时间"
-                android:textColor="@android:color/black"
-                android:textSize="12sp" />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:padding="8dp" >
 
-            <EditText
-                android:id="@+id/edit_pritime"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="印刷时间"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/edit_pritime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_weight="6"
+                    android:background="@null"
+                    android:hint="点击选择日期"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:hint="点击选择日期" />
+                android:layout_height="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:background="#8ccc" />
 
             <Button
                 android:id="@+id/submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
                 android:text="submit" />
         </LinearLayout>
     </ScrollView>

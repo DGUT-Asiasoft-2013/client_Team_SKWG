@@ -6,28 +6,14 @@
     android:orientation="vertical" >
 
     <fragment
-        android:id="@+id/message_titlebar"
+        android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         class="com.example.bbook.api.widgets.TitleBarFragment"
         tools:layout="@layout/fragment_widget_titlebar" />
 
-    <fragment
-        android:id="@+id/btn_push_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        class="com.example.bbook.api.widgets.ItemFragment"
-        tools:layout="@layout/fragment_widget_item" />
-
-    <fragment
-        android:id="@+id/btn_mysubscribe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        class="com.example.bbook.api.widgets.ItemFragment"
-        tools:layout="@layout/fragment_widget_item" />
-    
     <ListView
-        android:id="@+id/chat_list"
+        android:id="@+id/list_mysubscribe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp" >
