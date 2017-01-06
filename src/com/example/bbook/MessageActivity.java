@@ -45,7 +45,7 @@ public class MessageActivity extends Activity {
         int page, temp, othersId;
         List<Chat> chatData, check=null;
         TitleBarFragment fragMessageTitleBar;
-        ItemFragment fragMessageItem;
+        ItemFragment fragMessageItem, fragMySubscribe;
         ListView chatList;
         User me;
         Shop shop;
@@ -79,6 +79,19 @@ public class MessageActivity extends Activity {
                                 goPushMessage();
                         }
                 });
+                
+                
+                fragMySubscribe = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_mysubscribe);
+                fragMySubscribe.setItemImage(R.drawable.ic_launcher);
+                fragMySubscribe.setItemText("我的关注");
+                fragMySubscribe.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
+
+                        @Override
+                        public void onDetailed() {
+                                goMySubscribe();
+                        }
+                });
+                
 
                 chatList = (ListView) findViewById(R.id.chat_list);
                 chatList.setAdapter(adapter);
@@ -284,6 +297,11 @@ public class MessageActivity extends Activity {
         
         void goPushMessage() {
                 Intent itnt = new Intent(MessageActivity.this, PushMessageActivity.class);
+                startActivity(itnt);
+        }
+        
+        void goMySubscribe(){
+                Intent itnt = new Intent(MessageActivity.this, MySubscribeActivity.class);
                 startActivity(itnt);
         }
         

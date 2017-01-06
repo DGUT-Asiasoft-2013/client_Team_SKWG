@@ -6,6 +6,7 @@
     android:orientation="vertical"
     >
 
+
  
 
     <include layout="@layout/minprice_and_maxpricce" 
