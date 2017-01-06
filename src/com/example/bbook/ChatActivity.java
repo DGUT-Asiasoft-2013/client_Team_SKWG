@@ -63,7 +63,6 @@ public class ChatActivity extends Activity {
                 chatList = (ListView) findViewById(R.id.chat_list);
                 chatList.setDivider(null);
                 chatList.setAdapter(adapter);
-
                 editChat = (EditText) findViewById(R.id.et_chat);
                 
 
@@ -108,7 +107,7 @@ public class ChatActivity extends Activity {
                                 switch (type) {
                                 case TYPE1:
                                         view = LayoutInflater.from(parent.getContext())
-                                                        .inflate(R.layout.sender_list_item, null);
+                                                        .inflate(R.layout.list_item_sender, null);
                                         holder1 = new ViewHolderMe();
                                         holder1.textView = (AutoSplitTextView) view
                                                         .findViewById(R.id.sender_chat_content);
@@ -120,7 +119,7 @@ public class ChatActivity extends Activity {
 
                                 case TYPE2:
                                         view = LayoutInflater.from(parent.getContext())
-                                                        .inflate(R.layout.receiver_list_item, null);
+                                                        .inflate(R.layout.list_item_receiver, null);
                                         holder2 = new ViewHolderOthers();
                                         holder2.textView = (AutoSplitTextView) view
                                                         .findViewById(R.id.receiver_chat_content);
@@ -150,7 +149,7 @@ public class ChatActivity extends Activity {
                                                         .findViewById(R.id.receiver_chat_content);
                                         holder2.avatar = (AvatarView) view.findViewById(R.id.avatar_receiver);
                                         holder2.textView.setText(data.getContent());
-                                        holder2.avatar.load(Server.serverAdress + data.getReceiver().getAvatar());
+                                        holder2.avatar.load(Server.serverAdress + data.getSender().getAvatar());
                                         break;
 
                                 default:
@@ -247,13 +246,8 @@ public class ChatActivity extends Activity {
                                         runOnUiThread(new Runnable() {
                                                 public void run() {
                                                         ChatActivity.this.page = pageData.getNumber();
-//                                                        List<Chat> reverse = new ArrayList<Chat>();
                                                         List<Chat> content = pageData.getContent();
-//                                                        for (int i = content.size() - 1; i >= 0; i--) {
-//                                                                reverse.add(content.get(i));
-//                                                        }
                                                         ChatActivity.this.chatData = content;
-
                                                         adapter.notifyDataSetInvalidated();
                                                 }
                                         });
@@ -296,7 +290,7 @@ public class ChatActivity extends Activity {
                                         refresh();
                                         chatList.setSelection(chatData.size()-1);
                                 }
-                        }, 1000);   
+                        }, 500);   
                 }
         }
 

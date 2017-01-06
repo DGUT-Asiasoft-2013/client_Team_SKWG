@@ -157,6 +157,16 @@ ImageView cursor;
 		scheduledExecutorService.scheduleWithFixedDelay(new ViewpageChange(), 3, 3,TimeUnit.SECONDS);
 
 	}
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+			if (scheduledExecutorService != null) {
+				scheduledExecutorService.shutdown();
+				scheduledExecutorService=null;
+			}
+	
+	}
 	public class ViewpageChange implements Runnable{
 
 		@Override

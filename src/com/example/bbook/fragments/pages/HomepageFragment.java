@@ -17,6 +17,7 @@ import com.example.bbook.api.Server;
 import com.example.bbook.api.Shop;
 import com.example.bbook.api.widgets.AvatarView;
 import com.example.bbook.api.widgets.GoodsPicture;
+import com.example.bbook.fragments.SlidingMenuFragment;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -37,9 +38,12 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.text.style.UpdateLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -71,9 +75,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 import util.AutoLoadListener;
 
-public class HomepageFragment extends Fragment {
+public class HomepageFragment extends Fragment implements OnClickListener{
 	//书籍展示页面
 
+	SlidingMenuFragment slidingMenuFragment=new SlidingMenuFragment();
+	
 	PopupMenu popupMenuClassify,popupMenuSort;
 	Menu menuClassify,menuSort;
 
@@ -115,15 +121,65 @@ public class HomepageFragment extends Fragment {
 	int bmpWidth=0;
 	int offset=0;
 	int curIndex=0;
+	View view;
 	
+	//侧拉菜单
+	private DrawerLayout mDrawerLayout = null;
+	private ImageView bt1;
+	private Button bt2;
+	private Button bt3;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view=inflater.inflate(R.layout.fragment_home_page, null);
+		if(view!=null){
+			return view;
+		}
+		view=inflater.inflate(R.layout.fragment_home_page, null);
 		btnSearch=(ImageView) view.findViewById(R.id.btn_search);
 		editKeyword=(EditText) view.findViewById(R.id.edit_keyword);
+		slidingMenuFragment=(SlidingMenuFragment) getFragmentManager().findFragmentById(R.id.sliding_menu);
 		
-		
+		//侧拉菜单
+
+		bt1 = (ImageView) view.findViewById(R.id.more_choice);
+		bt2 = (Button) view.findViewById(R.id.btn1);
+		bt3 = (Button) view.findViewById(R.id.btn2);
+		bt1.setOnClickListener(this);
+		bt2.setOnClickListener(this);
+		bt3.setOnClickListener(this);
+		mDrawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+		mDrawerLayout.setDrawerListener(new DrawerListener() {
+
+			@Override
+			public void onDrawerStateChanged(int arg0) {
+				Log.d("David", "onDrawerStateChanged arg0 = " + arg0);
+			}
+
+			@Override
+			public void onDrawerSlide(View arg0, float arg1) {
+				Log.d("David", "onDrawerSlide arg1 = " + arg1);
+			}
+
+			@Override
+			public void onDrawerOpened(View arg0) {
+				Log.d("David", "onDrawerOpened");
+			}
+
+			@Override
+			public void onDrawerClosed(View arg0) {
+				Log.d("David", "onDrawerClosed");
+				
+				goodsType=slidingMenuFragment.getGoodsType();
+				if(goodsType.equals("全部")){
+					isClassified=false;
+				}else{
+					isClassified=true;
+				}
+				Log.d("goodstype", goodsType);
+				bookLoad();
+			}
+		});
+	
 		
 		
 		minPrice=(EditText) view.findViewById(R.id.min_price);
@@ -362,6 +418,7 @@ public class HomepageFragment extends Fragment {
 		//		if(!sortState){
 		bookLoad();
 		updateLayout();
+		
 		//		}
 		//		else {
 		//			SortStyle(sortStyle);
@@ -468,6 +525,8 @@ public class HomepageFragment extends Fragment {
 	}
 	//加载书本
 	public void bookLoad(){
+	
+	
 		Request request;
 		request=Server.requestBuilderWithApi("goods/s")
 				.get().build();
@@ -776,5 +835,28 @@ void onFailture(Call arg0, Exception arg1) {
 	.setTitle("失败")
 	.setMessage(arg1.getLocalizedMessage())
 	.show();
+}
+
+
+
+@Override
+public void onClick(View v) {
+
+	switch (v.getId()) {
+	case R.id.more_choice:
+		mDrawerLayout.openDrawer(Gravity.RIGHT);
+		Toast.makeText(getActivity(), "bt1111111111", Toast.LENGTH_LONG).show();
+		break;
+	case R.id.btn1:
+		Toast.makeText(getActivity(), "bt2222222222", Toast.LENGTH_LONG).show();
+		break;
+	case R.id.btn2:
+		Toast.makeText(getActivity(), "bt33333333333", Toast.LENGTH_LONG).show();
+		break;
+	default:
+		break;
+	}
+
+	
 }
 }

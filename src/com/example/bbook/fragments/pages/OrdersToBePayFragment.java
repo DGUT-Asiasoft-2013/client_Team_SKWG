@@ -9,6 +9,7 @@ import java.util.UUID;
 import com.example.bbook.BuyActivity;
 import com.example.bbook.MD5;
 import com.example.bbook.MyOrdersActivity;
+import com.example.bbook.OrderDetailActivity;
 import com.example.bbook.PayActivity;
 import com.example.bbook.R;
 import com.example.bbook.SetPayPasswordActivity;
@@ -32,12 +33,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
@@ -62,6 +65,15 @@ public class OrdersToBePayFragment extends Fragment {
 		
 		list.setAdapter(listAdapter);
 		list.setDivider(null);
+		list.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent itnt = new Intent(getActivity(), OrderDetailActivity.class);
+				itnt.putExtra("order", listData.get(position));
+				startActivity(itnt);
+			}
+		});
 		return view;
 	}
 	

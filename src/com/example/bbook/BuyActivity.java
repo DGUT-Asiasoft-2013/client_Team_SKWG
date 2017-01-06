@@ -114,8 +114,7 @@ public class BuyActivity extends Activity {
 	}
 
 	protected void goManageInfo() {
-		Intent itnt = new Intent(BuyActivity.this, ManageCommomInfoActivity.class);
-		//		startActivity(itnt);
+		Intent itnt = new Intent(BuyActivity.this, SelectCommomInfoActivity.class);
 		startActivityForResult(itnt, SELECTED_INFO_CODE);
 	}
 
@@ -162,11 +161,7 @@ public class BuyActivity extends Activity {
 									BuyActivity.this.setInfo();
 								}
 							});
-						} catch (JsonParseException e) {
-							e.printStackTrace();
-						} catch (JsonMappingException e) {
-							e.printStackTrace();
-						} catch (IOException e) {
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
