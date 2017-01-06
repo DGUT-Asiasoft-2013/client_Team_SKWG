@@ -5,13 +5,14 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/item"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_height="86dp" >
 
         <ImageView
+            android:layout_gravity="center|top"
             android:id="@+id/item_image"
             android:layout_width="26dp"
             android:layout_height="26dp"
@@ -20,28 +21,16 @@
             android:src="@drawable/ic_launcher" />
 
         <TextView
+            android:layout_gravity="center|bottom"
             android:id="@+id/item_text"
-            android:layout_width="0dp"
-            android:layout_height="26dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="内容"
             android:textSize="18sp" />
 
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="10dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/btn_next" />
-    </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:layout_marginStart="8dp"
-        android:background="#CCCCCC" />
+    </FrameLayout>
 
 </LinearLayout>
