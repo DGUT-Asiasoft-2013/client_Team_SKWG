@@ -113,7 +113,7 @@ public class AddCommentActivity extends Activity {
 
 	void onResponse(Call arg0, String responseBody) {
 		new AlertDialog.Builder(this)
-		.setTitle("发表成功")
+		.setTitle("评论成功")
 		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
 			@Override
@@ -127,7 +127,7 @@ public class AddCommentActivity extends Activity {
 
 	void onFailure(Call arg0, Exception arg1) {
 		new AlertDialog.Builder(this)
-		.setTitle("发表失败")
+		.setTitle("评论失败")
 		.setMessage(arg1.getLocalizedMessage())
 		.setNegativeButton("OK", null)
 		.show();

@@ -503,6 +503,8 @@ public class BuyActivity extends Activity {
 						if(checkPayState){
 							Toast.makeText(BuyActivity.this,"支付成功", Toast.LENGTH_SHORT).show();
 							goMyOrders();
+						}else{
+							goonFailure();
 						}
 					}
 				});
@@ -520,6 +522,17 @@ public class BuyActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				Intent itnt = new Intent(BuyActivity.this,MyOrdersActivity.class);
+				startActivity(itnt);
+				finish();
+			}
+		}).show();
+	}
+	
+	public void goonFailure() {
+		new AlertDialog.Builder(this).setMessage("余额不足").setPositiveButton("马上充值", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent itnt = new Intent(BuyActivity.this,MyWalletActivity.class);
 				startActivity(itnt);
 				finish();
 			}

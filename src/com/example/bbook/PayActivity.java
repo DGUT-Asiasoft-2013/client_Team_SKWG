@@ -142,17 +142,20 @@ public class PayActivity extends Activity {
 		client.newCall(request).enqueue(new Callback() {
 
 			@Override
-			public void onResponse(Call arg0, Response arg1) throws IOException {
+			public void onResponse(final Call arg0, Response arg1) throws IOException {
 				String responseStr=arg1.body().string();
-				final Boolean checkPayState=new ObjectMapper().readValue(responseStr, Boolean.class);
-				Log.d("aaasss",  responseStr);
+				Log.e("OK",  responseStr);
+				final boolean checkPayState=responseStr.equalsIgnoreCase("true");
+				
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						if(checkPayState){
+						if(checkPayState==true){
 							Toast.makeText(PayActivity.this,"支付成功", Toast.LENGTH_SHORT).show();
 							goHomePage();
-						}
+						}else {
+							goonFailure();
+							}
 					}
 				});
 
@@ -160,7 +163,7 @@ public class PayActivity extends Activity {
 
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
-
+				
 			}
 		});
 	}
@@ -179,5 +182,15 @@ public class PayActivity extends Activity {
 			}
 		}).show();
 	}
-
+	
+	public void goonFailure() {
+		new AlertDialog.Builder(this).setMessage("余额不足").setPositiveButton("马上充值", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent itnt = new Intent(PayActivity.this,MyWalletActivity.class);
+				startActivity(itnt);
+				finish();
+			}
+		}).show();
+	}
 }

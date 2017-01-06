@@ -95,14 +95,37 @@ public class ForumContentActivity extends Activity {
 		AvatarView avatar = (AvatarView)listViewHead.findViewById(R.id.avatar);
 		avatar.load(Server.serverAdress+getIntent().getStringExtra("AuthorAvatar"));
 
+		RectangleView img1=(RectangleView)listViewHead.findViewById(R.id.img1);   //第一个图片
+		RectangleView img2=(RectangleView)listViewHead.findViewById(R.id.img2);   //第二个图片
+		RectangleView img3=(RectangleView)listViewHead.findViewById(R.id.img3);   //第三个图片
 
 		//图片不为空显示图片
-		RectangleView articleImage = (RectangleView)listViewHead.findViewById(R.id.articleImage);
-		if(article.getArticlesImage()!=null){
-			articleImage.setVisibility(RectangleView.VISIBLE);
-			articleImage.load(Server.serverAdress+article.getArticlesImage());
-		}else{
-			articleImage.setVisibility(RectangleView.GONE);
+		if(article.getArticlesImage()==null||article.getArticlesImage().length()<=0){   //没有图片
+			img1.setVisibility(RectangleView.GONE);
+			img2.setVisibility(RectangleView.GONE);
+			img3.setVisibility(RectangleView.GONE);	
+		}else{          														//有图片
+			String[] articleImg = article.getArticlesImage().split("\\|");
+			if(articleImg.length==3){                    //有三张图片
+				for(int i=0;i<articleImg.length;i++){
+					RectangleView[] imgs = new RectangleView[]{img1,img2,img3};
+					imgs[i].setVisibility(RectangleView.VISIBLE);
+					imgs[i].load(Server.serverAdress+articleImg[i]);
+				}
+			}else if (articleImg.length==2) {              //两张图片
+				for(int i=0;i<articleImg.length;i++){
+					RectangleView[] imgs = new RectangleView[]{img1,img2};
+					imgs[i].setVisibility(RectangleView.VISIBLE);
+					imgs[i].load(Server.serverAdress+articleImg[i]);
+					img3.setVisibility(RectangleView.GONE);
+				}
+			}else{                     						//一张图片
+				img1.setVisibility(RectangleView.VISIBLE);
+				img1.load(Server.serverAdress+articleImg[0]);
+				img2.setVisibility(RectangleView.GONE);
+				img3.setVisibility(RectangleView.GONE);
+			}
+		
 		}
 
 		txt_title.setText(title);         //帖子标题
@@ -280,28 +303,30 @@ public class ForumContentActivity extends Activity {
 						}
 					});
 				}catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							new AlertDialog.Builder(ForumContentActivity.this)
-							.setMessage(e.getMessage())
-							.show();
-						}
-					});  
+					e.printStackTrace();
+//					runOnUiThread(new Runnable() {
+//						@Override
+//						public void run() {
+//							new AlertDialog.Builder(ForumContentActivity.this)
+//							.setMessage(e.getMessage())
+//							.show();
+//						}
+//					});  
 				}
 			}
 
 
 			@Override
 			public void onFailure(Call arg0,final IOException e) {
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						new AlertDialog.Builder(ForumContentActivity.this)
-						.setMessage(e.getMessage())
-						.show();
-					}
-				}); 
+//				runOnUiThread(new Runnable() {
+//					@Override
+//					public void run() {
+//						new AlertDialog.Builder(ForumContentActivity.this)
+//						.setMessage(e.getMessage())
+//						.show();
+//					}
+//				}); 
+				e.printStackTrace();
 			}
 		});
 	}

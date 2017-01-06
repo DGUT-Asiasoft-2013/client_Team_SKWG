@@ -109,7 +109,7 @@ public class ChangeUserMessageActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String value = changeEmail.getText();
+				String value = changePhone.getText();
 				String change = "changePhone";
 				goChange(change,value);
 			}
