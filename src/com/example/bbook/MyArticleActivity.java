@@ -30,6 +30,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
+import util.MyListener;
+import util.PullToRefreshLayout;
+import util.PullableListView;
 
 public class MyArticleActivity extends Activity {
 	ListView listView;
@@ -37,21 +40,23 @@ public class MyArticleActivity extends Activity {
 	int page=0;
 	List<Article>data;
 	ImageButton ibtn_back;
-	View btnLoadMore;
-	TextView textLoadMore;
-	
+//	View btnLoadMore;
+//	TextView textLoadMore;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_myart);
 
-		btnLoadMore= LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
-		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
-		
-		listView =(ListView)findViewById(R.id.list);
-		listView.addFooterView(btnLoadMore);
+		//		btnLoadMore= LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
+		//		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
+
+		PullToRefreshLayout pullToRefreshLayout=(PullToRefreshLayout)findViewById(R.id.refresh_view);   //获取自定义layout
+
+		listView =(PullableListView)findViewById(R.id.content_view);
+		//		listView.addFooterView(btnLoadMore);
 		listView.setAdapter(listAdapter);
-		
+
 		ibtn_back=(ImageButton)findViewById(R.id.btn_back);
 		ibtn_back.setOnClickListener(new OnClickListener() {
 
@@ -68,12 +73,21 @@ public class MyArticleActivity extends Activity {
 				onItemClicked(position);
 			}
 		});
-		
-		btnLoadMore.setOnClickListener(new View.OnClickListener() {
 
+		//自定义布局上拉下拉操作监听
+		pullToRefreshLayout.setOnRefreshListener(new MyListener(){
+			//下拉刷新操作
 			@Override
-			public void onClick(View v) {
+			public void onRefresh(final PullToRefreshLayout pullToRefreshLayout){
+				reload();
+				pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+			}
+			//上拉加载更多操作
+			@Override
+			public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout)
+			{
 				loadmore();
+				pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
 			}
 		});
 	}
@@ -85,7 +99,7 @@ public class MyArticleActivity extends Activity {
 		reload();
 	}
 
-	//从服务器端获取解析我的文章到客户端data
+	//从服务器端获取解析我的帖子到客户端data
 	void reload(){
 		Request request = Server.requestBuilderWithApi("myarticles")
 				.method("GET", null)
@@ -160,7 +174,7 @@ public class MyArticleActivity extends Activity {
 			String dateStr = DateFormat.format("yyyy-MM-dd hh:mm", article.getCreateDate()).toString();
 			txt_date.setText(dateStr);
 			txt_comNum.setText(article.getCommentNum()+"");
-			
+
 			return view;
 		}
 
@@ -187,17 +201,17 @@ public class MyArticleActivity extends Activity {
 	public void onItemClicked( int position){
 		String title = data.get(position).getTitle();
 		String text = data.get(position).getText();
-//		String authorName = data.get(position).getAuthorName();
-//		String date = DateFormat.format("yyyy-MM-dd hh:mm", data.get(position).getCreateDate()).toString();
-//		String articleImage = data.get(position).getArticlesImage();
+		//		String authorName = data.get(position).getAuthorName();
+		//		String date = DateFormat.format("yyyy-MM-dd hh:mm", data.get(position).getCreateDate()).toString();
+		//		String articleImage = data.get(position).getArticlesImage();
 		Article content = data.get(position);
 
 		Intent itnt =new Intent(MyArticleActivity.this,ModifyArticleActivity.class);
 		itnt.putExtra("Text", text);
 		itnt.putExtra("Title", title);
-//		itnt.putExtra("AuthorName", authorName);
-//		itnt.putExtra("Date", date);
-//		itnt.putExtra("ArticleImage", articleImage);
+		//		itnt.putExtra("AuthorName", authorName);
+		//		itnt.putExtra("Date", date);
+		//		itnt.putExtra("ArticleImage", articleImage);
 		itnt.putExtra("Data",content);
 
 		startActivity(itnt);
@@ -205,52 +219,49 @@ public class MyArticleActivity extends Activity {
 	}
 
 	//加载更多
-		void loadmore(){
-			btnLoadMore.setEnabled(false);
-			textLoadMore.setText("载入中…");
-
-			Request request = Server.requestBuilderWithApi("myarticles?page="+(page+1)).get().build();
-			Server.getSharedClient().newCall(request).enqueue(new Callback() {
-				@Override
-				public void onResponse(Call arg0, Response arg1) throws IOException {
-					runOnUiThread(new Runnable() {
-						public void run() {
-							btnLoadMore.setEnabled(true);
-							textLoadMore.setText("加载更多");
-						}
-					});
-
-					try{
-						final Page<Article> searchs = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Article>>() {});
-						if(searchs.getNumber()>page){
-
-							runOnUiThread(new Runnable() {
-								public void run() {
-									if(data==null){
-										data = searchs.getContent();
-									}else{
-										data.addAll(searchs.getContent());
-									}
-									page = searchs.getNumber();
-									listAdapter.notifyDataSetChanged();
-								}
-							});
-						}
-					}catch(Exception ex){
-						ex.printStackTrace();
+	void loadmore(){
+		Request request = Server.requestBuilderWithApi("myarticles?page="+(page+1)).get().build();
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				runOnUiThread(new Runnable() {
+					public void run() {
+//						btnLoadMore.setEnabled(true);
+//						textLoadMore.setText("加载更多");
 					}
-				}
+				});
 
-				@Override
-				public void onFailure(Call arg0, IOException arg1) {
-					runOnUiThread(new Runnable() {
-						public void run() {
-							btnLoadMore.setEnabled(true);
-							textLoadMore.setText("加载更多");
-						}
-					});
-				}
-			});
+				try{
+					final Page<Article> searchs = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Article>>() {});
+					if(searchs.getNumber()>page){
 
-		}
+						runOnUiThread(new Runnable() {
+							public void run() {
+								if(data==null){
+									data = searchs.getContent();
+								}else{
+									data.addAll(searchs.getContent());
+								}
+								page = searchs.getNumber();
+								listAdapter.notifyDataSetChanged();
+							}
+						});
+					}
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				runOnUiThread(new Runnable() {
+					public void run() {
+//						btnLoadMore.setEnabled(true);
+//						textLoadMore.setText("加载更多");
+					}
+				});
+			}
+		});
+
+	}
 }

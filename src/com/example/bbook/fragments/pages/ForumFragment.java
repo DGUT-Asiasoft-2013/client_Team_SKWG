@@ -343,7 +343,7 @@ public class ForumFragment extends Fragment {
 						public void run() {
 							ForumFragment.this.page = data.getNumber();
 							ForumFragment.this.data = data.getContent();
-							listAdapter.notifyDataSetInvalidated();
+							listAdapter.notifyDataSetChanged();
 						}
 					});
 				}catch (final Exception e) {

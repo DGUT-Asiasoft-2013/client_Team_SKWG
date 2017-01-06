@@ -39,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center"
                 android:gravity="right|center"
+                android:layout_marginRight="5dp"
                 android:text="date" />
 
         </LinearLayout>

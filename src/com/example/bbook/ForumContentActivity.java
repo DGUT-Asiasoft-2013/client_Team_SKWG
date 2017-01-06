@@ -38,6 +38,9 @@ import okhttp3.Callback;
 import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.Response;
+import util.MyListener;
+import util.PullToRefreshLayout;
+import util.PullableListView;
 
 public class ForumContentActivity extends Activity {
 	Comment comment;
@@ -50,8 +53,8 @@ public class ForumContentActivity extends Activity {
 
 	TitleBarFragment fragTitleBar;
 	View listViewHead;
-	View btnLoadMore;
-	TextView textLoadMore;
+	//	View btnLoadMore;
+	//	TextView textLoadMore;
 
 	List<Comment> data;
 	int page =0;
@@ -66,8 +69,8 @@ public class ForumContentActivity extends Activity {
 		fragTitleBar.setBtnNextState(false);
 		fragTitleBar.setTitleName("详情", 16);
 
-		btnLoadMore=LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
-		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
+		//		btnLoadMore=LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
+		//		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
 
 		LayoutInflater inflater = LayoutInflater.from(ForumContentActivity.this);
 		listViewHead = inflater.inflate(R.layout.forum_top_item, null);//这是头部View
@@ -75,9 +78,10 @@ public class ForumContentActivity extends Activity {
 		count_like =(TextView)listViewHead.findViewById(R.id.count_like);		//这里可以获取头部的组件
 		img_like=(ImageView)listViewHead.findViewById(R.id.img_like);
 
-		listView = (ListView)findViewById(R.id.list_comment);
+		PullToRefreshLayout pullToRefreshLayout=(PullToRefreshLayout)findViewById(R.id.refresh_view);   //获取自定义layout
+
+		listView =(PullableListView)findViewById(R.id.content_view);
 		listView.addHeaderView(listViewHead);//添加进去
-		listView.addFooterView(btnLoadMore);
 		listView.setAdapter(listAdapter);
 		//		setListViewHeightBasedOnChildren(listView);
 
@@ -125,7 +129,7 @@ public class ForumContentActivity extends Activity {
 				img2.setVisibility(RectangleView.GONE);
 				img3.setVisibility(RectangleView.GONE);
 			}
-		
+
 		}
 
 		txt_title.setText(title);         //帖子标题
@@ -159,10 +163,20 @@ public class ForumContentActivity extends Activity {
 			}
 		});
 
-		btnLoadMore.setOnClickListener(new View.OnClickListener() {
+		//自定义布局上拉下拉操作监听
+		pullToRefreshLayout.setOnRefreshListener(new MyListener(){
+			//下拉刷新操作
 			@Override
-			public void onClick(View v) {
+			public void onRefresh(final PullToRefreshLayout pullToRefreshLayout){
+				reload();
+				pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+			}
+			//上拉加载更多操作
+			@Override
+			public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout)
+			{
 				loadmore();
+				pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
 			}
 		});
 
@@ -176,30 +190,7 @@ public class ForumContentActivity extends Activity {
 		});
 	}
 
-
-	//	public void setListViewHeightBasedOnChildren(ListView listView) {   
-	//        // 获取ListView对应的Adapter   
-	//        ListAdapter listAdapter = listView.getAdapter();   
-	//        if (listAdapter == null) {   
-	//            return;   
-	//        }   
-	//   
-	//        int totalHeight = 0;   
-	//        for (int i = 0, len = listAdapter.getCount(); i < len; i++) {   
-	//            // listAdapter.getCount()返回数据项的数目   
-	//            View listItem = listAdapter.getView(i, null, listView);   
-	//            // 计算子项View 的宽高   
-	//            listItem.measure(0, 0);    
-	//            // 统计所有子项的总高度   
-	//            totalHeight += listItem.getMeasuredHeight();    
-	//        }   
-	//   
-	//        ViewGroup.LayoutParams params = listView.getLayoutParams();   
-	//        params.height = totalHeight+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));   
-	//        // listView.getDividerHeight()获取子项间分隔符占用的高度   
-	//        // params.height最后得到整个ListView完整显示需要的高度   
-	//        listView.setLayoutParams(params);   
-	//    }   
+  
 
 	//重新显示回复的条目
 	@Override
@@ -214,7 +205,7 @@ public class ForumContentActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = null;
-			MyListener myListener=null;
+			MyListener1 myListener=null;
 			if(convertView==null){
 				LayoutInflater inflater= LayoutInflater.from(parent.getContext());
 				// 自定义listitem显示回复内容
@@ -222,7 +213,7 @@ public class ForumContentActivity extends Activity {
 			}else{
 				view = convertView;
 			}
-			myListener = new MyListener(position);
+			myListener = new MyListener1(position);
 
 			TextView text1 = (TextView)view.findViewById(R.id.text1); //作者
 			TextView text2 = (TextView)view.findViewById(R.id.text2); //内容
@@ -262,9 +253,9 @@ public class ForumContentActivity extends Activity {
 		}
 	};
 
-	private class MyListener implements OnClickListener{
+	private class MyListener1 implements OnClickListener{
 		int mPosition;
-		public MyListener(int inPosition){
+		public MyListener1(int inPosition){
 			mPosition=inPosition;
 		}
 		@Override
@@ -304,28 +295,28 @@ public class ForumContentActivity extends Activity {
 					});
 				}catch (final Exception e) {
 					e.printStackTrace();
-//					runOnUiThread(new Runnable() {
-//						@Override
-//						public void run() {
-//							new AlertDialog.Builder(ForumContentActivity.this)
-//							.setMessage(e.getMessage())
-//							.show();
-//						}
-//					});  
+					//					runOnUiThread(new Runnable() {
+					//						@Override
+					//						public void run() {
+					//							new AlertDialog.Builder(ForumContentActivity.this)
+					//							.setMessage(e.getMessage())
+					//							.show();
+					//						}
+					//					});  
 				}
 			}
 
 
 			@Override
 			public void onFailure(Call arg0,final IOException e) {
-//				runOnUiThread(new Runnable() {
-//					@Override
-//					public void run() {
-//						new AlertDialog.Builder(ForumContentActivity.this)
-//						.setMessage(e.getMessage())
-//						.show();
-//					}
-//				}); 
+				//				runOnUiThread(new Runnable() {
+				//					@Override
+				//					public void run() {
+				//						new AlertDialog.Builder(ForumContentActivity.this)
+				//						.setMessage(e.getMessage())
+				//						.show();
+				//					}
+				//				}); 
 				e.printStackTrace();
 			}
 		});
@@ -334,17 +325,12 @@ public class ForumContentActivity extends Activity {
 	//加载更多
 	void loadmore(){
 
-		btnLoadMore.setEnabled(false);
-		textLoadMore.setText("载入中…");
-
 		Request request = Server.requestBuilderWithApi("/article/"+article.getId()+"/comments/"+(page+1)).get().build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				runOnUiThread(new Runnable() {
 					public void run() {
-						btnLoadMore.setEnabled(true);
-						textLoadMore.setText("加载更多");
 					}
 				});
 
@@ -373,8 +359,6 @@ public class ForumContentActivity extends Activity {
 			public void onFailure(Call arg0, IOException arg1) {
 				runOnUiThread(new Runnable() {
 					public void run() {
-						btnLoadMore.setEnabled(true);
-						textLoadMore.setText("加载更多");
 					}
 				});
 			}

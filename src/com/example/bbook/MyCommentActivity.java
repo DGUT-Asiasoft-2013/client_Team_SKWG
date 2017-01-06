@@ -31,15 +31,18 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
+import util.MyListener;
+import util.PullToRefreshLayout;
+import util.PullableListView;
 
 public class MyCommentActivity extends Activity{
 
 	Comment comment;
 
-	View btnLoadMore;
-	TextView textLoadMore;
+	//	View btnLoadMore;
+	//	TextView textLoadMore;
 	ImageButton ibtn_back;
-	
+
 	ListView listView;
 	List<Comment> data;
 	int page =0;
@@ -48,11 +51,12 @@ public class MyCommentActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mycomment);
 
-		btnLoadMore= LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
-		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
+		//		btnLoadMore= LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
+		//		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
 
-		listView = (ListView)findViewById(R.id.list);
-		listView.addFooterView(btnLoadMore);
+		PullToRefreshLayout pullToRefreshLayout=(PullToRefreshLayout)findViewById(R.id.refresh_view);   //获取自定义layout
+
+		listView =(PullableListView)findViewById(R.id.content_view);
 		listView.setAdapter(listAdapter);
 
 		ibtn_back=(ImageButton)findViewById(R.id.btn_back);
@@ -65,11 +69,20 @@ public class MyCommentActivity extends Activity{
 			}
 		});
 
-		btnLoadMore.setOnClickListener(new View.OnClickListener() {
-
+		//自定义布局上拉下拉操作监听
+		pullToRefreshLayout.setOnRefreshListener(new MyListener(){
+			//下拉刷新操作
 			@Override
-			public void onClick(View v) {
+			public void onRefresh(final PullToRefreshLayout pullToRefreshLayout){
+				reload();
+				pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+			}
+			//上拉加载更多操作
+			@Override
+			public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout)
+			{
 				loadmore();
+				pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
 			}
 		});
 
@@ -178,8 +191,6 @@ public class MyCommentActivity extends Activity{
 
 	//加载更多
 	void loadmore(){
-		btnLoadMore.setEnabled(false);
-		textLoadMore.setText("载入中…");
 
 		Request request = Server.requestBuilderWithApi("mycomments?page="+(page+1))
 				.method("GET", null)
@@ -189,8 +200,8 @@ public class MyCommentActivity extends Activity{
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				runOnUiThread(new Runnable() {
 					public void run() {
-						btnLoadMore.setEnabled(true);
-						textLoadMore.setText("加载更多");
+						//						btnLoadMore.setEnabled(true);
+						//						textLoadMore.setText("加载更多");
 					}
 				});
 
@@ -220,8 +231,8 @@ public class MyCommentActivity extends Activity{
 			public void onFailure(Call arg0, IOException arg1) {
 				runOnUiThread(new Runnable() {
 					public void run() {
-						btnLoadMore.setEnabled(true);
-						textLoadMore.setText("加载更多");
+						//						btnLoadMore.setEnabled(true);
+						//						textLoadMore.setText("加载更多");
 					}
 				});
 			}
@@ -241,11 +252,11 @@ public class MyCommentActivity extends Activity{
 		});
 		builder.show();
 	}
-	
+
 	//delete评论
 	void deleteComment(int position){
 		Comment comment = data.get(position);
-		
+
 		Request request = Server.requestBuilderWithApi("deletecomment/"+comment.getId())
 				.method("delete", null)
 				.build();
@@ -282,7 +293,7 @@ public class MyCommentActivity extends Activity{
 			}
 		});
 
-	
+
 	}
 	void onResponsed(Call arg0, String responseBody) {
 		new AlertDialog.Builder(this)
