@@ -11,10 +11,12 @@ import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import okhttp3.Call;
@@ -29,6 +31,7 @@ public class AddBookCommentActivity extends Activity {
 	TextView tvGoodsName, tvGoodsType;
 	EditText etComment;
 	Button btnSubmit;
+	RatingBar goodsDescribe,sellerAttitute,sendSpeed;
 	
 	Goods goods;
 	@Override
@@ -53,6 +56,10 @@ public class AddBookCommentActivity extends Activity {
 		imgGoods = (GoodsPicture) findViewById(R.id.img_goods);
 		etComment = (EditText) findViewById(R.id.comment);
 		
+		goodsDescribe=(RatingBar) findViewById(R.id.goods_describe);
+		sellerAttitute=(RatingBar) findViewById(R.id.seller_attitute);
+		sendSpeed=(RatingBar) findViewById(R.id.send_speed);
+		
 		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
 		fragTitleBar.setBtnNextState(false);
 		fragTitleBar.setOnGoBackListener(new OnGoBackListener() {
@@ -76,6 +83,7 @@ public class AddBookCommentActivity extends Activity {
 	
 	void setEvent() {
 		btnSubmit.setOnClickListener(new OnClickListener() {
+		
 			
 			@Override
 			public void onClick(View v) {
@@ -83,6 +91,7 @@ public class AddBookCommentActivity extends Activity {
 				if(commentText == null && goods != null) {
 					Toast.makeText(AddBookCommentActivity.this, "请输入评价内容", Toast.LENGTH_SHORT).show();;
 				} else {
+					Log.d("sdf",goodsDescribe.getRating()+"");
 					addComment(commentText);
 				}
 			}
