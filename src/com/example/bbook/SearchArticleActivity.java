@@ -33,14 +33,17 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
+import util.MyListener;
+import util.PullToRefreshLayout;
+import util.PullableListView;
 
 public class SearchArticleActivity extends Activity {
 
 	EditText searchText;
 	ListView listView;
 	ImageButton ibtn_back;
-	View btnLoadMore;
-	TextView textLoadMore;
+	//	View btnLoadMore;
+	//	TextView textLoadMore;
 
 	int page= 0;
 	List<Article>find;
@@ -49,15 +52,16 @@ public class SearchArticleActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_searcharticle);
 
-		btnLoadMore= LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
-		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
+		//		btnLoadMore= LayoutInflater.from(this).inflate(R.layout.load_more_button, null);
+		//		textLoadMore= (TextView)btnLoadMore.findViewById(R.id.text);
 
-		listView = (ListView)findViewById(R.id.list);
-		listView.addFooterView(btnLoadMore);
+		PullToRefreshLayout pullToRefreshLayout=(PullToRefreshLayout)findViewById(R.id.refresh_view);   //获取自定义layout
+
+		listView =(PullableListView)findViewById(R.id.content_view);
 		listView.setAdapter(listAdapter);
 
 		searchText=(EditText)findViewById(R.id.keyword_txt);
-		
+
 		ibtn_back=(ImageButton)findViewById(R.id.btn_back);
 		ibtn_back.setOnClickListener(new OnClickListener() {
 
@@ -74,11 +78,20 @@ public class SearchArticleActivity extends Activity {
 			}
 		});
 
-		btnLoadMore.setOnClickListener(new View.OnClickListener() {
-
+		//自定义布局上拉下拉操作监听
+		pullToRefreshLayout.setOnRefreshListener(new MyListener(){
+			//下拉刷新操作
 			@Override
-			public void onClick(View v) {
+			public void onRefresh(final PullToRefreshLayout pullToRefreshLayout){
+//				searchKeyword();
+				pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+			}
+			//上拉加载更多操作
+			@Override
+			public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout)
+			{
 				loadmore();
+				pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
 			}
 		});
 
@@ -167,12 +180,12 @@ public class SearchArticleActivity extends Activity {
 	void searchKeyword(){
 		String keywords = searchText.getText().toString();
 		if(keywords==null||keywords.isEmpty()){
-			 new AlertDialog.Builder(SearchArticleActivity.this)
+			new AlertDialog.Builder(SearchArticleActivity.this)
 			.setMessage("请输入要搜索的关键字!")
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setPositiveButton("OK",null)
 			.show();
-			 return;
+			return;
 		}
 
 		//强制隐藏自带软键盘
@@ -226,8 +239,6 @@ public class SearchArticleActivity extends Activity {
 
 	//加载更多
 	void loadmore(){
-		btnLoadMore.setEnabled(false);
-		textLoadMore.setText("载入中…");
 
 		String keywords = searchText.getText().toString();
 		Request request = Server.requestBuilderWithApi("article/s/"+keywords+"?page="+(page+1)).get().build();
@@ -236,8 +247,7 @@ public class SearchArticleActivity extends Activity {
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				runOnUiThread(new Runnable() {
 					public void run() {
-						btnLoadMore.setEnabled(true);
-						textLoadMore.setText("加载更多");
+
 					}
 				});
 
@@ -266,8 +276,6 @@ public class SearchArticleActivity extends Activity {
 			public void onFailure(Call arg0, IOException arg1) {
 				runOnUiThread(new Runnable() {
 					public void run() {
-						btnLoadMore.setEnabled(true);
-						textLoadMore.setText("加载更多");
 					}
 				});
 			}

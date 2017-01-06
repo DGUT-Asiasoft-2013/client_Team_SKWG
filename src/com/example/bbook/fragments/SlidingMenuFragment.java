@@ -7,32 +7,41 @@ import java.util.Map;
 
 import com.example.bbook.R;
 
-import android.R.raw;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.GridView;
 import android.widget.TextView;
 
-public class SlidingMenuFragment extends Fragment {
+public class SlidingMenuFragment extends Fragment  implements OnItemClickListener,OnClickListener{
 	View view;
-	GridView classifyView;
+	GridView classifyView,authorView;
 	String[] goodsType,authorArray,parent;
 	List<String> typeList,authorList,groupList;
 	String selectType;
 	ExpandableListView list;
-//	Map<String ,String[]> listMap;
 	Map<String ,List<String>> listMap;
-//	List<String> childList;
+	List<String> childList;
+	//	List<String> childList;
+	boolean isTypeShow=false;
+	TextView typeView;
+
+	String typeStr,authorStr;
+	boolean isTypeSelected=false,isAuthorSelected=false;
+	int gPosition=-1;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -40,13 +49,11 @@ public class SlidingMenuFragment extends Fragment {
 			return view;
 		}
 		view=inflater.inflate(R.layout.fragment_sliding_menu, null);
-	//	classifyView=(GridView) view.findViewById(R.id.classify_gridview);
+
+
 
 		list=(ExpandableListView) view.findViewById(R.id.expandableListView);
-//		listMap=new HashMap<String ,String[]>();
 		listMap=new HashMap<String ,List<String>>();
-
-		//	childList=new ArrayList<String>();
 
 
 		goodsType=new String[]{
@@ -56,12 +63,12 @@ public class SlidingMenuFragment extends Fragment {
 				"a","b","c","d","e","f","g","h","i"	
 		};
 		parent=new String[]{
-				"1","2"	
+				"类型","作者"	
 		};
 
 		typeList=new ArrayList<>();
 		for (int i = 0; i < goodsType.length; i++) {
-			
+
 			typeList.add(goodsType[i]);
 		}
 		authorList=new ArrayList<>();
@@ -72,32 +79,22 @@ public class SlidingMenuFragment extends Fragment {
 		for (int i = 0; i < parent.length; i++) {
 			groupList.add(parent[i]);
 		}
+
 		listMap.put(groupList.get(0),typeList);
 		listMap.put(groupList.get(1), authorList);
-		
-//		classifyView.setAdapter(typeAdapter);
-//		typeList=new ArrayList<String>();
-//		for(int i=0;i<goodsType.length;i++){
-//			typeList.add(goodsType[i]);
-//		}
+		typeList=new ArrayList<String>();
+
+
+		for(int i=0;i<goodsType.length;i++){
+			typeList.add(goodsType[i]);
+		}
 		list.setAdapter(listAdapter);
-		
-//		classifyView.setOnItemClickListener(new OnItemClickListener(){
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//				// TODO Auto-generated method stub
-//				selectType=goodsType[position];
-//				//	Log.d("type", selectType);
-//			}
-//
-//		});
+
 
 		return view;	
 	}
 
 	BaseExpandableListAdapter listAdapter=new BaseExpandableListAdapter() {
-
 		@Override
 		public boolean isChildSelectable(int groupPosition, int childPosition) {
 			// TODO Auto-generated method stub
@@ -122,111 +119,139 @@ public class SlidingMenuFragment extends Fragment {
 				view=convertView;
 			}
 			TextView textView=(TextView) view.findViewById(android.R.id.text1);
-//				textView.setText(SlidingMenuFragment.this.parent[groupPosition]);
 			textView.setText(groupList.get(groupPosition));
 			return view;
 		}
 
 		@Override
 		public long getGroupId(int groupPosition) {
-			// TODO Auto-generated method stub
 			return groupPosition;
 		}
 
 		@Override
 		public int getGroupCount() {
-			// TODO Auto-generated method stub
 			return groupList.size();
 		}
 
 		@Override
 		public Object getGroup(int groupPosition) {
-			// TODO Auto-generated method stub
-//			return parent[groupPosition];
 			return groupList.get(groupPosition);
 		}
 
 		@Override
 		public int getChildrenCount(int groupPosition) {
-			// TODO Auto-generated method stub
-//			return listMap.get(parent[groupPosition]).length;
-			return listMap.get(groupList.get(groupPosition)).size();
+			return 1;
 		}
-		
-
-		@Override
-		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView,
-				ViewGroup parent) {
-			// TODO Auto-generated method stub
-			View view=null;
-			if(convertView==null){
-				LayoutInflater inflater = LayoutInflater.from(getActivity());
-				view=inflater.inflate(R.layout.goodstype_item, null);
-
-
-			}
-			else{
-				view=convertView;
-			}
-			
-			TextView textView=(TextView) view.findViewById(R.id.goods_type);
-//			textView.setText((listMap.get(SlidingMenuFragment.this.parent[groupPosition]))[childPosition]);
-textView.setText(listMap.get(groupList.get(groupPosition)).get(childPosition));
-
-			return view;
-		}
-
 		@Override
 		public long getChildId(int groupPosition, int childPosition) {
-			// TODO Auto-generated method stub
 			return childPosition;
 		}
 
 		@Override
 		public Object getChild(int groupPosition, int childPosition) {
-			// TODO Auto-generated method stub
-//			return (listMap.get(parent[groupPosition]))[childPosition];
 			return listMap.get(groupList.get(groupPosition)).get(childPosition);
+		}
+
+		@Override
+		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView,
+				ViewGroup parent) {
+			View view=null;
+			if(convertView==null){
+				LayoutInflater inflater = LayoutInflater.from(getActivity());
+				view=inflater.inflate(R.layout.child_gridview, null);
+			}
+			else{
+				view=convertView;
+			}
+			int size =listMap.get(groupList.get(groupPosition)).size();
+			childList= new ArrayList<String>();
+			for (int i = 0; i < size; i++) {
+				childList.add(listMap.get(groupList.get(groupPosition)).get(i));
+				Log.d("child", childList.get(i));
+			}
+			gPosition=groupPosition;
+			//Log.d("group", groupPosition+"");
+			//	Log.d("child", childPosition+"");
+
+			GridView gridView=(GridView) view.findViewById(R.id.child_view);
+			//gridView.setNumColumns(10);
+			gridView.setHorizontalSpacing(10);
+
+			LayoutParams lp = gridView.getLayoutParams();
+			//			lp.height = (int) ((childAdapter.getCount()/3+1) * (getResources().getDisplayMetrics().density * 20.0));
+			lp.height = (int) ((childAdapter.getCount()/3+1) * (getResources().getDisplayMetrics().density * 15.0));
+			gridView.setLayoutParams(lp);
+
+			gridView.setAdapter(childAdapter);
+			gridView.setOnItemClickListener(SlidingMenuFragment.this);
+			return view;
+		}
+
+
+	};
+	BaseAdapter childAdapter=new BaseAdapter() {
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if(convertView==null){
+				LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+				convertView = inflater.inflate(R.layout.goodstype_item, null);
+			}
+			TextView textView=(TextView) convertView.findViewById(R.id.goods_type);
+			textView.setText(childList.get(position));
+			return convertView;
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return childList.get(position);
+		}
+
+		@Override
+		public int getCount() {
+			Log.d("count",childList.size()+"");
+			return childList.size();
 		}
 	};
 
 
-//	BaseAdapter typeAdapter=new BaseAdapter() {
-//
-//		@Override
-//		public View getView(int position, View convertView, ViewGroup parent) {
-//			View view=null;
-//			if(convertView==null){
-//				LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-//				view =inflater.inflate(R.layout.goodstype_item,null);
-//			}else{
-//				view=convertView;
-//			}
-//			TextView textView=(TextView) view.findViewById(R.id.goods_type);
-//			textView.setText(goodsType[position]);
-//			return view;
-//		}
-//
-//		@Override
-//		public long getItemId(int position) {
-//			// TODO Auto-generated method stub
-//			return position;
-//		}
-//
-//		@Override
-//		public Object getItem(int position) {
-//			// TODO Auto-generated method stub
-//			return goodsType[position];
-//		}
-//
-//		@Override
-//		public int getCount() {
-//			// TODO Auto-generated method stub
-//			return goodsType.length;
-//		}
-//	};
 
-	public String getGoodsType(){
-		return selectType;
+public void cleanBackColor(int position){
+	
+}
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		// TODO Auto-generated method stub
+	
+		switch (gPosition) {
+		case 0:
+			typeStr=childList.get(position);
+			
+			break;
+		case 1:
+			authorStr=childList.get(position);
+		default:
+			break;
+		}
+	}
+	
+	public String getTypeStr(){
+		return typeStr;
+	}
+	public String getAuthorStr(){
+		return authorStr;
+	}
+
+	@Override
+	public void onClick(View v) {
+	
+		// TODO Auto-generated method stub
+		
 	}
 }

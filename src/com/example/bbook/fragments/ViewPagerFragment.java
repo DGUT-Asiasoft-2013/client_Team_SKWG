@@ -29,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ViewPagerFragment extends Fragment {
-
 	ViewPager viewPager;
 	List<ImageView> imgList;
 	List<View>  matBar;

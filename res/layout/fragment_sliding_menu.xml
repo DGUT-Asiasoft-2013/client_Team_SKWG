@@ -11,16 +11,37 @@
 
     <include layout="@layout/minprice_and_maxpricce" 
        />
+     <TextView 
+        android:id="@+id/type_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="分类"
+        />
     <GridView 
         android:id="@+id/classify_gridview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:numColumns="3"
         ></GridView>
+    <TextView 
+        android:id="@+id/author_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="作者"
+        />
+       <GridView 
+        android:id="@+id/author_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="3"
+        ></GridView>
+  
        <ExpandableListView
         android:id="@+id/expandableListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </ExpandableListView>
+    
+
     
 </LinearLayout>
