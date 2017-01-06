@@ -74,6 +74,7 @@
         <activity android:name="com.example.bbook.SelectCommomInfoActivity" />
         <activity android:name="com.example.bbook.ManageOrderActivity" />
         <activity android:name="com.example.bbook.OrderDetailActivity" />
+        <activity android:name="com.example.bbook.MyPublishedGoodsActivity" />
     </application>
 
 </manifest>
