@@ -10,6 +10,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- 申明权限 操作SD卡 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -52,6 +55,7 @@
         <activity android:name="com.example.bbook.ManageCommomInfoActivity" />
         <activity android:name="com.example.bbook.MyCommentActivity" />
         <activity android:name="com.example.bbook.CommentTomeActivity" />
+        <activity android:name="com.example.bbook.PayActivity" />
         <activity android:name="com.example.bbook.ChangeUserMessageActivity" />
         <activity android:name="com.example.bbook.ChangeMessageActivity" />
         <activity android:name="com.example.bbook.AddReplyActivity" />
@@ -63,7 +67,6 @@
         <activity android:name="com.example.bbook.MyOrdersActivity" />
         <activity android:name="com.example.bbook.MessageActivity" />
         <activity android:name="com.example.bbook.MyBillActivity" />
-        <activity android:name="com.example.bbook.PayActivity" />
         <activity android:name="com.example.bbook.ClassifyActivity" />
         <activity android:name="com.example.bbook.MyWalletActivity" />
         <activity android:name="com.example.bbook.PushMessageActivity" />
@@ -74,6 +77,7 @@
         <activity android:name="com.example.bbook.SelectCommomInfoActivity" />
         <activity android:name="com.example.bbook.ManageOrderActivity" />
         <activity android:name="com.example.bbook.OrderDetailActivity" />
+        <activity android:name="com.example.bbook.BrowseImgActivity" />
     </application>
 
 </manifest>

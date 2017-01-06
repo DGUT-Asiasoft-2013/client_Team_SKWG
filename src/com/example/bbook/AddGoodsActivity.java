@@ -88,15 +88,6 @@ public class AddGoodsActivity extends Activity {
                                 return false;
                         }
                 });
-                pubDate.setOnFocusChangeListener(new OnFocusChangeListener() {
-
-                        @Override
-                        public void onFocusChange(View v, boolean hasFocus) {
-                                if (hasFocus) {
-                                        showPubDatePickDlg();
-                                }
-                        }
-                });
 
                 // 印刷时间
                 priTime = (EditText) findViewById(R.id.edit_pritime);
@@ -109,15 +100,6 @@ public class AddGoodsActivity extends Activity {
                                         return true;
                                 }
                                 return false;
-                        }
-                });
-                priTime.setOnFocusChangeListener(new OnFocusChangeListener() {
-
-                        @Override
-                        public void onFocusChange(View v, boolean hasFocus) {
-                                if (hasFocus) {
-                                        showPriDatePickDlg();
-                                }
                         }
                 });
 
