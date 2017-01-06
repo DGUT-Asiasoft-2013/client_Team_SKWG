@@ -2,24 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
-    android:layout_marginTop="4dp"
-    android:orientation="vertical"
-    android:padding="8dp" >
+    android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/label"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="输入项目"
-        android:textColor="@android:color/black"
-        android:textSize="12sp" />
-    
-    <EditText 
-        android:id="@+id/edit"
+        android:orientation="horizontal"
+        android:padding="8dp" >
+
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="输入项目"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_weight="6"
+            android:background="@null"
+            android:hint="请输入内容"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="请输入内容"
-        />
+        android:layout_height="1dp"
+        android:background="#8ccc" />
 
 </LinearLayout>
