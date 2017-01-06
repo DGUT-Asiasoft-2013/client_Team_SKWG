@@ -115,7 +115,7 @@ public class ShoppingCartFragment extends Fragment {
 			titleBar.setTitleName("购物车", 16);
 		}
 		exlistAdapter = new myAdapter();
-		initData();
+		
 		list =  (ExpandableListView) view.findViewById(R.id.list);
 		list.setGroupIndicator(null);
 		list.setDivider(null);
@@ -124,14 +124,7 @@ public class ShoppingCartFragment extends Fragment {
 		tvSum = (TextView) view.findViewById(R.id.sum);
 		btnPay = (Button) view.findViewById(R.id.pay);
 		tvSum.setText(sum + "");
-		list.setAdapter(exlistAdapter);
-		list.setOnGroupClickListener(new OnGroupClickListener() {
-
-			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-				return true;
-			}
-		});
+		
 		btnPay.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -176,8 +169,18 @@ public class ShoppingCartFragment extends Fragment {
 		super.onResume();
 		isAllSelected = false;
 		selectAll.setChecked(isAllSelected);
+		groupList = new ArrayList<>();
+		dataset = new HashMap<>();
+//		initData();
 		reload();
-		initData();
+		list.setAdapter(exlistAdapter);
+		list.setOnGroupClickListener(new OnGroupClickListener() {
+
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+				return true;
+			}
+		});
 		calculate();
 	}
 
@@ -188,6 +191,14 @@ public class ShoppingCartFragment extends Fragment {
 			list.expandGroup(i);
 		}
 	};
+	
+	void collapse() {
+		int count = exlistAdapter.getGroupCount();
+		Log.d("listCOunt", count + "");
+		for(int i = 0; i < count; i++) {
+			list.collapseGroup(i);
+		}
+	}
 
 
 	private void init(View view) {
@@ -244,8 +255,8 @@ public class ShoppingCartFragment extends Fragment {
 							ShoppingCartFragment.this.page = data.getNumber();
 							ShoppingCartFragment.this.initData();
 							ShoppingCartFragment.this.exlistAdapter.notifyDataSetChanged();
+//							ShoppingCartFragment.this.collapse();
 							ShoppingCartFragment.this.expand();
-							//							listAdapter.notifyDataSetChanged();
 						}
 					});
 				} catch (final Exception e) {
@@ -290,7 +301,7 @@ public class ShoppingCartFragment extends Fragment {
 		View goodsView = null;
 		@Override
 		public int getGroupCount() {
-			return dataset.size();
+			return groupList.size();
 		}
 
 		@Override
@@ -324,7 +335,7 @@ public class ShoppingCartFragment extends Fragment {
 		}
 
 		@Override
-		public View getGroupView(final int groupPosition, boolean isExpanded, final View convertView, final ViewGroup parent) {
+		public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, final ViewGroup parent) {
 			ShopInfoHolder sHolder;
 			if(convertView == null) {
 				sHolder = new ShopInfoHolder();
@@ -338,6 +349,7 @@ public class ShoppingCartFragment extends Fragment {
 				shopView = convertView;
 				sHolder = (ShopInfoHolder) shopView.getTag();
 			}
+			Log.d("position", groupPosition + "");
 			final Shop shop = groupList.get(groupPosition);
 			if(shop != null) {
 				sHolder.tvShopName.setText(groupList.get(groupPosition).getShopName());

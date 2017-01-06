@@ -20,6 +20,7 @@ public class Goods   implements Serializable {
 	String author;
 	String pubDate;
 	String pritime;
+	boolean isOnSale;
 	Shop shop;
 	int goodsSales; // 商品销量
 	int quantity;	// 购买数量
@@ -123,6 +124,12 @@ public class Goods   implements Serializable {
 	}
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
+	}
+	public boolean isOnSale() {
+		return isOnSale;
+	}
+	public void setOnSale(boolean isOnSale) {
+		this.isOnSale = isOnSale;
 	}
 	
 	

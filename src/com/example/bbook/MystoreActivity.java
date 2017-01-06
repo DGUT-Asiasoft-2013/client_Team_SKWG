@@ -9,6 +9,7 @@ import com.example.bbook.api.Server;
 import com.example.bbook.api.Shop;
 import com.example.bbook.api.widgets.AvatarView;
 import com.example.bbook.api.widgets.GoodsPicture;
+import com.example.bbook.api.widgets.ItemFragment;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,17 +46,22 @@ public class MystoreActivity extends Activity {
         int page = 0;
         Shop myshop;
 
+        TextView tvShopName;
+        AvatarView avatarShop;
+        ItemFragment itemOnSale, itemOffSale, itemSold, itemOrderManage, itemSetting;
+        
         @Override
         protected void onCreate(Bundle savedInstanceState) {
-                // TODO Auto-generated method stub
                 super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_edit_mystore);
+                setContentView(R.layout.activity_my_store);
 
-                shopName = (TextView) findViewById(R.id.show_stopName);
-                shopImageUseBg = (AvatarView) findViewById(R.id.bgshow_img);
-                shopDescription = (TextView) findViewById(R.id.show_stopDescription);
+//                shopName = (TextView) findViewById(R.id.show_stopName);
+                tvShopName = (TextView) findViewById(R.id.shop_name);
+                avatarShop = (AvatarView) findViewById(R.id.shop_avatar);
+//                shopImageUseBg = (AvatarView) findViewById(R.id.bgshow_img);
+//                shopDescription = (TextView) findViewById(R.id.show_stopDescription);
 
-                fragMyShopTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.my_shop_titlebar);
+                fragMyShopTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
                 fragMyShopTitleBar.setBtnNextState(false);
                 fragMyShopTitleBar.setTitleName("我的商店", 16);
                 fragMyShopTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
@@ -65,30 +71,86 @@ public class MystoreActivity extends Activity {
                                 finish();
                         }
                 });
-
-                // 关注
-                subscribeCount = (TextView) findViewById(R.id.subscribe_count);
-
-                // 商品列表
-                goodsView = (GridView) findViewById(R.id.goods_gridview);
-                goodsView.setAdapter(goodsAdapter);
-                findViewById(R.id.add_goods).setOnClickListener(new OnClickListener() {
+                // 我发布的商品
+                itemOnSale = (ItemFragment) getFragmentManager().findFragmentById(R.id.onsale);
+                itemOnSale.setItemText("已发布的");
+//                itemPublished.setItemImage(R.drawable.icon_shop);
+                itemOnSale.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                         @Override
-                        public void onClick(View v) {
-                                goAdd();
+                        public void onDetailed() {
+                        	goMyPublishedGoods();
                         }
                 });
-                findViewById(R.id.btn_manage).setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						goOrderManage();
-					}
-				});
+                
+                // 已下架的商品
+                itemSold = (ItemFragment) getFragmentManager().findFragmentById(R.id.offsale);
+                itemSold.setItemText("已下架的");
+//                itemPublished.setItemImage(R.drawable.icon_shop);
+                itemSold.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
+
+                        @Override
+                        public void onDetailed() {
+                        	goMyOnSaleGoods();
+                        }
+                });
+                
+                // 我卖出的商品
+                itemSold = (ItemFragment) getFragmentManager().findFragmentById(R.id.sold);
+                itemSold.setItemText("我卖出的");
+//                itemPublished.setItemImage(R.drawable.icon_shop);
+                itemSold.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
+
+                        @Override
+                        public void onDetailed() {
+//                                Intent itnt = new Intent(MystoreActivity.this, );
+//                                startActivity(itnt);
+                        }
+                });
+                
+                // 订单管理
+                itemOrderManage = (ItemFragment) getFragmentManager().findFragmentById(R.id.order_manage);
+                itemOrderManage.setItemText("订单管理");
+//                itemPublished.setItemImage(R.drawable.icon_shop);
+                itemOrderManage.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
+
+                        @Override
+                        public void onDetailed() {
+                        	goOrderManage();
+                        }
+                });
+                
+                // 设置
+                itemSetting = (ItemFragment) getFragmentManager().findFragmentById(R.id.setting);
+                itemSetting.setItemText("设置");
+//                itemPublished.setItemImage(R.drawable.icon_shop);
+                itemSetting.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
+
+                        @Override
+                        public void onDetailed() {
+//                                Intent itnt = new Intent(MystoreActivity.this, );
+//                                startActivity(itnt);
+                        }
+                });
+                // 关注
+//                subscribeCount = (TextView) findViewById(R.id.subscribe_count);
+
+                // 商品列表
+//                goodsView = (GridView) findViewById(R.id.goods_gridview);
+//                goodsView.setAdapter(goodsAdapter);
         }
 
-        protected void goOrderManage() {
+        protected void goMyOnSaleGoods() {
+        	Intent itnt = new Intent(MystoreActivity.this, MyOffSaleGoodsActivity.class);
+        	startActivity(itnt);
+		}
+
+		protected void goMyPublishedGoods() {
+        	Intent itnt = new Intent(MystoreActivity.this, MyPublishedGoodsActivity.class);
+        	startActivity(itnt);
+		}
+
+		protected void goOrderManage() {
         	Intent itnt = new Intent(MystoreActivity.this, ManageOrderActivity.class);
         	startActivity(itnt);
 		}
@@ -132,10 +194,9 @@ public class MystoreActivity extends Activity {
 
         void onResponse(Call arg0, Shop shop) {
                 myshop = shop;
-                shopName.setText("我的店铺:" + shop.getShopName());
-                shopDescription.setText(shop.getDescription());
-                shopImageUseBg.load(shop);
-                reloadSubscribe();
+                tvShopName.setText("我的店铺:" + shop.getShopName());
+                avatarShop.load(shop);
+//                reloadSubscribe();
         }
 
         void onFailure(Call arg0, Exception ex) {

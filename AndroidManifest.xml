@@ -79,6 +79,7 @@
         <activity android:name="com.example.bbook.OrderDetailActivity" />
         <activity android:name="com.example.bbook.MyPublishedGoodsActivity" />
         <activity android:name="com.example.bbook.BrowseImgActivity" />
+        <activity android:name="com.example.bbook.MyOffSaleGoodsActivity" />
     </application>
 
 </manifest>

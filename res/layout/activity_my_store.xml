@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <fragment
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#eee"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <com.example.bbook.api.widgets.AvatarView
+            android:id="@+id/shop_avatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/shop_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="shopname"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical" >
+
+        <fragment
+            android:id="@+id/onsale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            class="com.example.bbook.api.widgets.ItemFragment"
+            tools:layout="@layout/fragment_widget_item" />
+        
+        <fragment
+            android:id="@+id/offsale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            class="com.example.bbook.api.widgets.ItemFragment"
+            tools:layout="@layout/fragment_widget_item" />
+        
+         <fragment
+            android:id="@+id/sold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            class="com.example.bbook.api.widgets.ItemFragment"
+            tools:layout="@layout/fragment_widget_item" />
+         
+         <fragment
+            android:id="@+id/order_manage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            class="com.example.bbook.api.widgets.ItemFragment"
+            tools:layout="@layout/fragment_widget_item" />
+         
+         <fragment
+            android:id="@+id/setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            class="com.example.bbook.api.widgets.ItemFragment"
+            tools:layout="@layout/fragment_widget_item" />
+    </LinearLayout>
+
+</LinearLayout>
