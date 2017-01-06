@@ -169,6 +169,16 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			public void onDrawerClosed(View arg0) {
 				Log.d("David", "onDrawerClosed");
 				
+				goodsType=slidingMenuFragment.getTypeStr();
+				if(goodsType==null){
+					return;
+				}
+				if(goodsType.equals("全部")){
+					isClassified=false;
+				}else {
+					isClassified=true;
+				}
+				bookLoad();
 //				goodsType=slidingMenuFragment.getGoodsType();
 //				if(goodsType.equals("全部")){
 //					isClassified=false;
@@ -559,6 +569,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/classify/"+goodsType+"/sort/"+sortStyle)
 					.get().build();
 		}
+		isClassified=false;
 		OkHttpClient client=Server.getSharedClient();
 
 
@@ -845,13 +856,13 @@ public void onClick(View v) {
 	switch (v.getId()) {
 	case R.id.more_choice:
 		mDrawerLayout.openDrawer(Gravity.RIGHT);
-		Toast.makeText(getActivity(), "bt1111111111", Toast.LENGTH_LONG).show();
+	//	Toast.makeText(getActivity(), "bt1111111111", Toast.LENGTH_LONG).show();
 		break;
 	case R.id.btn1:
-		Toast.makeText(getActivity(), "bt2222222222", Toast.LENGTH_LONG).show();
+//		Toast.makeText(getActivity(), "bt2222222222", Toast.LENGTH_LONG).show();
 		break;
 	case R.id.btn2:
-		Toast.makeText(getActivity(), "bt33333333333", Toast.LENGTH_LONG).show();
+	//	Toast.makeText(getActivity(), "bt33333333333", Toast.LENGTH_LONG).show();
 		break;
 	default:
 		break;
