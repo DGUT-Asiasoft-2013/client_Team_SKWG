@@ -185,17 +185,22 @@ public class BuyActivity extends Activity {
 	}
 
 	protected void onSubmit() {
-		for(int i = 0; i < selectedGoods.size(); i++) {
-			addOrder(selectedGoods.get(i));
+		if(selectedGoods.size() > 1) {
+			int quantity = selectedGoods.get(0).getQuantity();
+			String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + quantity;
+			for(int i = 0; i < selectedGoods.size(); i++) {
+				addOrder(selectedGoods.get(i), orderId);
+			}
+			
 		}
 
 	}
 
-	private void addOrder(Goods goods) {
+	private void addOrder(Goods goods, String orderId) {
 		int orderState = 2;
 
 		quantity = goods.getQuantity();
-		final String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + quantity;
+//		final String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + quantity;
 		if(toBePayOrders == null) {
 			toBePayOrders = new ArrayList();
 		}
