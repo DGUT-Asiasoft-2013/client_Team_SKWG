@@ -229,6 +229,7 @@ public void cleanBackColor(int position){
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		// TODO Auto-generated method stub
 	
+		
 		switch (gPosition) {
 		case 0:
 			typeStr=childList.get(position);
