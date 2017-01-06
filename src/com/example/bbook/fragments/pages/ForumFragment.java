@@ -1,6 +1,8 @@
 package com.example.bbook.fragments.pages;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.example.bbook.AddNoteActivity;
@@ -10,6 +12,7 @@ import com.example.bbook.MyArticleActivity;
 import com.example.bbook.MyCommentActivity;
 import com.example.bbook.R;
 import com.example.bbook.SearchArticleActivity;
+import com.example.bbook.BrowseImgActivity;
 import com.example.bbook.api.Article;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
@@ -21,6 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -34,15 +39,19 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import util.AutoLoadListener;
@@ -57,6 +66,7 @@ public class ForumFragment extends Fragment {
 
 	int page=0;
 	List<Article>data;
+
 
 	//	View btnLoadMore;
 	//	TextView textLoadMore;
@@ -197,17 +207,94 @@ public class ForumFragment extends Fragment {
 			TextView txt_text = (TextView)view.findViewById(R.id.text3);    //帖子内容
 			TextView txt_date = (TextView)view.findViewById(R.id.text4);    //帖子日期
 			TextView txt_comNum = (TextView)view.findViewById(R.id.text5);	//帖子评论数
-			AvatarView avatar = (AvatarView)view.findViewById(R.id.avatar_fra);  //作者头像
-			RectangleView articleImage = (RectangleView)view.findViewById(R.id.articleImage);  // 帖子图片
-
+			AvatarView avatar = (AvatarView)view.findViewById(R.id.avatar_fra);  //作者头像	
+			RectangleView img1=(RectangleView)view.findViewById(R.id.img1);   //第一个图片
+			RectangleView img2=(RectangleView)view.findViewById(R.id.img2);   //第二个图片
+			RectangleView img3=(RectangleView)view.findViewById(R.id.img3);   //第三个图片
+			LinearLayout imgLayout=(LinearLayout)view.findViewById(R.id.imglayout);
+			img1.setClickable(true);
+			img1.setFocusable(false);        //设置可点击不可获取焦点
+			img2.setClickable(true);
+			img2.setFocusable(false);        //设置可点击不可获取焦点
+			img3.setClickable(true);
+			img3.setFocusable(false);	     //设置可点击不可获取焦点
 			Article article = data.get(position);
 
 			//图片不为空显示图片
-			if(article.getArticlesImage()!=null){
-				articleImage.setVisibility(RectangleView.VISIBLE);
-				articleImage.load(Server.serverAdress+article.getArticlesImage());
-			}else{
-				articleImage.setVisibility(RectangleView.GONE);
+			if(article.getArticlesImage()==null||article.getArticlesImage().length()<=0){	//没有图片		
+				imgLayout.setVisibility(LinearLayout.GONE);
+			}else{       
+				imgLayout.setVisibility(LinearLayout.VISIBLE);                                   //有图片
+//				final String Img=article.getArticlesImage();   //传参
+				final String[] articleImg = article.getArticlesImage().split("\\|");
+				if(articleImg.length==3){                    //有三张图片
+					for(int i=0;i<articleImg.length;i++){
+						RectangleView[] imgs = new RectangleView[]{img1,img2,img3};
+						imgs[i].setVisibility(RectangleView.VISIBLE);
+						imgs[i].load(Server.serverAdress+articleImg[i]);
+					}
+					img1.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent(getActivity(),BrowseImgActivity.class);
+							intent.putExtra("Img", articleImg[0]);
+							startActivity(intent);
+						}
+					});
+					img2.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent(getActivity(),BrowseImgActivity.class);
+							intent.putExtra("Img", articleImg[1]);
+							startActivity(intent);
+						}
+					});
+					img3.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent(getActivity(),BrowseImgActivity.class);
+							intent.putExtra("Img", articleImg[2]);
+							startActivity(intent);
+						}
+					});
+				}else if (articleImg.length==2) {              //两张图片
+					img3.setVisibility(RectangleView.GONE);
+					for(int i=0;i<articleImg.length;i++){
+						RectangleView[] imgs = new RectangleView[]{img1,img2};
+						imgs[i].setVisibility(RectangleView.VISIBLE);
+						imgs[i].load(Server.serverAdress+articleImg[i]);
+					}
+					img1.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent(getActivity(),BrowseImgActivity.class);
+							intent.putExtra("Img", articleImg[0]);
+							startActivity(intent);
+						}
+					});
+					img2.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent(getActivity(),BrowseImgActivity.class);
+							intent.putExtra("Img", articleImg[1]);
+							startActivity(intent);
+						}
+					});
+				}else{                     						//一张图片
+					img1.setVisibility(RectangleView.VISIBLE);
+					img1.load(Server.serverAdress+articleImg[0]);
+					img2.setVisibility(RectangleView.GONE);
+					img3.setVisibility(RectangleView.GONE);
+					img1.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent(getActivity(),BrowseImgActivity.class);
+							intent.putExtra("Img", articleImg[0]);
+							startActivity(intent);
+						}
+					});
+				}
+			
 			}
 
 			avatar.load(Server.serverAdress + article.getAuthorAvatar());
@@ -260,28 +347,14 @@ public class ForumFragment extends Fragment {
 						}
 					});
 				}catch (final Exception e) {
-					getActivity().runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							new AlertDialog.Builder(getActivity())
-							.setMessage(e.getMessage())
-							.show();
-						}
-					});  
+					e.printStackTrace();
 				}
 			}
 
 
 			@Override
 			public void onFailure(Call arg0,final IOException e) {
-				getActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						new AlertDialog.Builder(getActivity())
-						.setMessage(e.getMessage())
-						.show();
-					}
-				}); 
+				e.printStackTrace();
 			}
 		});
 	}
@@ -334,8 +407,6 @@ public class ForumFragment extends Fragment {
 			}
 		});
 	}
-
-
 
 	//点击listview跳转到这条帖子的详情并传参
 	public void onItemClicked( int position){
