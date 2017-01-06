@@ -229,19 +229,19 @@
                     android:id="@+id/pay_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="pay date: 0000-00-00 00:00:00" />
+                    />
 
                 <TextView
                     android:id="@+id/delever_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="delever date: 0000-00-00 00:00:00" />
+                     />
 
                 <TextView
                     android:id="@+id/complete_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="complete date:	0000-00-00 00:00:00" />
+                     />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

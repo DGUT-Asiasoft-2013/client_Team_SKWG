@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <fragment
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:padding="10dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="店铺头像" />
+
+        <com.example.bbook.api.widgets.GoodsPicture
+            android:id="@+id/shop_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/ic_launcher" />
+    </FrameLayout>
+
+   <fragment
+       android:id="@+id/shop_name"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       class="inputcells.SimpleTextInputcellFragment"
+       tools:layout="@layout/fragment_inputcell_simpleted" />
+   <fragment
+       android:id="@+id/shop_description"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       class="inputcells.SimpleTextInputcellFragment"
+       tools:layout="@layout/fragment_inputcell_simpleted" />
+   <fragment
+       android:id="@+id/shop_deliver_address"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       class="inputcells.SimpleTextInputcellFragment"
+       tools:layout="@layout/fragment_inputcell_simpleted" />
+
+</LinearLayout>

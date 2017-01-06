@@ -9,6 +9,7 @@ import com.example.bbook.api.Server;
 import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
+import com.example.bbook.api.widgets.TitleBarFragment.OnGoNextListener;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -16,6 +17,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,8 +58,20 @@ public class MyPublishedGoodsActivity extends Activity {
 				finish();
 			}
 		});
-		fragTitleBar.setBtnNextState(false);
+		fragTitleBar.setOnGoNextListener(new OnGoNextListener() {
+			
+			@Override
+			public void onGoNext() {
+				goAddGoods();
+			}
+		});
+		fragTitleBar.setBtnNextText("添加", 12);
 		list.setAdapter(goodsAdapter);
+	}
+
+	protected void goAddGoods() {
+		Intent itnt = new Intent(MyPublishedGoodsActivity.this, AddGoodsActivity.class);
+		startActivity(itnt);
 	}
 
 	@Override

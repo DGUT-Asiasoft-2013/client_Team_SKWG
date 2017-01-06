@@ -80,6 +80,8 @@
         <activity android:name="com.example.bbook.MyPublishedGoodsActivity" />
         <activity android:name="com.example.bbook.BrowseImgActivity" />
         <activity android:name="com.example.bbook.MyOffSaleGoodsActivity" />
+        <activity android:name="com.example.bbook.MySoldGoodsActivity" />
+        <activity android:name="com.example.bbook.ShopSettingActivity" />
     </application>
 
 </manifest>

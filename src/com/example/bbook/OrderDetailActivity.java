@@ -46,9 +46,15 @@ public class OrderDetailActivity extends Activity {
 		tvSum.setText("合计： ￥ " + Double.parseDouble(order.getGoods().getGoodsPrice()) * Integer.parseInt(order.getGoodsQTY()));
 		tvOrderId.setText("订单编号:  " + order.getOrdersID());
 		tvCreateDate.setText("创建时间:  " + format.format(order.getCreateDate()));
-		tvPayDate.setText("付款时间:  " + format.format(order.getPayDate()));
-		tvDeliverDate.setText("发货时间:  " + format.format(order.getDeliverDate()));
-		tvCompleteData.setText("成交时间:  " + format.format(order.getCompleteDate()));
+		if(order.getPayDate() != null) {
+			tvPayDate.setText("付款时间:  " + format.format(order.getPayDate()));
+		}
+		if(order.getDeliverDate() != null) {
+			tvDeliverDate.setText("发货时间:  " + format.format(order.getDeliverDate()));
+		}
+		if(order.getCompleteDate() != null) {
+			tvCompleteData.setText("成交时间:  " + format.format(order.getCompleteDate())); 
+		}
 		shopAvatar.load(Server.serverAdress + order.getGoods().getShop().getShopImage());
 		imgGoods.load(Server.serverAdress + order.getGoods().getGoodsImage());
 	}

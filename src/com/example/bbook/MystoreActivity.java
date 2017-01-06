@@ -74,7 +74,7 @@ public class MystoreActivity extends Activity {
                 // 我发布的商品
                 itemOnSale = (ItemFragment) getFragmentManager().findFragmentById(R.id.onsale);
                 itemOnSale.setItemText("已发布的");
-//                itemPublished.setItemImage(R.drawable.icon_shop);
+                itemOnSale.setItemImage(R.drawable.icon_onsale);
                 itemOnSale.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                         @Override
@@ -84,10 +84,10 @@ public class MystoreActivity extends Activity {
                 });
                 
                 // 已下架的商品
-                itemSold = (ItemFragment) getFragmentManager().findFragmentById(R.id.offsale);
-                itemSold.setItemText("已下架的");
-//                itemPublished.setItemImage(R.drawable.icon_shop);
-                itemSold.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
+                itemOffSale = (ItemFragment) getFragmentManager().findFragmentById(R.id.offsale);
+                itemOffSale.setItemText("已下架的");
+                itemOffSale.setItemImage(R.drawable.icon_offsale);
+                itemOffSale.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                         @Override
                         public void onDetailed() {
@@ -98,20 +98,19 @@ public class MystoreActivity extends Activity {
                 // 我卖出的商品
                 itemSold = (ItemFragment) getFragmentManager().findFragmentById(R.id.sold);
                 itemSold.setItemText("我卖出的");
-//                itemPublished.setItemImage(R.drawable.icon_shop);
+                itemSold.setItemImage(R.drawable.icon_sold);
                 itemSold.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                         @Override
                         public void onDetailed() {
-//                                Intent itnt = new Intent(MystoreActivity.this, );
-//                                startActivity(itnt);
+                        	goMySoldGoods();
                         }
                 });
                 
                 // 订单管理
                 itemOrderManage = (ItemFragment) getFragmentManager().findFragmentById(R.id.order_manage);
                 itemOrderManage.setItemText("订单管理");
-//                itemPublished.setItemImage(R.drawable.icon_shop);
+                itemOrderManage.setItemImage(R.drawable.icon_order_manage);
                 itemOrderManage.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                         @Override
@@ -123,13 +122,12 @@ public class MystoreActivity extends Activity {
                 // 设置
                 itemSetting = (ItemFragment) getFragmentManager().findFragmentById(R.id.setting);
                 itemSetting.setItemText("设置");
-//                itemPublished.setItemImage(R.drawable.icon_shop);
+                itemSetting.setItemImage(R.drawable.icon_setting);
                 itemSetting.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                         @Override
                         public void onDetailed() {
-//                                Intent itnt = new Intent(MystoreActivity.this, );
-//                                startActivity(itnt);
+                        	goShopSetting();
                         }
                 });
                 // 关注
@@ -140,7 +138,18 @@ public class MystoreActivity extends Activity {
 //                goodsView.setAdapter(goodsAdapter);
         }
 
-        protected void goMyOnSaleGoods() {
+        protected void goShopSetting() {
+        	Intent itnt = new Intent(MystoreActivity.this, ShopSettingActivity.class);
+        	itnt.putExtra("shop", myshop);
+        	startActivity(itnt);			
+		}
+
+		protected void goMySoldGoods() {
+        	Intent itnt = new Intent(MystoreActivity.this, MySoldGoodsActivity.class);
+        	startActivity(itnt);
+		}
+
+		protected void goMyOnSaleGoods() {
         	Intent itnt = new Intent(MystoreActivity.this, MyOffSaleGoodsActivity.class);
         	startActivity(itnt);
 		}
@@ -188,7 +197,6 @@ public class MystoreActivity extends Activity {
                                 MystoreActivity.this.onFailure(arg0, arg1);
                         }
                 });
-                GoodsLoad();
               
         }
 
@@ -206,108 +214,6 @@ public class MystoreActivity extends Activity {
                 shopDescription.setTextColor(color.holo_red_dark);
         }
 
-        BaseAdapter goodsAdapter = new BaseAdapter() {
-                @SuppressLint("InflateParams")
-                @Override
-                public View getView(final int position, View convertView, ViewGroup parent) {
-                        View view = null;
-
-                        if (convertView == null) {
-                                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                                view = inflater.inflate(R.layout.fragment_picture_name, null);
-                        } else {
-                                view = convertView;
-                        }
-                        Goods goods = data.get(position);
-                        TextView goodsPrice = (TextView) view.findViewById(R.id.price);
-                        goodsPrice.setText("价格：" + goods.getGoodsPrice());
-                        TextView goodsName = (TextView) view.findViewById(R.id.id);
-                        goodsName.setText(goods.getGoodsName());
-
-                        // 商品图片、点击事件
-                        goodsPicture = (GoodsPicture) view.findViewById(R.id.picture);
-                        goodsPicture.load(Server.serverAdress + goods.getGoodsImage());
-                        goodsPicture.setOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                        goBookDetailActivity(position);
-                                }
-                        });
-
-                        return view;
-                }
-
-                @Override
-                public long getItemId(int position) {
-                        // TODO Auto-generated method stub
-                        return position;
-                }
-
-                @Override
-                public Object getItem(int position) {
-                        // TODO Auto-generated method stub
-                        return data.get(position);
-                        // return null;
-                }
-
-                @Override
-                public int getCount() {
-                        // TODO Auto-generated method stub
-                        return data == null ? 0 : data.size();
-                        // return 6;
-                }
-
-                @Override
-                public boolean isEnabled(int position) {
-                        return false;
-                }
-        };
-
-        public void GoodsLoad() {
-
-                OkHttpClient client = Server.getSharedClient();
-
-                Request request = Server.requestBuilderWithApi("goods/mygoods").get().build();
-
-                client.newCall(request).enqueue(new Callback() {
-
-                        @Override
-                        public void onResponse(Call arg0, final Response arg1) throws IOException {
-                                // TODO Auto-generated method stub
-                                final String responseStr = arg1.body().string();
-                                Log.d("response", responseStr);
-                                runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                                // TODO Auto-generated method
-                                                // stub
-                                                try {
-                                                        Page<Goods> data = new ObjectMapper().readValue(responseStr,
-                                                                        new TypeReference<Page<Goods>>() {
-                                                                        });
-                                                        MystoreActivity.this.data = data.getContent();
-                                                        MystoreActivity.this.page = data.getNumber();
-                                                        goodsAdapter.notifyDataSetInvalidated();
-                                                } catch (Exception e) {
-                                                        e.printStackTrace();
-                                                }
-                                        }
-                                });
-                        }
-
-                        @Override
-                        public void onFailure(Call arg0, IOException arg1) {
-
-                        }
-                });
-        }
-
-        public void goBookDetailActivity(int position) {
-                Goods goods = data.get(position);
-                Intent intent = new Intent(MystoreActivity.this, BookDetailActivity.class);
-                intent.putExtra("goods", goods);
-                startActivity(intent);
-        }
 
         // 关注功能
 
