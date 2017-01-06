@@ -20,6 +20,9 @@ public class Orders implements Serializable {
     String paySum;  
     Date createDate;
     Date editDate;
+    Date deliverDate;
+    Date payDate;
+    Date completeDate;
     Integer id;
 	public String getOrdersID() {
 		return ordersID;
@@ -98,6 +101,24 @@ public class Orders implements Serializable {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	public Date getDeliverDate() {
+		return deliverDate;
+	}
+	public void setDeliverDate(Date deliverDate) {
+		this.deliverDate = deliverDate;
+	}
+	public Date getPayDate() {
+		return payDate;
+	}
+	public void setPayDate(Date payDate) {
+		this.payDate = payDate;
+	}
+	public Date getCompleteDate() {
+		return completeDate;
+	}
+	public void setCompleteDate(Date completeDate) {
+		this.completeDate = completeDate;
 	}
     
     

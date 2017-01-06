@@ -79,9 +79,21 @@ public class MystoreActivity extends Activity {
                                 goAdd();
                         }
                 });
+                findViewById(R.id.btn_manage).setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						goOrderManage();
+					}
+				});
         }
 
-        protected void goAdd() {
+        protected void goOrderManage() {
+        	Intent itnt = new Intent(MystoreActivity.this, ManageOrderActivity.class);
+        	startActivity(itnt);
+		}
+
+		protected void goAdd() {
                 Intent itnt = new Intent(MystoreActivity.this, AddGoodsActivity.class);
                 itnt.putExtra("shop", myshop);
                 startActivity(itnt);
