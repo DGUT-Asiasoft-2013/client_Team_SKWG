@@ -169,14 +169,14 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			public void onDrawerClosed(View arg0) {
 				Log.d("David", "onDrawerClosed");
 				
-				goodsType=slidingMenuFragment.getGoodsType();
-				if(goodsType.equals("全部")){
-					isClassified=false;
-				}else{
-					isClassified=true;
-				}
-				Log.d("goodstype", goodsType);
-				bookLoad();
+//				goodsType=slidingMenuFragment.getGoodsType();
+//				if(goodsType.equals("全部")){
+//					isClassified=false;
+//				}else{
+//					isClassified=true;
+//				}
+//				Log.d("goodstype", goodsType);
+//				bookLoad();
 			}
 		});
 	
