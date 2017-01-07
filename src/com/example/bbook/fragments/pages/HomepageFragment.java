@@ -90,6 +90,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 	GoodsPicture goodsPicture;
 	TextView textview;
 	TextView goodsPrice;
+	TextView goodsName;
 
 	String sortStyle="createDate";
 	String typeStr="全部",authorStr="全部";
@@ -358,12 +359,13 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			textview=(TextView) view.findViewById(R.id.id);
 			goodsPrice=(TextView) view.findViewById(R.id.price);
 			goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
+			goodsName=(TextView) view.findViewById(R.id.goods_name);
 
 			goods=data.get(position);
 			textview.setText("商家:"+goods.getShop().getShopName());
 			goodsPrice.setText("价格："+goods.getGoodsPrice());
 			goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
-
+			goodsName.setText("书名:"+goods.getGoodsName());
 			goodsPicture.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
@@ -553,7 +555,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				request=Server.requestBuilderWithApi("goods/classify/"+typeStr)
 						.get().build();
 			}
-			
+
 			else if(!(authorStr.equals("全部"))){
 				request=Server.requestBuilderWithApi("goods/search/"+authorStr)
 						.get().build();
@@ -561,7 +563,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				request=Server.requestBuilderWithApi("goods/classify/"+authorStr)
 						.get().build();
 			}
-			
+
 		}
 		if(isSorted){
 			request=Server.requestBuilderWithApi("goods/sort/"+sortStyle)
@@ -584,7 +586,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/classify/"+typeStr+"/sort/"+sortStyle)
 					.get().build();
 		}
-		
+
 		OkHttpClient client=Server.getSharedClient();
 
 
@@ -709,7 +711,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				request=Server.requestBuilderWithApi("goods/classify/"+authorStr)
 						.get().build();
 			}
-			
+
 		}
 		if(isSearched&&isSorted){
 			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/sort/"+sortStyle+"?page="+(page+1))
@@ -877,8 +879,6 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 		.show();
 	}
 
-
-
 	@Override
 	public void onClick(View v) {
 
@@ -896,7 +896,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 		default:
 			break;
 		}
-
-
 	}
+
+
 }
