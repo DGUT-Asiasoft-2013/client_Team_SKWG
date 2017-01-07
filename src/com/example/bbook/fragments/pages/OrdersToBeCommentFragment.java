@@ -118,7 +118,7 @@ public class OrdersToBeCommentFragment extends Fragment {
 
 				@Override
 				public void onClick(View v) {
-					goComment(order.getGoods());
+					goComment(order.getGoods(),order.getOrdersID());
 				}
 			});
 			oHolder.tvDelete.setOnClickListener(new OnClickListener() {
@@ -147,8 +147,9 @@ public class OrdersToBeCommentFragment extends Fragment {
 		}
 	};
 
-	public void goComment(Goods goods) {
+	public void goComment(Goods goods,String ordersId) {
 		Intent itnt = new Intent(getActivity(), AddBookCommentActivity.class);
+		itnt.putExtra("ordersId", ordersId);
 		itnt.putExtra("goods", goods);
 		startActivity(itnt);
 	}

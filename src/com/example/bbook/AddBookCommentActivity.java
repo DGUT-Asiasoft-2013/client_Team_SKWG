@@ -34,11 +34,13 @@ public class AddBookCommentActivity extends Activity {
 	RatingBar goodsDescribe,sellerAttitute,sendSpeed;
 	
 	Goods goods;
+	String ordersId;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_addgoodscomment);
 		goods = (Goods) getIntent().getSerializableExtra("goods");
+		ordersId=getIntent().getStringExtra("ordersId");
 		init();
 		setEvent();
 	}
@@ -91,7 +93,8 @@ public class AddBookCommentActivity extends Activity {
 				if(commentText == null && goods != null) {
 					Toast.makeText(AddBookCommentActivity.this, "请输入评价内容", Toast.LENGTH_SHORT).show();;
 				} else {
-					Log.d("sdf",goodsDescribe.getRating()+"");
+				//	Log.d("sdf",goodsDescribe.getRating()+"");
+					
 					addComment(commentText);
 				}
 			}
@@ -99,8 +102,19 @@ public class AddBookCommentActivity extends Activity {
 	}
 
 	protected void addComment(String commentText) {
+		int state=1;
 		MultipartBody.Builder body = new MultipartBody.Builder()
-				.addFormDataPart("commentText", commentText);
+				.addFormDataPart("commentText", commentText)
+				.addFormDataPart("goodsDescribe", goodsDescribe.getRating()+"")
+				.addFormDataPart("sellerAttitute", sellerAttitute.getRating()+"")
+				.addFormDataPart("sendSpeed", sendSpeed.getRating()+"")
+				.addFormDataPart("state", state+"")
+				.addFormDataPart("ordersId", ordersId);
+		Log.d("orderId",ordersId);
+		Log.d("goodsDescribe",goodsDescribe.getRating()+"");
+		
+		Log.d("goodsId",goods.getId()+"");
+		
 		Request request = Server.requestBuilderWithApi("goods/" + goods.getId() + "/addcomments")
 				.method("post", null).post(body.build()).build();
 		

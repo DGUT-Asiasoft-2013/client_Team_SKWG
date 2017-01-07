@@ -1,5 +1,9 @@
 package com.example.bbook;
 
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.example.bbook.api.widgets.TitleBarFragment;
 
 import android.app.Activity;
@@ -11,6 +15,7 @@ TextView txMoneyItem,txMoneyType,txCreateDate,txBillNumber,txRemain,txDetial;
 TitleBarFragment titlebar;
 float sizeL = 20;
 float sizeS = 14;
+String billNum;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,16 +53,35 @@ float sizeS = 14;
 		
 		String moneyItem=getIntent().getStringExtra("MoneyItem");  
 		String moneyType=getIntent().getStringExtra("MoneyType");
-		String createDate=getIntent().getStringExtra("CreateDate");
+		Date createDate=(Date) getIntent().getSerializableExtra("CreateDate");
 		String billNumber=getIntent().getStringExtra("BillNumber");
 		String remain=getIntent().getStringExtra("Remain");
 		String detial=getIntent().getStringExtra("Detial");
 		
+		
+		//将获取的交易单号分割，并转换成10进制；
+		String[] temp = null;
+		temp = billNumber.split("-");
+		String num = "";
+		for(int i=0; i<temp.length; i++){
+		        num = num + temp[i];
+		}
+                try {
+                        billNum = new BigInteger(num, 16).toString();
+                } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                }
+		
+		//设置时间格式
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd  hh:mm");
+		
+		
 		txMoneyItem.setText(moneyItem);
 		txMoneyItem.setTextSize(sizeL);
 		txMoneyType.setText(moneyType);
-		txCreateDate.setText(createDate);
-		txBillNumber.setText(billNumber);
+		txCreateDate.setText(dateFormat.format(createDate));
+		txBillNumber.setText(billNum);
+		txBillNumber.setLines(1);
 		txBillNumber.setTextSize(sizeS);
 		txRemain.setText(remain);
 		txDetial.setText(detial);
