@@ -10,9 +10,9 @@
 
  
 
-    <include layout="@layout/minprice_and_maxpricce" 
+ <!--    <include layout="@layout/minprice_and_maxpricce" 
        />
-    
+    --> 
   
        <ExpandableListView
         android:id="@+id/expandableListView"

@@ -127,8 +127,8 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 	//侧拉菜单
 	private DrawerLayout mDrawerLayout = null;
 	private ImageView bt1;
-	private Button bt2;
-	private Button bt3;
+//	private Button bt2;
+//	private Button bt3;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -143,11 +143,11 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 		//侧拉菜单
 
 		bt1 = (ImageView) view.findViewById(R.id.more_choice);
-		bt2 = (Button) view.findViewById(R.id.btn1);
-		bt3 = (Button) view.findViewById(R.id.btn2);
+//		bt2 = (Button) view.findViewById(R.id.btn1);
+//		bt3 = (Button) view.findViewById(R.id.btn2);
 		bt1.setOnClickListener(this);
-		bt2.setOnClickListener(this);
-		bt3.setOnClickListener(this);
+//		bt2.setOnClickListener(this);
+//		bt3.setOnClickListener(this);
 		mDrawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
 		mDrawerLayout.setDrawerListener(new DrawerListener() {
 
@@ -179,11 +179,12 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				Log.d("typeStr", typeStr);
 				if(!typeStr.equals("全部")||!authorStr.equals("全部")){
 					isClassified=true;
+					bookLoad();
 				}
 				else {
 					isClassified=false;
+					
 				}
-				bookLoad();
 				//				goodsType=slidingMenuFragment.getGoodsType();
 				//				if(goodsType.equals("全部")){
 				//					isClassified=false;
@@ -887,12 +888,12 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			mDrawerLayout.openDrawer(Gravity.RIGHT);
 			//	Toast.makeText(getActivity(), "bt1111111111", Toast.LENGTH_LONG).show();
 			break;
-		case R.id.btn1:
-			//		Toast.makeText(getActivity(), "bt2222222222", Toast.LENGTH_LONG).show();
-			break;
-		case R.id.btn2:
+//		case R.id.btn1:
+//			//		Toast.makeText(getActivity(), "bt2222222222", Toast.LENGTH_LONG).show();
+//			break;
+//		case R.id.btn2:
 			//	Toast.makeText(getActivity(), "bt33333333333", Toast.LENGTH_LONG).show();
-			break;
+//			break;
 		default:
 			break;
 		}
