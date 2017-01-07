@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -187,12 +188,18 @@ public class BuyActivity extends Activity {
 	protected void onSubmit() {
 		if(selectedGoods.size() > 1) {
 			int quantity = selectedGoods.get(0).getQuantity();
-			String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + quantity;
+			String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + selectedGoods.get(0).getId() + quantity;
 			for(int i = 0; i < selectedGoods.size(); i++) {
 				addOrder(selectedGoods.get(i), orderId);
 			}
-			
+			checkPayPasswordIsExisted();
+		} else {
+			int quantity = selectedGoods.get(0).getQuantity();
+			String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + selectedGoods.get(0).getId() + quantity;
+			addOrder(selectedGoods.get(0), orderId);
+			checkPayPasswordIsExisted();
 		}
+		
 
 	}
 
@@ -207,6 +214,18 @@ public class BuyActivity extends Activity {
 		if(goods != null) {
 			toBePayOrders.add(orderId);
 		}
+		for (int i = 0; i < toBePayOrders.size(); i++)  //外循环是循环的次数
+        {
+            for (int j = toBePayOrders.size() - 1 ; j > i; j--)  //内循环是 外循环一次比较的次数
+            {
+
+                if (toBePayOrders.get(i) == toBePayOrders.get(j))
+                {
+                	toBePayOrders.remove(j);
+                }
+
+            }
+        }
 		String name = selectedInfo.getName();
 		String address = selectedInfo.getAddress();
 		String tel = selectedInfo.getTel();
@@ -231,7 +250,7 @@ public class BuyActivity extends Activity {
 					public void run() {
 						try {
 							//							goPay();
-							checkPayPasswordIsExisted();
+							
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -312,6 +331,7 @@ public class BuyActivity extends Activity {
 				gHolder.tvCount.setText("剩余 " + goods.getGoodsCount() + " 件");
 				gHolder.tvPrice.setText(goods.getGoodsPrice());
 				Log.d("goods.getQuantity()", goods.getQuantity() + "");
+				quantity = goods.getQuantity();
 				gHolder.tvQuantity.setText(goods.getQuantity() + "");
 				gHolder.btnPlus.setOnClickListener(new OnClickListener() {
 

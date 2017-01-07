@@ -10,6 +10,9 @@ import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,11 +37,13 @@ public class AddBookCommentActivity extends Activity {
 	RatingBar goodsDescribe,sellerAttitute,sendSpeed;
 	
 	Goods goods;
+	String ordersId;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_addgoodscomment);
 		goods = (Goods) getIntent().getSerializableExtra("goods");
+		ordersId=getIntent().getStringExtra("ordersId");
 		init();
 		setEvent();
 	}
@@ -87,20 +92,58 @@ public class AddBookCommentActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				
+				isAddComment();
+//				String commentText = AddBookCommentActivity.this.etComment.getText().toString();
+//				if(commentText == null && goods != null) {
+//					Toast.makeText(AddBookCommentActivity.this, "请输入评价内容", Toast.LENGTH_SHORT).show();;
+//				} else {
+//				//	Log.d("sdf",goodsDescribe.getRating()+"");
+//					
+//					addComment(commentText);
+//				}
+			}
+		});
+	}
+	
+	//确定是否评价
+	public void isAddComment(){
+		AlertDialog.Builder builder=new Builder(this);
+		builder.setTitle("是否添加评价");
+		builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
 				String commentText = AddBookCommentActivity.this.etComment.getText().toString();
 				if(commentText == null && goods != null) {
-					Toast.makeText(AddBookCommentActivity.this, "请输入评价内容", Toast.LENGTH_SHORT).show();;
+					Toast.makeText(AddBookCommentActivity.this, "请输入评价内容", Toast.LENGTH_SHORT).show();
+					return;
 				} else {
-					Log.d("sdf",goodsDescribe.getRating()+"");
+				//	Log.d("sdf",goodsDescribe.getRating()+"");
 					addComment(commentText);
 				}
 			}
 		});
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		});
+		builder.show();
 	}
 
 	protected void addComment(String commentText) {
+		int state=1;
 		MultipartBody.Builder body = new MultipartBody.Builder()
-				.addFormDataPart("commentText", commentText);
+				.addFormDataPart("commentText", commentText)
+				.addFormDataPart("goodsDescribe", goodsDescribe.getRating()+"")
+				.addFormDataPart("sellerAttitute", sellerAttitute.getRating()+"")
+				.addFormDataPart("sendSpeed", sendSpeed.getRating()+"")
+				.addFormDataPart("state", state+"")
+				.addFormDataPart("ordersId", ordersId);
+		Log.d("orderId",ordersId);
+		Log.d("goodsDescribe",goodsDescribe.getRating()+"");
+		
+		Log.d("goodsId",goods.getId()+"");
+		
 		Request request = Server.requestBuilderWithApi("goods/" + goods.getId() + "/addcomments")
 				.method("post", null).post(body.build()).build();
 		
@@ -113,6 +156,7 @@ public class AddBookCommentActivity extends Activity {
 					@Override
 					public void run() {
 						Toast.makeText(AddBookCommentActivity.this, "发表成功", Toast.LENGTH_SHORT).show();
+						goMyOrders();
 					}
 				});
 			}
@@ -121,5 +165,17 @@ public class AddBookCommentActivity extends Activity {
 			public void onFailure(Call arg0, IOException arg1) {
 			}
 		});
+	}
+
+	//转到我的订单
+	public void goMyOrders(){
+		new AlertDialog.Builder(this).setMessage("支付成功").setPositiveButton("查看我的订单", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent itnt = new Intent(AddBookCommentActivity.this,MyOrdersActivity.class);
+				startActivity(itnt);
+				finish();
+			}
+		}).show();
 	}
 }

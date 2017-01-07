@@ -27,7 +27,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:background="#8ccc" />
-            
+
             <fragment
                 android:id="@+id/input_goods_name"
                 android:layout_width="match_parent"
@@ -82,85 +82,38 @@
                 class="inputcells.SimpleTextInputcellFragment"
                 tools:layout="@layout/fragment_inputcell_simpleted" />
 
-            <fragment
-                android:id="@+id/input_goods_publisher"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                class="inputcells.SimpleTextInputcellFragment"
-                tools:layout="@layout/fragment_inputcell_simpleted" />
-
-            <fragment
-                android:id="@+id/input_goods_author"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                class="inputcells.SimpleTextInputcellFragment"
-                tools:layout="@layout/fragment_inputcell_simpleted" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal"
-                android:padding="8dp" >
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="出版时间"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/edit_pubdate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_weight="6"
-                    android:background="@null"
-                    android:hint="点击选择日期"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginEnd="10dp"
+                android:layout_height="3dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginStart="10dp"
                 android:background="#8ccc" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <fragment
+                android:id="@+id/btn_publish"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal"
-                android:padding="8dp" >
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="印刷时间"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/edit_pritime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_weight="6"
-                    android:background="@null"
-                    android:hint="点击选择日期"
-                    android:textSize="15sp" />
-            </LinearLayout>
+                class="com.example.bbook.api.widgets.ItemFragment"
+                tools:layout="@layout/fragment_widget_item" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginEnd="10dp"
+                android:layout_height="3dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="10dp"
+                android:background="#8ccc" />
+
+            <fragment
+                android:id="@+id/btn_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                class="com.example.bbook.api.widgets.ItemFragment"
+                tools:layout="@layout/fragment_widget_item" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginStart="10dp"
                 android:background="#8ccc" />
 

@@ -9,14 +9,17 @@ import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.Shop;
 import com.example.bbook.api.entity.Subscribe;
+import com.example.bbook.api.widgets.ItemFragment;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import android.R.string;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -44,14 +47,14 @@ public class AddGoodsActivity extends Activity {
         Spinner spinner;
         List<String> type_list;
         ArrayAdapter<String> type_adapter;
-        String selectedType;
-        EditText pubDate, priTime;
+        String selectedType,str1,str2,str3,str4;
+        
         Shop shop;
         List<Subscribe> subscribeData;
         Integer userId;
-
-        SimpleTextInputcellFragment fragGoodsName, fragGoodsType, fragGoodsPrice, fragGoodsCount, fragGoodsPublisher,
-                        fragGoodsAuthor, fragGoodsPubDate, fragGoodsPritime;
+        ItemFragment itempublish,itemdetail;
+        private static final int RequestCode_Publish=1;
+        SimpleTextInputcellFragment fragGoodsName, fragGoodsType, fragGoodsPrice, fragGoodsCount;
         PictureInputCellFragment fragGoodsImage;
 
         @Override
@@ -66,42 +69,33 @@ public class AddGoodsActivity extends Activity {
                 fragGoodsCount = (SimpleTextInputcellFragment) getFragmentManager()
                                 .findFragmentById(R.id.input_goods_count);
                 fragGoodsCount.setEditNum(true); // 设置数量输入为整型
-                fragGoodsPublisher = (SimpleTextInputcellFragment) getFragmentManager()
-                                .findFragmentById(R.id.input_goods_publisher);
-                fragGoodsAuthor = (SimpleTextInputcellFragment) getFragmentManager()
-                                .findFragmentById(R.id.input_goods_author);
+
                 fragGoodsImage = (PictureInputCellFragment) getFragmentManager()
                                 .findFragmentById(R.id.input_goods_image);
 
                 shop = (Shop) getIntent().getSerializableExtra("shop");
                 
-                // 出版时间
-                pubDate = (EditText) findViewById(R.id.edit_pubdate);
-                pubDate.setOnTouchListener(new OnTouchListener() {
-
+             // 跳转到书本出版信息
+                itempublish = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_publish);
+                itempublish.setItemText(" 出版信息 ");
+                itempublish.setItemImageState(false);
+                itempublish.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
                         @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                        showPubDatePickDlg();
-                                        return true;
-                                }
-                                return false;
+                        public void onDetailed() {
+                        	publish();
                         }
                 });
-
-                // 印刷时间
-                priTime = (EditText) findViewById(R.id.edit_pritime);
-                priTime.setOnTouchListener(new OnTouchListener() {
-
+             // 跳转到书本描述
+                itemdetail = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_detail);
+                itemdetail.setItemText(" 宝贝描述");
+                itemdetail.setItemImageState(false);
+                itemdetail.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
                         @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                        showPriDatePickDlg();
-                                        return true;
-                                }
-                                return false;
+                        public void onDetailed() {
+                        	detail();
                         }
                 });
+                
 
                 spinner = (Spinner) findViewById(R.id.spinner_type);
                 // 种类下拉框数据
@@ -148,21 +142,17 @@ public class AddGoodsActivity extends Activity {
                         }
                 });
         }
-
+       
         protected void onSubmit() {
                 String goodsName = fragGoodsName.getText();
                 String goodsType = selectedType;
                 String goodsPrice = fragGoodsPrice.getText();
                 String goodsCount = fragGoodsCount.getText();
-                String goodsPublisher = fragGoodsPublisher.getText();
-                String goodsAuthor = fragGoodsAuthor.getText();
-                String goodsPubDate = pubDate.getText().toString();
-                String goodsPritime = priTime.getText().toString();
-                // isNulltips(goodsName, "请输入商品名称!");
-                // isNulltips(goodsPrice, "请输入商品价格!");
-                // isNulltips(goodsCount, "请输入商品库存!");
-                // isNulltips(goodsPublisher, "请输入商品出版社!");
-                // isNulltips(goodsAuthor, "请输入商品作者!");
+                String goodsPublisher = str1;                       //从addpublishactivity中返回的参数
+                String goodsAuthor = str2;
+                String goodsPubDate = str3;
+                String goodsPritime = str4;
+
 
                 MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("goodsName", goodsName)
                                 .addFormDataPart("goodsType", goodsType).addFormDataPart("goodsPrice", goodsPrice)
@@ -270,10 +260,7 @@ public class AddGoodsActivity extends Activity {
                 fragGoodsPrice.setHintText("请输入价格");
                 fragGoodsCount.setLabelText("商品库存");
                 fragGoodsCount.setHintText("请输入商品库存");
-                fragGoodsPublisher.setLabelText("出版社");
-                fragGoodsPublisher.setHintText("请输入出版社");
-                fragGoodsAuthor.setLabelText("作者");
-                fragGoodsAuthor.setHintText("请输入作者");
+
         }
 
         void onResponse(Call arg0, String responseBody) {
@@ -292,49 +279,27 @@ public class AddGoodsActivity extends Activity {
                                 .setNegativeButton("OK", null).show();
         }
 
-        // 选择出版日期对话框
-        protected void showPubDatePickDlg() {
-                Calendar calendar = Calendar.getInstance();
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddGoodsActivity.this,
-                                new OnDateSetListener() {
-
-                                        @Override
-                                        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                                        int dayOfMonth) {
-                                                AddGoodsActivity.this.pubDate.setText(
-                                                                year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                                        }
-                                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                                calendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.show();
-
+        void publish(){
+        	Intent itnt=new Intent(this,AddPublishActivity.class);
+        	startActivityForResult(itnt, RequestCode_Publish);
         }
-
-        // 选择印刷日期对话框
-        protected void showPriDatePickDlg() {
-                Calendar calendar = Calendar.getInstance();
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddGoodsActivity.this,
-                                new OnDateSetListener() {
-
-                                        @Override
-                                        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                                        int dayOfMonth) {
-                                                AddGoodsActivity.this.priTime.setText(
-                                                                year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                                        }
-                                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                                calendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.show();
-
+        
+        void detail(){
+        	Intent itnt=new Intent(this,AddBookDetailActivity.class);
+        	startActivity(itnt);
         }
-        // void isNulltips(String str,String tips){
-        // if(str==null||str.isEmpty()){
-        // new AlertDialog.Builder(getParent())
-        // .setMessage(tips)
-        // .setIcon(android.R.drawable.ic_dialog_alert)
-        // .setPositiveButton("OK",null)
-        // .show();
-        // return;
-        // }
-        // }
+        
+        @Override  
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
+            // TODO Auto-generated method stub  
+            super.onActivityResult(requestCode, resultCode, data);  
+            //requestCode标示请求的标示   resultCode表示有数据  
+            if (requestCode == RequestCode_Publish && resultCode == RESULT_OK) {
+            	itempublish.setItemText(" 出版信息                             已编辑");
+                  str1 = data.getStringExtra("goodsPublisher"); 
+                  str2 = data.getStringExtra("goodsAuthor");  
+                  str3 = data.getStringExtra("goodsPubDate"); 
+                  str4 = data.getStringExtra("goodsPritime"); 
+            }   
+        }
 }

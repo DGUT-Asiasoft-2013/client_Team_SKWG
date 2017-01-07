@@ -7,6 +7,7 @@ import java.util.List;
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
+import com.example.bbook.api.Shop;
 import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.fragments.pages.HomepageFragment;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ public class ClassifyActivity extends Activity {
 	List<Goods> goodsList;
 	GridView goodsView;
 	int page=0;
+	Goods goods;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -70,7 +73,7 @@ public class ClassifyActivity extends Activity {
 	BaseAdapter goodsAdapter=new BaseAdapter() {
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View view=null;
 			if(convertView==null){
@@ -83,7 +86,7 @@ public class ClassifyActivity extends Activity {
 			TextView goodsPrice=(TextView) view.findViewById(R.id.price);
 			GoodsPicture	 goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
 
-			Goods	goods=goodsList.get(position);
+			goods=goodsList.get(position);
 			textview.setText("商家:"+goods.getShop().getShopName());
 			goodsPrice.setText("价格："+goods.getGoodsPrice());
 			goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
@@ -91,7 +94,7 @@ public class ClassifyActivity extends Activity {
 			goodsPicture.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
-					//	goBookDetailActivity( position);
+						goBookDetailActivity( position);
 				}
 			});
 			textview.setOnClickListener(new OnClickListener() {
@@ -100,7 +103,7 @@ public class ClassifyActivity extends Activity {
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Toast.makeText(ClassifyActivity.this, "ID",Toast.LENGTH_SHORT).show();
-					//	goShopActivity(position);
+						goShopActivity(position);
 				}
 			});
 
@@ -172,5 +175,19 @@ public class ClassifyActivity extends Activity {
 
 			}
 		});
+	}
+
+	public void goBookDetailActivity(int position){
+		goods=goodsList.get(position);
+		Intent intent=new Intent(ClassifyActivity.this,BookDetailActivity.class);
+		intent.putExtra("goods", goods);
+		startActivity(intent);
+	}
+	
+	public void goShopActivity(int position){
+		Shop shop=goodsList.get(position).getShop();
+		Intent intent=new Intent(ClassifyActivity.this,ShopActivity.class);
+		intent.putExtra("shop", shop);
+		startActivity(intent);
 	}
 }

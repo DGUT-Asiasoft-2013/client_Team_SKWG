@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#39f"
+    android:orientation="horizontal" >
+
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@null"
+        android:scaleType="center"
+        android:src="@drawable/btn_back" />
+
+    <View 
+        android:id="@+id/split_line"
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#06c"/>
+    
+    <TextView
+        android:id="@+id/title_name"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="出版信息"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+    <View 
+        android:id="@+id/view_null"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="gone"/>
+    
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:padding="10dp"
+        android:background="@null"
+        android:gravity="center_vertical|end"
+        android:text="确定"
+        android:textColor="@android:color/white"
+        android:textSize="13sp" />
+
+</LinearLayout>
+    <fragment
+        android:id="@+id/input_goods_publisher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        class="inputcells.SimpleTextInputcellFragment"
+        tools:layout="@layout/fragment_inputcell_simpleted" />
+
+    <fragment
+        android:id="@+id/input_goods_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        class="inputcells.SimpleTextInputcellFragment"
+        tools:layout="@layout/fragment_inputcell_simpleted" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:padding="8dp" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="出版时间"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edit_pubdate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_weight="6"
+            android:background="@null"
+            android:hint="点击选择日期"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:background="#8ccc" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:padding="8dp" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="印刷时间"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edit_pritime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_weight="6"
+            android:background="@null"
+            android:hint="点击选择日期"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</LinearLayout>

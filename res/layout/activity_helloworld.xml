@@ -12,12 +12,17 @@
             android:id="@+id/contain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/frag_tabbar"
+            android:layout_above="@+id/a"
             android:layout_alignParentTop="true"
              >
 
         </FrameLayout>
-
+<View
+    android:id="@+id/a" 
+    android:layout_width="match_parent"
+    android:layout_height="1px"
+    android:background="#ccc"
+    android:layout_above="@+id/frag_tabbar"/>
         <fragment
             android:id="@+id/frag_tabbar"
             android:layout_width="match_parent"

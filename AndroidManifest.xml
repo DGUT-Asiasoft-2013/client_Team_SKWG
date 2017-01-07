@@ -82,6 +82,8 @@
         <activity android:name="com.example.bbook.MyOffSaleGoodsActivity" />
         <activity android:name="com.example.bbook.MySoldGoodsActivity" />
         <activity android:name="com.example.bbook.ShopSettingActivity" />
+        <activity android:name="com.example.bbook.AddPublishActivity" />
+        <activity android:name="com.example.bbook.AddBookDetailActivity" />
     </application>
 
 </manifest>
