@@ -79,7 +79,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 	//书籍展示页面
 
 	SlidingMenuFragment slidingMenuFragment=new SlidingMenuFragment();
-	
+
 	PopupMenu popupMenuClassify,popupMenuSort;
 	Menu menuClassify,menuSort;
 
@@ -92,7 +92,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 	TextView goodsPrice;
 
 	String sortStyle="createDate";
-	String typeStr,authorStr;
+	String typeStr="全部",authorStr="全部";
 	String keyword;
 	boolean isSearched=false,isSorted=false,isClassified=false;
 
@@ -103,12 +103,12 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 	Button sortByName;
 	List<Goods> data;
 	int page=0;
-	
+
 	//切换GridView和Listview标志
 	boolean isGridview=true;
 	ImageView changeView;
 	ListView listView;
-	
+
 	//
 	EditText minPrice,maxPrice;
 	ImageView btnPricce;
@@ -122,13 +122,13 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 	int offset=0;
 	int curIndex=0;
 	View view;
-	
+
 	//侧拉菜单
 	private DrawerLayout mDrawerLayout = null;
 	private ImageView bt1;
 	private Button bt2;
 	private Button bt3;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if(view!=null){
@@ -138,7 +138,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 		btnSearch=(ImageView) view.findViewById(R.id.btn_search);
 		editKeyword=(EditText) view.findViewById(R.id.edit_keyword);
 		slidingMenuFragment=(SlidingMenuFragment) getFragmentManager().findFragmentById(R.id.sliding_menu);
-		
+
 		//侧拉菜单
 
 		bt1 = (ImageView) view.findViewById(R.id.more_choice);
@@ -168,30 +168,34 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			@Override
 			public void onDrawerClosed(View arg0) {
 				Log.d("David", "onDrawerClosed");
-				
-				typeStr=slidingMenuFragment.getTypeStr();
-				authorStr=slidingMenuFragment.getAuthorStr();
+
+				if(slidingMenuFragment.getTypeSelected()){
+					typeStr=slidingMenuFragment.getTypeStr();
+				}
+				if (slidingMenuFragment.getAuthorSelected()) {
+					authorStr=slidingMenuFragment.getAuthorStr();
+				}				
+				Log.d("typeStr", typeStr);
 				if(!typeStr.equals("全部")||!authorStr.equals("全部")){
 					isClassified=true;
 				}
-		
 				else {
 					isClassified=false;
 				}
 				bookLoad();
-//				goodsType=slidingMenuFragment.getGoodsType();
-//				if(goodsType.equals("全部")){
-//					isClassified=false;
-//				}else{
-//					isClassified=true;
-//				}
-//				Log.d("goodstype", goodsType);
-//				bookLoad();
+				//				goodsType=slidingMenuFragment.getGoodsType();
+				//				if(goodsType.equals("全部")){
+				//					isClassified=false;
+				//				}else{
+				//					isClassified=true;
+				//				}
+				//				Log.d("goodstype", goodsType);
+				//				bookLoad();
 			}
 		});
-	
-		
-		
+
+
+
 		minPrice=(EditText) view.findViewById(R.id.min_price);
 		maxPrice=(EditText) view.findViewById(R.id.max_price);
 		btnPricce =(ImageView) view.findViewById(R.id.btn_price);
@@ -204,20 +208,20 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				goodsLoad(min,max);
 			}
 		});
-		
-		
-		
+
+
+
 		bookView=(GridView) view.findViewById(R.id.book_gridView);
 		//bookView.setAdapter(bookAdapter);
 		listView=(ListView) view.findViewById(R.id.book_listview);
-		
+
 		//向下滚动加载更多
 		AutoLoadListener autoLoadListener = new AutoLoadListener(callBack);  
 		bookView.setOnScrollListener(autoLoadListener);  
-		
+
 		changeView=(ImageView) view.findViewById(R.id.change_view);
 		changeView.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -225,7 +229,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				updateLayout();
 			}
 		});
-		
+
 
 		popupMenuSort=new PopupMenu(getActivity(),view.findViewById(R.id.pop_menu_sort));
 		menuSort=popupMenuSort.getMenu();
@@ -285,8 +289,8 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 		return view;		
 	}
 
-	
-	
+
+
 	public void SortStyle(String sortStyle){
 		String keyword=editKeyword.getText().toString();
 		OkHttpClient client=Server.getSharedClient();
@@ -376,7 +380,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 					goShopActivity(position);
 				}
 			});
-			
+
 			view.findViewById(R.id.shopping_car).setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -428,7 +432,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 		//		if(!sortState){
 		bookLoad();
 		updateLayout();
-		
+
 		//		}
 		//		else {
 		//			SortStyle(sortStyle);
@@ -535,8 +539,8 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 	}
 	//加载书本
 	public void bookLoad(){
-	
-	
+
+
 		Request request;
 		request=Server.requestBuilderWithApi("goods/s")
 				.get().build();
@@ -549,10 +553,15 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				request=Server.requestBuilderWithApi("goods/classify/"+typeStr)
 						.get().build();
 			}
-			if(!(authorStr.equals("全部"))){
+			
+			else if(!(authorStr.equals("全部"))){
+				request=Server.requestBuilderWithApi("goods/search/"+authorStr)
+						.get().build();
+			}else{
 				request=Server.requestBuilderWithApi("goods/classify/"+authorStr)
 						.get().build();
 			}
+			
 		}
 		if(isSorted){
 			request=Server.requestBuilderWithApi("goods/sort/"+sortStyle)
@@ -575,7 +584,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/classify/"+typeStr+"/sort/"+sortStyle)
 					.get().build();
 		}
-		isClassified=false;
+		
 		OkHttpClient client=Server.getSharedClient();
 
 
@@ -623,56 +632,56 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 
 	}
 	//
-	
+
 	//按金额搜索
 	public void goodsLoad(String min,String max){
-	Request request=Server.requestBuilderWithApi("goods/search/"+min+"/"+max)
-			.get().build();
-	OkHttpClient client=Server.getSharedClient();
+		Request request=Server.requestBuilderWithApi("goods/search/"+min+"/"+max)
+				.get().build();
+		OkHttpClient client=Server.getSharedClient();
 
-	client.newCall(request).enqueue(new Callback() {
+		client.newCall(request).enqueue(new Callback() {
 
-		@Override
-		public void onResponse(Call arg0, final Response arg1) throws IOException {
-			// TODO Auto-generated method stub
-			final String responseStr=arg1.body().string();
+			@Override
+			public void onResponse(Call arg0, final Response arg1) throws IOException {
+				// TODO Auto-generated method stub
+				final String responseStr=arg1.body().string();
 
 
-			getActivity().runOnUiThread(new Runnable() {
+				getActivity().runOnUiThread(new Runnable() {
 
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					try {
-						Page<Goods> data=new ObjectMapper()
-								.readValue(responseStr, new TypeReference<Page<Goods>>() {
-								});
-						//Log.d("aaa",data.toString());
-						HomepageFragment.this.data=data.getContent();
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						try {
+							Page<Goods> data=new ObjectMapper()
+									.readValue(responseStr, new TypeReference<Page<Goods>>() {
+									});
+							//Log.d("aaa",data.toString());
+							HomepageFragment.this.data=data.getContent();
 
-						HomepageFragment.this.page=data.getNumber();
-						bookAdapter.notifyDataSetInvalidated();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+							HomepageFragment.this.page=data.getNumber();
+							bookAdapter.notifyDataSetInvalidated();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+
+
+
 					}
+				});
+			}
 
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				// TODO Auto-generated method stub
 
+			}
+		});
 
-
-				}
-			});
-		}
-
-		@Override
-		public void onFailure(Call arg0, IOException arg1) {
-			// TODO Auto-generated method stub
-
-		}
-	});
-		
 	}
-	
+
 	public void LoadMore(){
 
 
@@ -687,6 +696,20 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 		if(isSorted){
 			request=Server.requestBuilderWithApi("goods/sort/"+sortStyle+"?page="+(page+1))
 					.get().build();
+		}
+		if(isClassified){
+			if(!(typeStr.equals("全部"))){
+				request=Server.requestBuilderWithApi("goods/classify/"+typeStr)
+						.get().build();
+			}
+			else	if(!(authorStr.equals("全部"))){
+				request=Server.requestBuilderWithApi("goods/search/"+authorStr)
+						.get().build();
+			}else{
+				request=Server.requestBuilderWithApi("goods/classify/"+authorStr)
+						.get().build();
+			}
+			
 		}
 		if(isSearched&&isSorted){
 			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/sort/"+sortStyle+"?page="+(page+1))
@@ -746,7 +769,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 
 
 	}
-	
+
 	//--------------------------------------------
 	public void goBookDetailActivity(int position){
 		goods=data.get(position);
@@ -764,7 +787,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 
 
 	public void updateLayout(){
-	
+
 		AutoLoadListener autoLoadListener = new AutoLoadListener(callBack);  
 		if(isGridview){
 			bookView.setOnScrollListener(autoLoadListener);  
@@ -779,34 +802,34 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			listView.setAdapter(bookAdapter);
 			bookView.setVisibility(View.GONE);
 		}
-	
+
 	}
 
-//	public void chooseNum(final int position){
-//		
-//		AlertDialog.Builder builder=new Builder(getActivity());
-//		builder.setTitle("请输入支付密码");
-//		//把布局文件先填充成View对象
-//		View view = View.inflate(getActivity(), R.layout.fragment_widget_number_plus_sub, null);
-//		final TextView chooseNum=(TextView) view.findViewById(R.id.quantity);
-//		//把填充得来的view对象设置为对话框显示内容
-//		builder.setView(view);
-//		builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int which) {
-//				String string= chooseNum.getText().toString();
-//				int quantity=Integer.parseInt(string);
-//				addToShopCar(quantity, position);
-//			}
-//		});
-//		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int which) {
-//
-//			}
-//		});
-//		builder.show();
-//	//	int quantity=1;
-//
-//}
+	//	public void chooseNum(final int position){
+	//		
+	//		AlertDialog.Builder builder=new Builder(getActivity());
+	//		builder.setTitle("请输入支付密码");
+	//		//把布局文件先填充成View对象
+	//		View view = View.inflate(getActivity(), R.layout.fragment_widget_number_plus_sub, null);
+	//		final TextView chooseNum=(TextView) view.findViewById(R.id.quantity);
+	//		//把填充得来的view对象设置为对话框显示内容
+	//		builder.setView(view);
+	//		builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+	//			public void onClick(DialogInterface dialog, int which) {
+	//				String string= chooseNum.getText().toString();
+	//				int quantity=Integer.parseInt(string);
+	//				addToShopCar(quantity, position);
+	//			}
+	//		});
+	//		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+	//			public void onClick(DialogInterface dialog, int which) {
+	//
+	//			}
+	//		});
+	//		builder.show();
+	//	//	int quantity=1;
+	//
+	//}
 	public void addToShopCar(int position){
 		int quantity=1;
 		goods=data.get(position);
@@ -843,37 +866,37 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			}
 		});
 	}
-void onResponse(Call arg0, String responseBody){
-	Toast.makeText(getActivity(), "加入购物车成功", Toast.LENGTH_SHORT).show();;
-}
-
-void onFailture(Call arg0, Exception arg1) {
-	new AlertDialog.Builder(getActivity())
-	.setTitle("失败")
-	.setMessage(arg1.getLocalizedMessage())
-	.show();
-}
-
-
-
-@Override
-public void onClick(View v) {
-
-	switch (v.getId()) {
-	case R.id.more_choice:
-		mDrawerLayout.openDrawer(Gravity.RIGHT);
-	//	Toast.makeText(getActivity(), "bt1111111111", Toast.LENGTH_LONG).show();
-		break;
-	case R.id.btn1:
-//		Toast.makeText(getActivity(), "bt2222222222", Toast.LENGTH_LONG).show();
-		break;
-	case R.id.btn2:
-	//	Toast.makeText(getActivity(), "bt33333333333", Toast.LENGTH_LONG).show();
-		break;
-	default:
-		break;
+	void onResponse(Call arg0, String responseBody){
+		Toast.makeText(getActivity(), "加入购物车成功", Toast.LENGTH_SHORT).show();;
 	}
 
-	
-}
+	void onFailture(Call arg0, Exception arg1) {
+		new AlertDialog.Builder(getActivity())
+		.setTitle("失败")
+		.setMessage(arg1.getLocalizedMessage())
+		.show();
+	}
+
+
+
+	@Override
+	public void onClick(View v) {
+
+		switch (v.getId()) {
+		case R.id.more_choice:
+			mDrawerLayout.openDrawer(Gravity.RIGHT);
+			//	Toast.makeText(getActivity(), "bt1111111111", Toast.LENGTH_LONG).show();
+			break;
+		case R.id.btn1:
+			//		Toast.makeText(getActivity(), "bt2222222222", Toast.LENGTH_LONG).show();
+			break;
+		case R.id.btn2:
+			//	Toast.makeText(getActivity(), "bt33333333333", Toast.LENGTH_LONG).show();
+			break;
+		default:
+			break;
+		}
+
+
+	}
 }

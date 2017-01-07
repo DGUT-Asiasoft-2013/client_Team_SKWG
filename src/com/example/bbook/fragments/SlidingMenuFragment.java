@@ -60,7 +60,7 @@ public class SlidingMenuFragment extends Fragment  implements OnItemClickListene
 				"全部","青春文学","历史","计算机","小说","建筑","自然科学","哲学","运动","文学","成功励志","保健养生","传记"
 		};
 		authorArray=new String[]{
-				"a","b","c","d","e","f","g","h","i"	
+				"全部","a","b","c","d","e","f","g","h","i"	
 		};
 		parent=new String[]{
 				"类型","作者"	
@@ -233,13 +233,22 @@ public void cleanBackColor(int position){
 		switch (gPosition) {
 		case 0:
 			typeStr=childList.get(position);
-			
+			isTypeSelected=true;
+			isAuthorSelected=false;
 			break;
 		case 1:
 			authorStr=childList.get(position);
+			isAuthorSelected=true;
+			isTypeSelected=false;
 		default:
 			break;
 		}
+	}
+	public boolean getTypeSelected(){
+		return isTypeSelected;
+	}
+	public boolean getAuthorSelected(){
+		return isAuthorSelected;
 	}
 	
 	public String getTypeStr(){
