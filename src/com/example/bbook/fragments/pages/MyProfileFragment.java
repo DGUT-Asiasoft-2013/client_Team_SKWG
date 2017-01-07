@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.example.bbook.ChangePasswordActivity;
 import com.example.bbook.ChangeUserMessageActivity;
 import com.example.bbook.LoginActivity;
+import com.example.bbook.ManageCommomInfoActivity;
 import com.example.bbook.MessageActivity;
 import com.example.bbook.MyBillActivity;
 import com.example.bbook.MyOrdersActivity;
@@ -56,7 +57,7 @@ public class MyProfileFragment extends Fragment {
         AvatarView avatar;
         TitleBarFragment fragMeTitleBar;
         PopupWindow bill;
-        ItemFragment itemBtnExit, itemBtnOrder, itemBtnChange, itemOpenStore, itemMyStore, itemBill, itemWallet, itemMySubscribe;
+        ItemFragment itemBtnExit, itemBtnOrder, itemBtnChange, itemOpenStore, itemMyStore, itemBill, itemWallet, itemMySubscribe, itemMyAddress;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -177,6 +178,18 @@ public class MyProfileFragment extends Fragment {
                                 }
                         });
                         
+                        //我的地址
+                        itemMyAddress = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_myaddress);
+                        itemMyAddress.setItemText("我的地址");
+                        itemMyAddress.setItemImage(R.drawable.icon_address);
+                        itemMyAddress.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
+
+                                @Override
+                                public void onDetailed() {
+                                        Intent intent = new Intent(getActivity(), ManageCommomInfoActivity.class);
+                                        startActivity(intent);
+                                }
+                        });
                         
                         // 注销
                         itemBtnExit = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_exit);

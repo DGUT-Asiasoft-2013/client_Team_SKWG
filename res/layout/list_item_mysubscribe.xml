@@ -8,7 +8,7 @@
     <com.example.bbook.api.widgets.AvatarView
         android:id="@+id/avatar"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="38dp"
         android:layout_margin="5dp"
         android:layout_weight="1" />
 

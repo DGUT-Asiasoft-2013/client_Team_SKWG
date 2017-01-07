@@ -46,7 +46,7 @@ public class AvatarView extends View{
 	public void setBitmap(Bitmap bmp) {
 		if(bmp==null) {
 			paint = new Paint();
-			paint.setColor(Color.GRAY);
+			paint.setColor(Color.WHITE);
 			paint.setStyle(Paint.Style.STROKE);
 			paint.setStrokeWidth(1);
 		    paint.setPathEffect(new DashPathEffect(new float[]{5, 10, 15, 20}, 0));
