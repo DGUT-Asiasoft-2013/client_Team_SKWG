@@ -2,6 +2,7 @@ package com.example.bbook;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.example.bbook.api.Bill;
@@ -231,7 +232,7 @@ public class MyBillActivity extends Activity {
 		
 		String moneyType;
 		String moneyItem = dataList.get(position).getItem().toString();
-		String createDate = dataList.get(position).getCreateDate().toString();
+		Date createDate = dataList.get(position).getCreateDate();
 		String billNumber = dataList.get(position).getBillNumber().toString();
 		String remain = dataList.get(position).getMoney().toString();
 		String detial = dataList.get(position).getDetial();
