@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EEEEEE"
     android:orientation="vertical" >
 
     <fragment
@@ -13,43 +14,47 @@
         tools:layout="@layout/fragment_widget_titlebar" />
 
     <FrameLayout
+        android:id="@+id/chang_shop_avatar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center_vertical"
-        android:padding="10dp" >
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@android:color/white"
+        android:orientation="horizontal" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical"
-            android:layout_marginLeft="10dp"
-            android:text="店铺头像" />
+            android:layout_gravity="center_vertical|start"
+            android:text="头像" />
 
         <com.example.bbook.api.widgets.GoodsPicture
-            android:id="@+id/shop_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="right|center_vertical"
-            android:background="@drawable/ic_launcher" />
+            android:id="@+id/shop_avatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginRight="20dp" />
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical|end"
+            android:scaleType="fitCenter"
+            android:src="@drawable/btn_next" />
     </FrameLayout>
 
-   <fragment
-       android:id="@+id/shop_name"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       class="inputcells.SimpleTextInputcellFragment"
-       tools:layout="@layout/fragment_inputcell_simpleted" />
-   <fragment
-       android:id="@+id/shop_description"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       class="inputcells.SimpleTextInputcellFragment"
-       tools:layout="@layout/fragment_inputcell_simpleted" />
-   <fragment
-       android:id="@+id/shop_deliver_address"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       class="inputcells.SimpleTextInputcellFragment"
-       tools:layout="@layout/fragment_inputcell_simpleted" />
+    <fragment
+        android:id="@+id/edit_shop_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        class="com.example.bbook.api.widgets.ChangeItemFragment"
+        tools:layout="@layout/fragment_widget_change_textview" />
+
+    <fragment
+        android:id="@+id/edit_shop_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.ChangeItemFragment"
+        tools:layout="@layout/fragment_widget_change_textview" />
 
 </LinearLayout>

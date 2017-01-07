@@ -126,7 +126,7 @@ public class ChangeUserMessageActivity extends Activity {
 			}
 		});
 		
-		//修改头像(未完成)
+		//修改头像
 		findViewById(R.id.chang_avatar).setOnClickListener(new OnClickListener() {
 			
 			@Override

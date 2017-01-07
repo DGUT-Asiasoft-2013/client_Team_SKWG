@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.LinearLayout.LayoutParams;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
@@ -58,13 +59,23 @@ public class ChangeMessageActivity extends Activity {
 		//把当前用户所要修改的原有值传入Edit编辑框
 		editMessage.setText(value);
 		if(type.equals("changeName")){
-			setbar("昵称",type);
+			setUserbar("昵称",type);
 		}else if(type.equals("changeEmail")){
-			setbar("邮箱",type);
+			setUserbar("邮箱",type);
 		}else if(type.equals("changePhone")){
-			setbar("电话号码",type);
+			setUserbar("电话号码",type);
 		}else if(type.equals("changeAddress")){
-			setbar("地址",type);
+			setUserbar("地址",type);
+		}
+		
+		
+		else if(type.equals("changeShopName")){
+			setShopbar("店名",type);
+		}else if(type.equals("changeShopDescription")){
+			LayoutParams param = (LayoutParams) editMessage.getLayoutParams();
+			param.height = 150;
+			editMessage.setLayoutParams(param);
+			setShopbar("店铺详情",type);
 		}
 	}
 	
@@ -73,7 +84,7 @@ public class ChangeMessageActivity extends Activity {
 	
 	
 	//设置TitleBar内容
-	void setbar(String str,final String type){
+	void setUserbar(String str,final String type){
 		
 		fragTitleBar.setBtnNextState(true);
 		fragTitleBar.setBtnNextText("保存", textSize);
@@ -131,6 +142,67 @@ public class ChangeMessageActivity extends Activity {
 	}
 	
 	
+	
+	
+	//设置TitleBar内容
+		void setShopbar(String str,final String type){
+			
+			fragTitleBar.setBtnNextState(true);
+			fragTitleBar.setBtnNextText("保存", textSize);
+			fragTitleBar.setTitleName(str, textSize);
+			fragTitleBar.setSplitLineState(false);
+			fragTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
+				
+				@Override
+				public void onGoBack() {
+					// TODO Auto-generated method stub
+					finish();
+				}
+			});
+			fragTitleBar.setOnGoNextListener(new TitleBarFragment.OnGoNextListener() {
+				
+				@Override
+				public void onGoNext() {
+					// TODO Auto-generated method stub
+					value = editMessage.getText().toString();
+					OkHttpClient client = Server.getSharedClient();
+					MultipartBody.Builder requestBody = new MultipartBody.Builder()
+							.addFormDataPart("type", type).addFormDataPart("value", value);
+					Request request = Server.requestBuilderWithApi("changeShopMessage")
+							.method("post", null).post(requestBody.build()).build();
+					
+					client.newCall(request).enqueue(new Callback() {
+						
+						@Override
+						public void onResponse(final Call arg0, Response arg1) throws IOException {
+							// TODO Auto-generated method stub
+							try {
+								final String responseString = arg1.body().string();
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										// TODO Auto-generated method stub
+										ChangeMessageActivity.this.onResponse(arg0,responseString);
+									}
+								});
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+								ChangeMessageActivity.this.onFailure(arg0, e);
+							}
+						}
+						
+						@Override
+						public void onFailure(final Call arg0, IOException arg1) {
+							// TODO Auto-generated method stub
+							ChangeMessageActivity.this.onFailure(arg0,arg1);
+						}
+					});
+				}
+			});
+		}
+	
+	
 	void onResponse(Call arg0,String responseString){
 		new AlertDialog.Builder(this).setTitle("修改成功").setMessage(responseString)
 		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -147,4 +219,7 @@ public class ChangeMessageActivity extends Activity {
 		new AlertDialog.Builder(this).setTitle("修改失败").setMessage(e.getLocalizedMessage())
 		.setNegativeButton("确定", null).show();
 	}
+	
+	
+	
 }
