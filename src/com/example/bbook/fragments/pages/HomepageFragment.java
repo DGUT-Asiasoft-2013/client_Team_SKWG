@@ -92,7 +92,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 	TextView goodsPrice;
 
 	String sortStyle="createDate";
-	String goodsType;
+	String typeStr,authorStr;
 	String keyword;
 	boolean isSearched=false,isSorted=false,isClassified=false;
 
@@ -169,14 +169,14 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			public void onDrawerClosed(View arg0) {
 				Log.d("David", "onDrawerClosed");
 				
-				goodsType=slidingMenuFragment.getTypeStr();
-				if(goodsType==null){
-					return;
-				}
-				if(goodsType.equals("全部")){
-					isClassified=false;
-				}else {
+				typeStr=slidingMenuFragment.getTypeStr();
+				authorStr=slidingMenuFragment.getAuthorStr();
+				if(!typeStr.equals("全部")||!authorStr.equals("全部")){
 					isClassified=true;
+				}
+		
+				else {
+					isClassified=false;
 				}
 				bookLoad();
 //				goodsType=slidingMenuFragment.getGoodsType();
@@ -545,15 +545,21 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 					.get().build();
 		}
 		if(isClassified){
-			request=Server.requestBuilderWithApi("goods/classify/"+goodsType)
-					.get().build();
+			if(!(typeStr.equals("全部"))){
+				request=Server.requestBuilderWithApi("goods/classify/"+typeStr)
+						.get().build();
+			}
+			if(!(authorStr.equals("全部"))){
+				request=Server.requestBuilderWithApi("goods/classify/"+authorStr)
+						.get().build();
+			}
 		}
 		if(isSorted){
 			request=Server.requestBuilderWithApi("goods/sort/"+sortStyle)
 					.get().build();
 		}
 		if(isSearched&&isClassified){
-			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/classify/"+goodsType)
+			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/classify/"+typeStr)
 					.get().build();
 		}
 		if(isSearched&&isSorted){
@@ -561,12 +567,12 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 					.get().build();
 		}
 		if(isClassified&&isSorted){
-			request=Server.requestBuilderWithApi("goods/classify/"+goodsType+"/sort/"+sortStyle)
+			request=Server.requestBuilderWithApi("goods/classify/"+typeStr+"/sort/"+sortStyle)
 					.get().build();
 
 		}
 		if(isSearched&&isClassified&&isSorted){
-			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/classify/"+goodsType+"/sort/"+sortStyle)
+			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/classify/"+typeStr+"/sort/"+sortStyle)
 					.get().build();
 		}
 		isClassified=false;
