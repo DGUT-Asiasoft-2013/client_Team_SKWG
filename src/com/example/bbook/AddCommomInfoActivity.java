@@ -3,6 +3,8 @@ package com.example.bbook;
 import java.io.IOException;
 
 import com.example.bbook.api.Server;
+import com.example.bbook.api.widgets.TitleBarFragment;
+import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,6 +21,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class AddCommomInfoActivity extends Activity {
+	TitleBarFragment fragTitleBar;
 	SimpleTextInputcellFragment fragInputName, fragInputAddress, fragInputTel, fragInputPostcode;
 	Button btnSubmit;
 	@Override
@@ -26,15 +29,10 @@ public class AddCommomInfoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.actiivty_add_commom_info);
 		init();
-		btnSubmit.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				onSubmit();
-			}
-		});
+		setEvent();
+
 	}
-	
+
 	protected void onSubmit() {
 		String name = fragInputName.getText();
 		String address = fragInputAddress.getText();
@@ -49,16 +47,16 @@ public class AddCommomInfoActivity extends Activity {
 				.addFormDataPart("address", address)
 				.addFormDataPart("tel", tel)
 				.addFormDataPart("postCode", postCode).build();
-		
+
 		Request request = Server.requestBuilderWithApi("commominfo/add")
 				.method("post", null)
 				.post(body).build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(final Call arg0, final Response arg1) throws IOException {
 				runOnUiThread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						try {
@@ -70,7 +68,7 @@ public class AddCommomInfoActivity extends Activity {
 					}
 				});
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
 				AddCommomInfoActivity.this.onFailure(arg0, arg1);
@@ -82,14 +80,14 @@ public class AddCommomInfoActivity extends Activity {
 		new AlertDialog.Builder(this).setTitle("成功")
 		.setMessage(responseBody).show();
 	}
-	
+
 	void onFailure(Call arg0, Exception arg1) {
 		new AlertDialog.Builder(this)
 		.setTitle("失败")
 		.setMessage(arg1.getLocalizedMessage())
 		.show();
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -102,12 +100,32 @@ public class AddCommomInfoActivity extends Activity {
 		fragInputPostcode.setLabelText("邮政编码");
 		fragInputPostcode.setHintText("请输入邮政编码");
 	}
-	
+
 	void init() {
+		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
 		fragInputName = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_name);
 		fragInputAddress = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_address);
 		fragInputTel = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_tel);
 		fragInputPostcode = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_postcode);
 		btnSubmit = (Button) findViewById(R.id.submit);
+	}
+
+	void setEvent() {
+		fragTitleBar.setTitleName("添加收货地址", 16);
+		fragTitleBar.setOnGoBackListener(new OnGoBackListener() {
+
+			@Override
+			public void onGoBack() {
+				finish();
+			}
+		});
+		fragTitleBar.setBtnNextState(false);
+		btnSubmit.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				onSubmit();
+			}
+		});
 	}
 }
