@@ -70,7 +70,7 @@ public class MessageActivity extends Activity {
                 });
 
                 fragMessageItem = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_push_message);
-                fragMessageItem.setItemImage(R.drawable.ic_launcher);
+                fragMessageItem.setItemImage(R.drawable.icon_push);
                 fragMessageItem.setItemText("推送");
                 fragMessageItem.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
@@ -81,16 +81,16 @@ public class MessageActivity extends Activity {
                 });
                 
                 
-                fragMySubscribe = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_mysubscribe);
-                fragMySubscribe.setItemImage(R.drawable.ic_launcher);
-                fragMySubscribe.setItemText("我的关注");
-                fragMySubscribe.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
-
-                        @Override
-                        public void onDetailed() {
-                                goMySubscribe();
-                        }
-                });
+//                fragMySubscribe = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_mysubscribe);
+//                fragMySubscribe.setItemImage(R.drawable.ic_launcher);
+//                fragMySubscribe.setItemText("我的关注");
+//                fragMySubscribe.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
+//
+//                        @Override
+//                        public void onDetailed() {
+//                                goMySubscribe();
+//                        }
+//                });
                 
 
                 chatList = (ListView) findViewById(R.id.chat_list);
@@ -300,10 +300,10 @@ public class MessageActivity extends Activity {
                 startActivity(itnt);
         }
         
-        void goMySubscribe(){
-                Intent itnt = new Intent(MessageActivity.this, MySubscribeActivity.class);
-                startActivity(itnt);
-        }
+//        void goMySubscribe(){
+//                Intent itnt = new Intent(MessageActivity.this, MySubscribeActivity.class);
+//                startActivity(itnt);
+//        }
         
         //刷新
         Handler handler = new Handler();

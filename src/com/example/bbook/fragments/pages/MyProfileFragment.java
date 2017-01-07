@@ -8,6 +8,7 @@ import com.example.bbook.LoginActivity;
 import com.example.bbook.MessageActivity;
 import com.example.bbook.MyBillActivity;
 import com.example.bbook.MyOrdersActivity;
+import com.example.bbook.MySubscribeActivity;
 import com.example.bbook.MyWalletActivity;
 import com.example.bbook.MystoreActivity;
 import com.example.bbook.OpenStoreActivity;
@@ -34,6 +35,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -47,13 +49,14 @@ import okhttp3.Response;
 public class MyProfileFragment extends Fragment {
 
         User me;
+        ImageView message;
         PopupMenu popupMenuMe;
         View view, menu;
         TextView txMoney, txName;
         AvatarView avatar;
         TitleBarFragment fragMeTitleBar;
         PopupWindow bill;
-        ItemFragment itemBtnExit, itemBtnOrder, itemBtnChange, itemOpenStore, itemMyStore, itemBill, itemWallet;
+        ItemFragment itemBtnExit, itemBtnOrder, itemBtnChange, itemOpenStore, itemMyStore, itemBill, itemWallet, itemMySubscribe;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,37 +72,47 @@ public class MyProfileFragment extends Fragment {
                         fragMeTitleBar.setBtnNextState(false);
                         fragMeTitleBar.setTitleName("我的", 16);
 
-                        // menu
-                        popupMenuMe = new PopupMenu(getActivity(), view.findViewById(R.id.menu_me));
-                        getActivity().getMenuInflater().inflate(R.menu.menu_me, popupMenuMe.getMenu());
-                        popupMenuMe.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-                                @Override
-                                public boolean onMenuItemClick(MenuItem item) {
-                                        switch (item.getItemId()) {
-                                        case R.id.a:
-                                                goLookMessage();
-                                                break;
-
-                                        case R.id.b:
-                                                Toast.makeText(getActivity(), "( ⊙ _ ⊙ )没实现", Toast.LENGTH_SHORT)
-                                                                .show();
-                                                break;
-
-                                        default:
-                                                break;
-                                        }
-                                        return false;
-                                }
-                        });
-                        
-                        view.findViewById(R.id.menu_me).setOnClickListener(new View.OnClickListener() {
+                        //我的消息
+                        message = (ImageView) view.findViewById(R.id.menu_me);
+                        message.setOnClickListener(new View.OnClickListener() {
                                 
                                 @Override
                                 public void onClick(View v) {
-                                        popupMenuMe.show();
+                                        goLookMessage();
                                 }
                         });
+                        
+//                        // menu
+//                        popupMenuMe = new PopupMenu(getActivity(), view.findViewById(R.id.menu_me));
+//                        getActivity().getMenuInflater().inflate(R.menu.menu_me, popupMenuMe.getMenu());
+//                        popupMenuMe.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//
+//                                @Override
+//                                public boolean onMenuItemClick(MenuItem item) {
+//                                        switch (item.getItemId()) {
+//                                        case R.id.a:
+//                                                goLookMessage();
+//                                                break;
+//
+//                                        case R.id.b:
+//                                                Toast.makeText(getActivity(), "( ⊙ _ ⊙ )没实现", Toast.LENGTH_SHORT)
+//                                                                .show();
+//                                                break;
+//
+//                                        default:
+//                                                break;
+//                                        }
+//                                        return false;
+//                                }
+//                        });
+//                        
+//                        view.findViewById(R.id.menu_me).setOnClickListener(new View.OnClickListener() {
+//                                
+//                                @Override
+//                                public void onClick(View v) {
+//                                        popupMenuMe.show();
+//                                }
+//                        });
 
                         // 我要开店
                         itemOpenStore = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_openStore);
@@ -152,6 +165,19 @@ public class MyProfileFragment extends Fragment {
                                 }
                         });
 
+                        //我的关注
+                        itemMySubscribe = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_mysubscribe);
+                        itemMySubscribe.setItemImage(R.drawable.icon_good);
+                        itemMySubscribe.setItemText("我的关注");
+                        itemMySubscribe.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
+
+                                @Override
+                                public void onDetailed() {
+                                        goMySubscribe();
+                                }
+                        });
+                        
+                        
                         // 注销
                         itemBtnExit = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_exit);
                         itemBtnExit.setItemText("注销");
@@ -351,4 +377,9 @@ public class MyProfileFragment extends Fragment {
                 startActivity(itnt);
         }
 
+        void goMySubscribe(){
+                Intent itnt = new Intent(getActivity(), MySubscribeActivity.class);
+                startActivity(itnt);
+        }
+        
 }
