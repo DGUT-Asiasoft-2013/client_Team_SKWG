@@ -91,7 +91,7 @@ public class MystoreActivity extends Activity {
 
                         @Override
                         public void onDetailed() {
-                        	goMyOnSaleGoods();
+                        	goMyOffSaleGoods();
                         }
                 });
                 
@@ -149,13 +149,14 @@ public class MystoreActivity extends Activity {
         	startActivity(itnt);
 		}
 
-		protected void goMyOnSaleGoods() {
+		protected void goMyOffSaleGoods() {
         	Intent itnt = new Intent(MystoreActivity.this, MyOffSaleGoodsActivity.class);
         	startActivity(itnt);
 		}
 
 		protected void goMyPublishedGoods() {
         	Intent itnt = new Intent(MystoreActivity.this, MyPublishedGoodsActivity.class);
+        	itnt.putExtra("shop", myshop);
         	startActivity(itnt);
 		}
 

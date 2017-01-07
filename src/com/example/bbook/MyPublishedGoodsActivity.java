@@ -6,6 +6,7 @@ import java.util.List;
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
+import com.example.bbook.api.Shop;
 import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
@@ -38,12 +39,13 @@ public class MyPublishedGoodsActivity extends Activity {
 	TitleBarFragment fragTitleBar;
 	ListView list;
 	List<Goods> listData;
-
+	Shop shop;
 	int page = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_published_goods);
+		shop = (Shop) getIntent().getSerializableExtra("shop");
 		init();
 		setEvent();
 
@@ -71,6 +73,7 @@ public class MyPublishedGoodsActivity extends Activity {
 
 	protected void goAddGoods() {
 		Intent itnt = new Intent(MyPublishedGoodsActivity.this, AddGoodsActivity.class);
+		itnt.putExtra("shop", shop);
 		startActivity(itnt);
 	}
 
