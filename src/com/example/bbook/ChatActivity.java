@@ -290,7 +290,7 @@ public class ChatActivity extends Activity {
                                         refresh();
                                         chatList.setSelection(chatData.size()-1);
                                 }
-                        }, 500);   
+                        }, 2000);   
                 }
         }
 
