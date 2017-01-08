@@ -34,6 +34,14 @@ public class ManageOrderActivity extends Activity {
 		init();
 		setEvent();
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (tabbar.getSelectedIndex() < 0) {
+			tabbar.setSelectedItem(0);
+		}
+	}
 	private void setEvent() {
 		tabbar.setOnTabSelectedListener(new OnTabSelectedListener() {
 
