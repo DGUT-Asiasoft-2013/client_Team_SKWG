@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <fragment
+        android:id="@+id/settings_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar" />
+
+    <fragment
+        android:id="@+id/btn_myaddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.ItemFragment"
+        tools:layout="@layout/fragment_widget_item" />
+
+    <fragment
+        android:id="@+id/btn_change_login_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.ItemFragment"
+        tools:layout="@layout/fragment_widget_item" />
+    
+    <fragment
+        android:id="@+id/btn_change_pay_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.ItemFragment"
+        tools:layout="@layout/fragment_widget_item" />
+
+    <fragment
+        android:id="@+id/btn_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.ItemFragment"
+        tools:layout="@layout/fragment_widget_item" />
+
+</LinearLayout>
