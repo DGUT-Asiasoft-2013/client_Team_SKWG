@@ -25,6 +25,7 @@ public class Goods   implements Serializable {
 	int goodsSales; // 商品销量
 	int quantity;	// 购买数量
 	boolean isSelected;		// 添加购物车的商品是否被选中
+	String goodsDetail;
 //	User seller;
 //	User buyer;
 	
@@ -130,6 +131,12 @@ public class Goods   implements Serializable {
 	}
 	public void setOnSale(boolean isOnSale) {
 		this.isOnSale = isOnSale;
+	}
+	public String getGoodsDetail() {
+		return goodsDetail;
+	}
+	public void setGoodsDetail(String goodsDetail) {
+		this.goodsDetail = goodsDetail;
 	}
 	
 	

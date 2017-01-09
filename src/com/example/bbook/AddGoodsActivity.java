@@ -47,13 +47,14 @@ public class AddGoodsActivity extends Activity {
         Spinner spinner;
         List<String> type_list;
         ArrayAdapter<String> type_adapter;
-        String selectedType,str1,str2,str3,str4;
+        String selectedType,str1,str2,str3,str4,str5;
         
         Shop shop;
         List<Subscribe> subscribeData;
         Integer userId;
         ItemFragment itempublish,itemdetail;
         private static final int RequestCode_Publish=1;
+        private static final int RequestCode_Detail=2;
         SimpleTextInputcellFragment fragGoodsName, fragGoodsType, fragGoodsPrice, fragGoodsCount;
         PictureInputCellFragment fragGoodsImage;
 
@@ -152,13 +153,13 @@ public class AddGoodsActivity extends Activity {
                 String goodsAuthor = str2;
                 String goodsPubDate = str3;
                 String goodsPritime = str4;
-
+                String goodsDetail = str5;                       //从addBookdetailactivity中返回的参数
 
                 MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("goodsName", goodsName)
                                 .addFormDataPart("goodsType", goodsType).addFormDataPart("goodsPrice", goodsPrice)
                                 .addFormDataPart("goodsCount", goodsCount).addFormDataPart("publisher", goodsPublisher)
                                 .addFormDataPart("author", goodsAuthor).addFormDataPart("pubDate", goodsPubDate)
-                                .addFormDataPart("pritime", goodsPritime);
+                                .addFormDataPart("pritime", goodsPritime).addFormDataPart("goodsDetail", goodsDetail);
                 if (fragGoodsImage.getPngData() != null) {
                         body.addFormDataPart("goodsImage", "goodsImage",
                                         RequestBody.create(MediaType.parse("image/png"), fragGoodsImage.getPngData()));
@@ -278,17 +279,20 @@ public class AddGoodsActivity extends Activity {
                 new AlertDialog.Builder(this).setTitle("发布失败").setMessage(arg1.getLocalizedMessage())
                                 .setNegativeButton("OK", null).show();
         }
-
+        
+        //跳转到添加出版信息
         void publish(){
         	Intent itnt=new Intent(this,AddPublishActivity.class);
         	startActivityForResult(itnt, RequestCode_Publish);
         }
         
+        //跳转到添加宝贝描述页面
         void detail(){
         	Intent itnt=new Intent(this,AddBookDetailActivity.class);
-        	startActivity(itnt);
+        	startActivityForResult(itnt, RequestCode_Detail);
         }
         
+        //返回出版信息、宝贝描述
         @Override  
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
             // TODO Auto-generated method stub  
@@ -300,6 +304,11 @@ public class AddGoodsActivity extends Activity {
                   str2 = data.getStringExtra("goodsAuthor");  
                   str3 = data.getStringExtra("goodsPubDate"); 
                   str4 = data.getStringExtra("goodsPritime"); 
-            }   
+            }
+            if (requestCode == RequestCode_Detail && resultCode == RESULT_OK) {
+            	itemdetail.setItemText(" 宝贝描述                             已编辑");
+                  str5 = data.getStringExtra("goodsDetail"); 
+            }  
         }
+        
 }

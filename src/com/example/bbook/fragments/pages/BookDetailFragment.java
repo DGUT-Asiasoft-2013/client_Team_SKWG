@@ -29,6 +29,8 @@ Goods goods;
 		bookPubDate.setText("出版时间:"+goods.getPubDate());
 		TextView bookPriTime=(TextView) view.findViewById(R.id.book_pritime);
 		bookPriTime.setText("印刷时间:"+goods.getPritime());
+		TextView bookDetail=(TextView) view.findViewById(R.id.book_detail);
+		bookDetail.setText("宝贝描述:"+goods.getGoodsDetail());
 		
 		return view;
 	}
