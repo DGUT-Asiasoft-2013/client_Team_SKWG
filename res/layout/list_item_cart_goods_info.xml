@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" 
+    android:layout_marginBottom="5dp"
     android:background="@android:color/white"
-    android:layout_marginBottom="5dp">
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,9 +13,11 @@
 
         <CheckBox
             android:id="@+id/check_eatch"
+            style="@style/CustomCheckboxTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp" />
 
         <com.example.bbook.api.widgets.GoodsPicture
             android:id="@+id/goods_image"

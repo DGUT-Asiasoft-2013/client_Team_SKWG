@@ -10,10 +10,6 @@ import com.example.bbook.fragments.pages.ManageOrderToBeCommentFragment;
 import com.example.bbook.fragments.pages.ManageOrderToBePayFragment;
 import com.example.bbook.fragments.pages.ManageOrderToBeSendFragment;
 import com.example.bbook.fragments.pages.OrdersAllFragment;
-import com.example.bbook.fragments.pages.OrdersToBeCommentFragment;
-import com.example.bbook.fragments.pages.OrdersToBePayFragment;
-import com.example.bbook.fragments.pages.OrdersToBeSendFragment;
-import com.example.bbook.fragments.pages.OrdersToBoCheckFragment;
 
 import android.app.Activity;
 import android.app.Fragment;

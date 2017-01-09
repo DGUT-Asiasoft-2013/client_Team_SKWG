@@ -20,8 +20,8 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="CustomCheckBoxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
-        <item name="android:button">@drawable/cart_select_background</item>
+    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_style</item>
     </style>
 
     <style name="anim_menu_bottombar">
