@@ -382,7 +382,6 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Toast.makeText(getActivity(), "ID",Toast.LENGTH_SHORT).show();
-					textview.setTextColor(Color.RED);
 					goShopActivity(position);
 				}
 			});
