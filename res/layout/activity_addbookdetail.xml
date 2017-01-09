@@ -66,6 +66,7 @@
         android:layout_height="200dp"
         android:gravity="start"
         android:hint="描述一下你的宝贝吧(100字以内)"
+        android:maxLength="100"
         android:ems="10" >
 
         <requestFocus />

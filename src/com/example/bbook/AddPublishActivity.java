@@ -2,7 +2,11 @@ package com.example.bbook;
 
 import java.util.Calendar;
 
+import com.example.bbook.api.entity.CommomInfo;
+import com.example.bbook.api.entity.PublishInfo;
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
@@ -22,19 +26,38 @@ public class AddPublishActivity extends Activity {
 	EditText pubDate, priTime;
 	ImageButton btn_back;
 	Button btn_enter;
+	PublishInfo publishinfo;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_addpublish);
-
+	
 		fragGoodsPublisher = (SimpleTextInputcellFragment) getFragmentManager()
 				.findFragmentById(R.id.input_goods_publisher);
 		fragGoodsAuthor = (SimpleTextInputcellFragment) getFragmentManager()
 				.findFragmentById(R.id.input_goods_author);
+		pubDate = (EditText) findViewById(R.id.edit_pubdate);
+		priTime = (EditText) findViewById(R.id.edit_pritime);
+
+		publishinfo = (PublishInfo) getIntent().getSerializableExtra("publishinfo");
+
+//		if (publishinfo.getGoodsPublisher()!= null || publishinfo.getGoodsPublisher().length() > 0) {   //出版社不为空
+			fragGoodsPublisher.setText(publishinfo.getGoodsPublisher());
+//		}
+//		if (publishinfo.getGoodsAuthor()!= null || publishinfo.getGoodsAuthor().length() > 0) {          //作者不为空
+			fragGoodsAuthor.setText(publishinfo.getGoodsAuthor());
+//		}
+//		if (publishinfo.getGoodsPubDate()!= null || publishinfo.getGoodsPubDate().length() > 0) {          //出版日期不为空
+			pubDate.setText(publishinfo.getGoodsPubDate());
+//		}
+//		if (publishinfo.getGoodsPritime()!= null || publishinfo.getGoodsPritime().length() > 0) {          //印刷日期不为空
+			priTime.setText(publishinfo.getGoodsPritime());
+//		}
+
 		ImageButton btn_back=(ImageButton)findViewById(R.id.btn_back);
 		Button btn_enter=(Button)findViewById(R.id.btn_next);
-		
+
 		btn_back.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -48,10 +71,9 @@ public class AddPublishActivity extends Activity {
 				back();
 			}
 		});
+		
 		// 出版时间
-		pubDate = (EditText) findViewById(R.id.edit_pubdate);
 		pubDate.setOnTouchListener(new OnTouchListener() {
-
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -63,9 +85,7 @@ public class AddPublishActivity extends Activity {
 		});
 
 		// 印刷时间
-		priTime = (EditText) findViewById(R.id.edit_pritime);
 		priTime.setOnTouchListener(new OnTouchListener() {
-
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -126,12 +146,22 @@ public class AddPublishActivity extends Activity {
         String goodsAuthor = fragGoodsAuthor.getText();
         String goodsPubDate = pubDate.getText().toString();
         String goodsPritime = priTime.getText().toString();
+        if((goodsPublisher==null||goodsPublisher.length()<=0)&&(goodsAuthor==null||goodsAuthor.length()<=0)
+        		&&(goodsPubDate==null||goodsPubDate.length()<=0)&&(goodsPritime==null||goodsPritime.length()<=0)){             //输入都为空
+        	new AlertDialog.Builder(this)
+        	.setTitle("温馨提示")
+        	.setMessage("输入不能全部为空，取消编辑请左上角返回")
+        	.setPositiveButton("好的", null)
+        	.show();
+        	return;
+        }else{
         Intent intent=new Intent();  
         intent.putExtra("goodsPublisher", goodsPublisher);  
         intent.putExtra("goodsAuthor", goodsAuthor);  
         intent.putExtra("goodsPubDate", goodsPubDate);
-        intent.putExtra("goodsPritime", goodsPritime);  
+        intent.putExtra("goodsPritime", goodsPritime);
         setResult(RESULT_OK, intent);  
         finish();  
+        }
 	}
 }

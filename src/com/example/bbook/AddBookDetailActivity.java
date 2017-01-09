@@ -1,6 +1,7 @@
 package com.example.bbook;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -34,7 +35,14 @@ public class AddBookDetailActivity extends Activity {
 	
 	void back(){                               //跳回发布商品页面
 		String goodsDetail=edt_detail.getText().toString();         //宝贝描述
-		
+		if((goodsDetail==null||goodsDetail.length()<=0)){             //宝贝描述为空
+        	new AlertDialog.Builder(this)
+        	.setTitle("温馨提示")
+        	.setMessage("输入不能为空，取消编辑请左上角返回")
+        	.setPositiveButton("好的", null)
+        	.show();
+        	return;
+        }
         Intent intent=new Intent();  
         intent.putExtra("goodsDetail", goodsDetail);  
         setResult(RESULT_OK, intent);  
