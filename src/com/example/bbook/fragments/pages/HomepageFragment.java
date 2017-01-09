@@ -17,6 +17,7 @@ import com.example.bbook.api.Server;
 import com.example.bbook.api.Shop;
 import com.example.bbook.api.widgets.AvatarView;
 import com.example.bbook.api.widgets.GoodsPicture;
+import com.example.bbook.fragments.MyGridView;
 import com.example.bbook.fragments.SlidingMenuFragment;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -214,7 +215,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 
 
 
-		bookView=(GridView) view.findViewById(R.id.book_gridView);
+	bookView=(GridView) view.findViewById(R.id.book_gridView);
 		//bookView.setAdapter(bookAdapter);
 		listView=(ListView) view.findViewById(R.id.book_listview);
 

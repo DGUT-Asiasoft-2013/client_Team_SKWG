@@ -8,8 +8,11 @@
 
     <!-- 主页内容 -->
 
+        
+       
+        
     <LinearLayout
-        android:id="@+id/content_frame"
+       android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
@@ -40,7 +43,8 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/icon_search" />
         </LinearLayout>
-        
+
+   
 
         <fragment
             android:id="@+id/fragment_viewpager_view"
@@ -48,6 +52,8 @@
             android:layout_height="wrap_content"
             class="com.example.bbook.fragments.ViewPagerFragment"
             tools:layout="@layout/fragment_viewpager" />
+
+ 
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -100,6 +106,7 @@
             android:layout_height="wrap_content"
             android:numColumns="2" >
         </GridView>
+
 
         <ListView
             android:id="@+id/book_listview"

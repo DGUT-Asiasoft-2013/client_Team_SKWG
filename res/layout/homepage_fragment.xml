@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <fragment
+                android:id="@+id/fragment_viewpager_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="com.example.bbook.fragments.ViewPagerFragment"
+                tools:layout="@layout/fragment_viewpager" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="新书上架"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/change1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="换一换"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.example.bbook.fragments.MyGridView
+                android:id="@+id/book_gridView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="3" >
+            </com.example.bbook.fragments.MyGridView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="热搜书单"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/change2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="换一换"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.example.bbook.fragments.MyGridView
+                android:id="@+id/book_gridView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="3" >
+            </com.example.bbook.fragments.MyGridView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="独家提供"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/change3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="换一换"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.example.bbook.fragments.MyGridView
+                android:id="@+id/book_gridView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="3" >
+            </com.example.bbook.fragments.MyGridView>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
