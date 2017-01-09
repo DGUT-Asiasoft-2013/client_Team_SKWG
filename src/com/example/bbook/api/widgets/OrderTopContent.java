@@ -35,8 +35,33 @@ public class OrderTopContent implements OrderContent {
 		TextView tvOrderId = (TextView) convertView.findViewById(R.id.order_id);
 		TextView tvOrderState = (TextView) convertView.findViewById(R.id.order_state);
 		if(order != null) {
-			tvOrderId.setText(order.getOrdersID());
-			tvOrderState.setText(order.getOrdersState() + "");
+			tvOrderId.setText("订单号:" + order.getOrdersID());
+			int orderState = order.getOrdersState();
+			switch (orderState) {
+			case 1:
+				tvOrderState.setText("已评价");
+				break;
+			case 2:
+				tvOrderState.setText("待付款");
+				break;
+			case 3:
+				tvOrderState.setText("待发货");
+				break;
+			case 4:
+				tvOrderState.setText("待收货");
+				break;
+			case 5:
+				tvOrderState.setText("待评价");
+				break;
+			case 6:
+				tvOrderState.setText("待退款");
+				break;
+			case 7:
+				tvOrderState.setText("已退款");
+				break;
+			default:
+				break;
+			}
 		}
 		return convertView;
 	}
