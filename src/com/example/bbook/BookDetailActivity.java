@@ -98,6 +98,9 @@ public class BookDetailActivity extends Activity {
 		TextView bookCount=(TextView) findViewById(R.id.book_count);
 		bookCount.setText("库存:"+goods.getGoodsCount());
 		
+		TextView bookSales=(TextView) findViewById(R.id.goods_sales);
+		bookSales.setText("销量:"+goods.getGoodsSales());
+		
 		goodsPicture=(GoodsPicture) findViewById(R.id.picture);
 		goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
 

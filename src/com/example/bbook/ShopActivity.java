@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,6 +47,7 @@ public class ShopActivity extends Activity {
         GoodsPicture shopPicture;
         GoodsPicture goodsPicture;
 
+        Goods goods;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
                 // TODO Auto-generated method stub
@@ -63,6 +65,7 @@ public class ShopActivity extends Activity {
                 goodsView = (GridView) findViewById(R.id.goods_gridview);
                 goodsView.setAdapter(goodsAdapter);
 
+        	
                 // 联系卖家
                 findViewById(R.id.contact_seller).setOnClickListener(new View.OnClickListener() {
 
@@ -151,15 +154,17 @@ public class ShopActivity extends Activity {
 
                         if (convertView == null) {
                                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                                view = inflater.inflate(R.layout.fragment_picture_name, null);
+                                view = inflater.inflate(R.layout.goods_grid_item, null);
                         } else {
                                 view = convertView;
                         }
-                        Goods goods = data.get(position);
+                        goods = data.get(position);
                         TextView goodsPrice = (TextView) view.findViewById(R.id.price);
                         goodsPrice.setText("价格：" + goods.getGoodsPrice());
                         TextView goodsName = (TextView) view.findViewById(R.id.id);
                         goodsName.setText(goods.getGoodsName());
+                        TextView goodsSales=(TextView) view.findViewById(R.id.goods_sales);
+                        goodsSales.setText("销量:"+goods.getGoodsSales());
                         // 商品图片、点击事件
                         goodsPicture = (GoodsPicture) view.findViewById(R.id.picture);
                         goodsPicture.load(Server.serverAdress + goods.getGoodsImage());
@@ -169,6 +174,13 @@ public class ShopActivity extends Activity {
                                         goBookDetailActivity(position);
                                 }
                         });
+                		view.findViewById(R.id.shopping_car).setOnClickListener(new OnClickListener() {
+            				@Override
+            				public void onClick(View v) {
+            					//chooseNum(position);
+            					addToShopCar(position);
+            				}
+            			});
 
                         return view;
                 }
@@ -315,4 +327,52 @@ public class ShopActivity extends Activity {
                         }
                 });
         }
+
+    	public void addToShopCar(int position){
+    		int quantity=1;
+    		goods=data.get(position);
+    		MultipartBody body = new MultipartBody.Builder()
+    				.addFormDataPart("quantity", quantity + "").build();
+
+
+    		Request request = Server.requestBuilderWithApi("shoppingcart/add/" + goods.getId())
+    				.method("post", null).post(body).build();
+
+    		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+
+    			@Override
+    			public void onResponse(final Call arg0, final Response arg1) throws IOException {
+    				final String body = arg1.body().string();
+    				runOnUiThread(new Runnable() {
+
+    					@Override
+    					public void run() {
+    						ShopActivity.this.onResponse(arg0, body);
+    					}
+    				});
+    			}
+
+    			@Override
+    			public void onFailure(final Call arg0, final IOException arg1) {
+    				runOnUiThread(new Runnable() {
+
+    					@Override
+    					public void run() {
+    						onFailture(arg0, arg1);
+    					}
+    				});
+    			}
+    		});
+    	}
+
+    	
+    	void onResponse(Call arg0, String responseBody){
+    		Toast.makeText(ShopActivity.this, "加入购物车成功", Toast.LENGTH_SHORT).show();;
+    	}
+    	void onFailture(Call arg0, Exception arg1) {
+    		new AlertDialog.Builder(this)
+    		.setTitle("失败")
+    		.setMessage(arg1.getLocalizedMessage())
+    		.show();
+    	}
 }

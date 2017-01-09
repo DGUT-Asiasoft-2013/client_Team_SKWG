@@ -98,7 +98,7 @@
             android:id="@+id/book_gridView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numColumns="3" >
+            android:numColumns="2" >
         </GridView>
 
         <ListView

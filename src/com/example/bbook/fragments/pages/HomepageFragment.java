@@ -91,6 +91,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 	TextView textview;
 	TextView goodsPrice;
 	TextView goodsName;
+	TextView goodsSales;
 
 	String sortStyle="createDate";
 	String typeStr="全部",authorStr="全部";
@@ -361,12 +362,14 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			goodsPrice=(TextView) view.findViewById(R.id.price);
 			goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
 			goodsName=(TextView) view.findViewById(R.id.goods_name);
-
+			goodsSales=(TextView) view.findViewById(R.id.goods_sales);
+			
 			goods=data.get(position);
 			textview.setText("商家:"+goods.getShop().getShopName());
 			goodsPrice.setText("价格："+goods.getGoodsPrice());
 			goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
 			goodsName.setText("书名:"+goods.getGoodsName());
+			goodsSales.setText("销量:"+goods.getGoodsSales());
 			goodsPicture.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
