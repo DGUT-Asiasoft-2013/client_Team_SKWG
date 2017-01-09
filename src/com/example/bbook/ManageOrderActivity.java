@@ -5,36 +5,38 @@ import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
 import com.example.bbook.api.widgets.OrderStateTabbarFragment.OnTabSelectedListener;
 import com.example.bbook.fragments.pages.ManageOrderAllFragment;
-import com.example.bbook.fragments.pages.ManageOrderToBeCheckFragment;
-import com.example.bbook.fragments.pages.ManageOrderToBeCommentFragment;
-import com.example.bbook.fragments.pages.ManageOrderToBePayFragment;
-import com.example.bbook.fragments.pages.ManageOrderToBeSendFragment;
 import com.example.bbook.fragments.pages.OrdersAllFragment;
-import com.example.bbook.fragments.pages.OrdersToBeCommentFragment;
-import com.example.bbook.fragments.pages.OrdersToBePayFragment;
-import com.example.bbook.fragments.pages.OrdersToBeSendFragment;
-import com.example.bbook.fragments.pages.OrdersToBoCheckFragment;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.PopupWindow.OnDismissListener;
 
 public class ManageOrderActivity extends Activity {
 	TitleBarFragment titleBar;
 	OrderStateTabbarFragment tabbar;
+	PopupWindow pWindow;
 	ManageOrderAllFragment contentAll = new ManageOrderAllFragment();
-	ManageOrderToBePayFragment contentToBePay = new ManageOrderToBePayFragment();
-	ManageOrderToBeSendFragment contentToBeSend = new ManageOrderToBeSendFragment();
-	ManageOrderToBeCheckFragment contentToBeCheck = new ManageOrderToBeCheckFragment();
-	ManageOrderToBeCommentFragment contentToBeComment = new ManageOrderToBeCommentFragment();
+	ManageOrderAllFragment contentToBePay = new ManageOrderAllFragment(2);
+	ManageOrderAllFragment contentToBeSend = new ManageOrderAllFragment(3);
+	ManageOrderAllFragment contentToBeCheck = new ManageOrderAllFragment(4);
+	ManageOrderAllFragment contentToBeComment = new ManageOrderAllFragment(5);
+	View view;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_manage_order);
+		view = View.inflate(this, R.layout.activity_manage_order, null);
+		setContentView(view);
 		init();
 		setEvent();
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -52,7 +54,7 @@ public class ManageOrderActivity extends Activity {
 		});	
 		titleBar.setTitleName("订单管理", 16);
 		titleBar.setOnGoBackListener(new OnGoBackListener() {
-			
+
 			@Override
 			public void onGoBack() {
 				finish();
@@ -74,7 +76,7 @@ public class ManageOrderActivity extends Activity {
 		case 1 : newFrag = contentToBePay;break;
 		case 2 : newFrag = contentToBeSend; break;
 		case 3 : newFrag = contentToBeCheck; break;
-		case 4 : newFrag = contentToBeComment; break;
+		case 4 : showPopWindow(); break;
 		default: 
 			break;
 		}
@@ -84,5 +86,21 @@ public class ManageOrderActivity extends Activity {
 		.beginTransaction()
 		.replace(R.id.container, newFrag)
 		.commit();
+	}
+
+	private void showPopWindow() {
+		
+		LayoutInflater inflater = LayoutInflater.from(this);
+		View view = inflater.inflate(R.layout.popwindow_order_state, null);
+		TextView tvToBeComment = (TextView) view.findViewById(R.id.to_be_comment);
+		TextView tvToBeRefunded = (TextView) view.findViewById(R.id.to_be_refunded);
+		pWindow = new PopupWindow(this);
+		pWindow.setHeight(LayoutParams.WRAP_CONTENT);
+		pWindow.setWidth(LayoutParams.WRAP_CONTENT);
+		pWindow.setFocusable(true);
+		pWindow.setOutsideTouchable(true);
+		pWindow.showAsDropDown(findViewById(R.id.more));
+
+
 	}
 }
