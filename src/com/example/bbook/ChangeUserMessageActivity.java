@@ -213,6 +213,7 @@ public class ChangeUserMessageActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				takePhoto();
+				P.dismiss();
 			}
 		});
 		//从相册选择按钮监听事件
@@ -222,6 +223,7 @@ public class ChangeUserMessageActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				pickFromAlbum();
+				P.dismiss();
 			}
 		});
 		//取消按钮
