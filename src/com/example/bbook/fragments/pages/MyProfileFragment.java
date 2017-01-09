@@ -54,7 +54,7 @@ public class MyProfileFragment extends Fragment {
         ImageView message;
         PopupMenu popupMenuMe;
         View view, menu;
-        TextView txMoney, txName;
+        TextView txName;
         AvatarView avatar;
         TitleBarFragment fragMeTitleBar;
         PopupWindow bill;
@@ -65,7 +65,6 @@ public class MyProfileFragment extends Fragment {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
                 if (view == null) {
                         view = inflater.inflate(R.layout.fragment_page_myprofile, null);
-                        txMoney = (TextView) view.findViewById(R.id.showMoney);
                         txName = (TextView) view.findViewById(R.id.showName);
                         avatar = (AvatarView) view.findViewById(R.id.avatar);
 
@@ -222,9 +221,7 @@ public class MyProfileFragment extends Fragment {
 
         void onResponse(Call arg0, User user) {
                 me = user;
-                txMoney.setVisibility(View.VISIBLE);
                 txName.setVisibility(View.VISIBLE);
-                txMoney.setText("余额：" + user.getMoney() + "元");
                 txName.setText("你好，" + user.getName());
                 avatar.load(user);
                 if (user.getIsStore().equals("0")) {
@@ -234,11 +231,8 @@ public class MyProfileFragment extends Fragment {
         }
 
         void onFailure(Call arg0, Exception ex) {
-                txMoney.setVisibility(View.VISIBLE);
                 txName.setVisibility(View.VISIBLE);
-                txMoney.setTextColor(color.holo_red_dark);
                 txName.setTextColor(color.holo_red_dark);
-                txMoney.setText(ex.getMessage());
                 txName.setText(ex.getMessage());
         }
 
