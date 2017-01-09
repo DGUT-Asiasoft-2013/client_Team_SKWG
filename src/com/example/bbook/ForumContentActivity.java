@@ -185,7 +185,7 @@ public class ForumContentActivity extends Activity {
 			@Override
 			public void onGoBack() {
 				finish();
-				overridePendingTransition(0, R.anim.slide_out_left);
+				overridePendingTransition(0, R.anim.slide_out_right);
 			}
 		});
 	}

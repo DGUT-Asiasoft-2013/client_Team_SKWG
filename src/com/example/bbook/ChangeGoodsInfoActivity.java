@@ -1,42 +1,44 @@
 package com.example.bbook;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
+import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
-import com.example.bbook.api.Shop;
 import com.example.bbook.api.entity.PublishInfo;
 import com.example.bbook.api.entity.Subscribe;
+import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.api.widgets.ItemFragment;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import android.R.string;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
-import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import inputcells.PictureInputCellFragment;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.PopupWindow.OnDismissListener;
 import inputcells.SimpleTextInputcellFragment;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -46,47 +48,56 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class AddGoodsActivity extends Activity {
+public class ChangeGoodsInfoActivity extends Activity {
 	Spinner spinner;
 	List<String> type_list;
 	ArrayAdapter<String> type_adapter;
 	String selectedType,str_detail;
 
-	Shop shop;
+	Goods goods;
+	GoodsPicture goodsimg;
+	SimpleTextInputcellFragment fragGoodsName, fragGoodsType, fragGoodsPrice, fragGoodsCount;
 	PublishInfo publishinfo;
-	List<Subscribe> subscribeData;
-	Integer userId;
 	ItemFragment itempublish,itemdetail;
 	private static final int RequestCode_Publish=1;
 	private static final int RequestCode_Detail=2;
-	SimpleTextInputcellFragment fragGoodsName, fragGoodsType, fragGoodsPrice, fragGoodsCount;
-	PictureInputCellFragment fragGoodsImage;
+	private static final int REQUESTCODE_ALBUM = 3;
+	private static final int REQUESTCODE_CAMERA = 4;
+
+	private Context mycontext = null;
+	TextView txtake,txpick,txcancel;
+	private PopupWindow P;
+	View parentView=null;
+	byte[] pngData;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add_goods);
+		parentView=View.inflate(this, R.layout.activity_change_goodsinfo, null);
+		setContentView(parentView);
 		fragGoodsName = (SimpleTextInputcellFragment) getFragmentManager()
 				.findFragmentById(R.id.input_goods_name);
 		fragGoodsPrice = (SimpleTextInputcellFragment) getFragmentManager()
 				.findFragmentById(R.id.input_goods_price);
 		fragGoodsPrice.setEditNum(true); // 设置价格输入为整型
 		fragGoodsCount = (SimpleTextInputcellFragment) getFragmentManager()
-		.findFragmentById(R.id.input_goods_count);
+				.findFragmentById(R.id.input_goods_count);
 		fragGoodsCount.setEditNum(true); // 设置数量输入为整型
 
-		fragGoodsImage = (PictureInputCellFragment) getFragmentManager()
-				.findFragmentById(R.id.input_goods_image);
+		goods =(Goods)getIntent().getSerializableExtra("goods");
+		fragGoodsName.setText(goods.getGoodsName());
+		fragGoodsPrice.setText(goods.getGoodsPrice());
+		fragGoodsCount.setText(goods.getGoodsCount());
+		goodsimg=(GoodsPicture)findViewById(R.id.goodsimg);
+		goodsimg.load(Server.serverAdress+goods.getGoodsImage());
 
-		//初始化publishinfo、宝贝描述
+		//赋值publishinfo、宝贝描述
 		publishinfo=new PublishInfo();
-		publishinfo.setGoodsAuthor("");
-		publishinfo.setGoodsPublisher("");
-		publishinfo.setGoodsPubDate("");
-		publishinfo.setGoodsPritime("");
-		str_detail="";
-
-		shop = (Shop) getIntent().getSerializableExtra("shop");
+		publishinfo.setGoodsAuthor(goods.getAuthor());
+		publishinfo.setGoodsPublisher(goods.getPublisher());
+		publishinfo.setGoodsPubDate(goods.getPubDate());
+		publishinfo.setGoodsPritime(goods.getPritime());
+		str_detail=goods.getGoodsDetail();
 
 		// 跳转到书本出版信息
 		itempublish = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_publish);
@@ -98,6 +109,7 @@ public class AddGoodsActivity extends Activity {
 				publish();
 			}
 		});
+
 		// 跳转到书本描述
 		itemdetail = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_detail);
 		itemdetail.setItemText(" 宝贝描述");
@@ -109,8 +121,8 @@ public class AddGoodsActivity extends Activity {
 			}
 		});
 
-
 		spinner = (Spinner) findViewById(R.id.spinner_type);
+
 		// 种类下拉框数据
 		// "青春文学","历史","计算机","小说","建筑","自然科学","哲学","运动","文学","成功励志","保健养生","传记"
 		type_list = new ArrayList<String>();
@@ -133,6 +145,15 @@ public class AddGoodsActivity extends Activity {
 		type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		// 加载适配器
 		spinner.setAdapter(type_adapter);
+
+		//设置下拉框默认值
+		int k= type_adapter.getCount();
+		for(int i=0;i<k;i++){
+			if((goods.getGoodsType()).equals(type_adapter.getItem(i).toString())){
+				spinner.setSelection(i,true);// 默认选中项
+				selectedType = type_adapter.getItem(i);
+			}
+		}
 		//
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			// parent： 为控件Spinner view：显示文字的TextView
@@ -154,130 +175,13 @@ public class AddGoodsActivity extends Activity {
 				onSubmit();
 			}
 		});
-	}
-
-	protected void onSubmit() {
-		String goodsName = fragGoodsName.getText();
-		if(goodsName.isEmpty()){
-			Toast toast = Toast.makeText(AddGoodsActivity.this, "商品名称不能为空", Toast.LENGTH_SHORT);
-			toast.setGravity(Gravity.CENTER, 0, 0);
-			toast.show();
-			return;
-		}
-		String goodsType = selectedType;
-		String goodsPrice = fragGoodsPrice.getText();
-		if(goodsPrice.isEmpty()){
-			Toast toast = Toast.makeText(AddGoodsActivity.this, "商品价格不能为空", Toast.LENGTH_SHORT);
-			toast.setGravity(Gravity.CENTER, 0, 0);
-			toast.show();
-			return;
-		}
-		String goodsCount = fragGoodsCount.getText();
-		if(goodsCount.isEmpty()){
-			Toast toast = Toast.makeText(AddGoodsActivity.this, "商品库存不能为空", Toast.LENGTH_SHORT);
-			toast.setGravity(Gravity.CENTER, 0, 0);
-			toast.show();
-			return;
-		}
-		String goodsPublisher = publishinfo.getGoodsPublisher();                       //从addpublishactivity中返回的参数
-		String goodsAuthor = publishinfo.getGoodsAuthor();
-		String goodsPubDate = publishinfo.getGoodsPubDate();
-		String goodsPritime = publishinfo.getGoodsPritime();
-		String goodsDetail = str_detail;                       //从addBookdetailactivity中返回的参数
-
-		MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("goodsName", goodsName)
-				.addFormDataPart("goodsType", goodsType).addFormDataPart("goodsPrice", goodsPrice)
-				.addFormDataPart("goodsCount", goodsCount).addFormDataPart("publisher", goodsPublisher)
-				.addFormDataPart("author", goodsAuthor).addFormDataPart("pubDate", goodsPubDate)
-				.addFormDataPart("pritime", goodsPritime).addFormDataPart("goodsDetail", goodsDetail);
-		if (fragGoodsImage.getPngData() != null) {
-			body.addFormDataPart("goodsImage", "goodsImage",
-					RequestBody.create(MediaType.parse("image/png"), fragGoodsImage.getPngData()));
-		}
-
-		Request request = Server.requestBuilderWithApi("goods").method("post", null).post(body.build()).build();
-
-		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+		//修改商品图片
+		findViewById(R.id.chang_picture).setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onResponse(final Call arg0, Response arg1) throws IOException {
-				try {
-					final String responString = arg1.body().toString();
-					runOnUiThread(new Runnable() {
-						public void run() {
-							AddGoodsActivity.this.onResponse(arg0, responString);
-						}
-					});
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						public void run() {
-							AddGoodsActivity.this.onFailure(arg0, e);
-						}
-					});
-				}
-			}
-
-			@Override
-			public void onFailure(final Call arg0, final IOException arg1) {
-				runOnUiThread(new Runnable() {
-					public void run() {
-						AddGoodsActivity.this.onFailure(arg0, arg1);
-					}
-				});
-			}
-		});
-
-		//通过shopId找到user
-		Request request2 = Server.requestBuilderWithApi("shop/" + shop.getId() +"/findsubscribe").get().build();
-		Server.getSharedClient().newCall(request2).enqueue(new Callback() {
-
-			@Override
-			public void onResponse(Call arg0, final Response arg1) throws IOException {
-				try {
-					final Page<Subscribe> data = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Subscribe>>(){});; 
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-
-							AddGoodsActivity.this.subscribeData = data.getContent();
-							for(int i = 0; i < AddGoodsActivity.this.subscribeData.size(); i++) {
-								userId = subscribeData.get(i).getId().getUser().getId();
-								AddGoodsActivity.this.onSend();
-							}
-						}
-					});
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void onFailure(Call arg0, IOException arg1) {
+			public void onClick(View v) {
 				// TODO Auto-generated method stub
-
-			}
-		});
-
-	}
-
-	void onSend() {
-		MultipartBody body = new MultipartBody.Builder()
-				.addFormDataPart("shopId", shop.getId() +"")
-				.addFormDataPart("receiverId", userId + "")
-				.addFormDataPart("content", shop.getShopName() + "商店发布了新书，点击查看详情").build();
-
-		Request request3 = Server.requestBuilderWithApi("push").method("post", null).post(body).build();
-		Server.getSharedClient().newCall(request3).enqueue(new Callback() {
-
-			@Override
-			public void onResponse(Call arg0, Response arg1) throws IOException {
-
-			}
-
-			@Override
-			public void onFailure(Call arg0, IOException arg1) {
-
+				showWindow();
 			}
 		});
 	}
@@ -293,9 +197,81 @@ public class AddGoodsActivity extends Activity {
 		fragGoodsCount.setHintText("请输入商品库存");
 
 	}
+	protected void onSubmit() {
+		String goodsName = fragGoodsName.getText();
+		if(goodsName.isEmpty()){
+			Toast toast = Toast.makeText(ChangeGoodsInfoActivity.this, "商品名称不能为空", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+			return;
+		}
+		String goodsType = selectedType;
+		String goodsPrice = fragGoodsPrice.getText();
+		if(goodsPrice.isEmpty()){
+			Toast toast = Toast.makeText(ChangeGoodsInfoActivity.this, "商品价格不能为空", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+			return;
+		}
+		String goodsCount = fragGoodsCount.getText();
+		if(goodsCount.isEmpty()){
+			Toast toast = Toast.makeText(ChangeGoodsInfoActivity.this, "商品库存不能为空", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+			return;
+		}
+		String goodsPublisher = publishinfo.getGoodsPublisher();                       //从addpublishactivity中返回的参数
+		String goodsAuthor = publishinfo.getGoodsAuthor();
+		String goodsPubDate = publishinfo.getGoodsPubDate();
+		String goodsPritime = publishinfo.getGoodsPritime();
+		String goodsDetail = str_detail;                       //从addBookdetailactivity中返回的参数
+
+		MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("goodsName", goodsName)
+				.addFormDataPart("goodsType", goodsType).addFormDataPart("goodsPrice", goodsPrice)
+				.addFormDataPart("goodsCount", goodsCount).addFormDataPart("publisher", goodsPublisher)
+				.addFormDataPart("author", goodsAuthor).addFormDataPart("pubDate", goodsPubDate)
+				.addFormDataPart("pritime", goodsPritime).addFormDataPart("goodsDetail", goodsDetail);
+		if (pngData != null) {
+			body.addFormDataPart("goodsImage", "goodsImage",
+					RequestBody.create(MediaType.parse("image/png"), pngData));
+		}
+
+		Request request = Server.requestBuilderWithApi("goods/change/"+goods.getId()).method("post", null).post(body.build()).build();
+
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+
+			@Override
+			public void onResponse(final Call arg0, Response arg1) throws IOException {
+				try {
+					final String responString = arg1.body().toString();
+					runOnUiThread(new Runnable() {
+						public void run() {
+							ChangeGoodsInfoActivity.this.onResponse(arg0, responString);
+						}
+					});
+				} catch (final Exception e) {
+					runOnUiThread(new Runnable() {
+						public void run() {
+							ChangeGoodsInfoActivity.this.onFailure(arg0, e);
+						}
+					});
+				}
+			}
+
+			@Override
+			public void onFailure(final Call arg0, final IOException arg1) {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						ChangeGoodsInfoActivity.this.onFailure(arg0, arg1);
+					}
+				});
+			}
+		});
+
+	}
 
 	void onResponse(Call arg0, String responseBody) {
-		new AlertDialog.Builder(this).setTitle("发布成功")
+		new AlertDialog.Builder(this).setTitle("修改成功")
 		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -306,18 +282,18 @@ public class AddGoodsActivity extends Activity {
 	}
 
 	void onFailure(Call arg0, Exception arg1) {
-		new AlertDialog.Builder(this).setTitle("发布失败").setMessage(arg1.getLocalizedMessage())
+		new AlertDialog.Builder(this).setTitle("修改失败").setMessage(arg1.getLocalizedMessage())
 		.setNegativeButton("OK", null).show();
 	}
 
-	//跳转到添加出版信息
+	//跳转到修改出版信息
 	void publish(){
 		Intent itnt=new Intent(this,AddPublishActivity.class);
 		itnt.putExtra("publishinfo", publishinfo);
 		startActivityForResult(itnt, RequestCode_Publish);
 	}
 
-	//跳转到添加宝贝描述页面
+	//跳转到修改宝贝描述页面
 	void detail(){
 		Intent itnt=new Intent(this,AddBookDetailActivity.class);
 		itnt.putExtra("bookdetail", str_detail);
@@ -340,7 +316,111 @@ public class AddGoodsActivity extends Activity {
 		if (requestCode == RequestCode_Detail && resultCode == RESULT_OK) {
 			itemdetail.setItemText(" 宝贝描述                             已编辑");
 			str_detail = data.getStringExtra("goodsDetail"); 
-		}  
+		}
+		if (requestCode == REQUESTCODE_CAMERA) {
+			Bitmap bmp = (Bitmap) data.getExtras().get("data");
+			saveBitmap(bmp);
+			goodsimg.setBitmap(bmp);
+
+		}
+		if (requestCode == REQUESTCODE_ALBUM) {
+			try {
+				Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+				saveBitmap(bmp);
+				goodsimg.setBitmap(bmp);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	//设置POP弹窗
+	void showWindow(){
+		mycontext = this;
+		View myview = View.inflate(mycontext, R.layout.popupwindows_change_avatar, null);
+		txtake = (TextView) myview.findViewById(R.id.change_useravatar_takephoto);
+		txpick = (TextView) myview.findViewById(R.id.change_useravatar_pick);
+		txcancel = (TextView) myview.findViewById(R.id.chang_useravatar_cancel);
+		P = new PopupWindow(myview);
+		P.setBackgroundDrawable(new ColorDrawable(0));
+		P.setWidth(LayoutParams.MATCH_PARENT);           
+		P.setHeight(LayoutParams.WRAP_CONTENT);
+		P.setFocusable(true);
+		P.setAnimationStyle(R.style.anim_menu_bottombar);
+		P.setOutsideTouchable(true);
+		P.setOnDismissListener(new OnDismissListener() {
+
+			@Override
+			public void onDismiss() {
+				backgroundAlpha(1);
+			}
+		});
+		P.showAtLocation(parentView,Gravity.BOTTOM, 0, 0);
+		backgroundAlpha(0.5f);
+
+		//拍照按钮监听事件
+		txtake.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				takePhoto();
+				P.dismiss();
+			}
+		});
+		//从相册选择按钮监听事件
+		txpick.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				pickFromAlbum();
+				P.dismiss();
+			}
+		});
+		//取消按钮
+		txcancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				P.dismiss();
+			}
+		});
+	}
+
+	/** 
+	 * 设置添加屏幕的背景透明度 
+	 */  
+	public void backgroundAlpha(float bgAlpha)  
+	{  
+		WindowManager.LayoutParams lp = getWindow().getAttributes();  
+		lp.alpha = bgAlpha; //0.0-1.0  
+		getWindow().setAttributes(lp);  
+	}  
+
+
+
+	void pickFrmCamera() {
+		Intent itnt = new Intent(Intent.ACTION_GET_CONTENT);
+		itnt.setType("image/*");
+		startActivityForResult(itnt, REQUESTCODE_ALBUM);
+	}
+
+	void takePhoto() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		startActivityForResult(intent, REQUESTCODE_CAMERA);
+	}
+
+	void pickFromAlbum() {
+		Intent itnt = new Intent(Intent.ACTION_GET_CONTENT);
+		itnt.setType("image/*");
+		startActivityForResult(itnt, REQUESTCODE_ALBUM);
+	}
+
+	void saveBitmap(Bitmap bmp) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		bmp.compress(CompressFormat.PNG, 100, baos);
+		pngData = baos.toByteArray();
 	}
 
 }
