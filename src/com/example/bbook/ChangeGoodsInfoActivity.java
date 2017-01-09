@@ -12,6 +12,9 @@ import com.example.bbook.api.entity.PublishInfo;
 import com.example.bbook.api.entity.Subscribe;
 import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.api.widgets.ItemFragment;
+import com.example.bbook.api.widgets.TitleBarFragment;
+import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
+import com.example.bbook.api.widgets.TitleBarFragment.OnGoNextListener;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -49,6 +52,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ChangeGoodsInfoActivity extends Activity {
+	TitleBarFragment fragTitleBar;
 	Spinner spinner;
 	List<String> type_list;
 	ArrayAdapter<String> type_adapter;
@@ -84,6 +88,24 @@ public class ChangeGoodsInfoActivity extends Activity {
 				.findFragmentById(R.id.input_goods_count);
 		fragGoodsCount.setEditNum(true); // 设置数量输入为整型
 
+		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
+		fragTitleBar.setTitleName("修改商品信息", 16);
+		fragTitleBar.setOnGoBackListener(new OnGoBackListener() {
+
+			@Override
+			public void onGoBack() {
+				finish();
+			}
+		});
+		fragTitleBar.setOnGoNextListener(new OnGoNextListener() {
+
+			@Override
+			public void onGoNext() {
+				onSubmit();
+			}
+		});
+		fragTitleBar.setBtnNextText("修改", 12);
+
 		goods =(Goods)getIntent().getSerializableExtra("goods");
 		fragGoodsName.setText(goods.getGoodsName());
 		fragGoodsPrice.setText(goods.getGoodsPrice());
@@ -97,8 +119,11 @@ public class ChangeGoodsInfoActivity extends Activity {
 		publishinfo.setGoodsPublisher(goods.getPublisher());
 		publishinfo.setGoodsPubDate(goods.getPubDate());
 		publishinfo.setGoodsPritime(goods.getPritime());
-		str_detail=goods.getGoodsDetail();
-
+		if(goods.getGoodsDetail()==null||goods.getGoodsDetail().length()<=0){
+			str_detail="";
+		}else{
+			str_detail=goods.getGoodsDetail();
+		}
 		// 跳转到书本出版信息
 		itempublish = (ItemFragment) getFragmentManager().findFragmentById(R.id.btn_publish);
 		itempublish.setItemText(" 出版信息 ");
@@ -168,13 +193,6 @@ public class ChangeGoodsInfoActivity extends Activity {
 			}
 		});
 
-		findViewById(R.id.submit).setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				onSubmit();
-			}
-		});
 		//修改商品图片
 		findViewById(R.id.chang_picture).setOnClickListener(new OnClickListener() {
 

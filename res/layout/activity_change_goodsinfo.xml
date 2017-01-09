@@ -6,6 +6,13 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
+    <fragment
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -144,14 +151,6 @@
                 android:layout_marginStart="10dp"
                 android:background="#8ccc" />
 
-            <Button
-                android:id="@+id/submit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
-                android:text="修改" />
         </LinearLayout>
     </ScrollView>
 

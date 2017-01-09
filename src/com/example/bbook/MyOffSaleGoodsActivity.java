@@ -16,6 +16,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -151,7 +152,9 @@ public class MyOffSaleGoodsActivity extends Activity {
 	}
 
 	private void goEdit(Goods goods) {
-
+		Intent itnt = new Intent(this,ChangeGoodsInfoActivity.class);
+		itnt.putExtra("goods", goods);
+		startActivity(itnt);
 	}
 
 	private static class GoodsHolder {
