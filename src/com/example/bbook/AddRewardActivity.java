@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -151,9 +152,19 @@ public class AddRewardActivity extends Activity {
 		builder.setTitle("请输入支付密码");
 		//把布局文件先填充成View对象
 		View view = View.inflate(AddRewardActivity.this, R.layout.dialog_item, null);
+		TextView forget = (TextView)view.findViewById(R.id.forget);
 		TextView txt_money=(TextView)view.findViewById(R.id.txt_money);
 		final EditText edt_pwd=(EditText)view.findViewById(R.id.edit_pwd);
 		txt_money.setText("￥"+sum);
+		//跳转到设置新支付密码页面
+		forget.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent=new Intent(AddRewardActivity.this,SetPayPasswordActivity.class);
+				startActivity(intent);	
+			}
+		});
+		
 		//把填充得来的view对象设置为对话框显示内容
 		builder.setView(view);
 		builder.setPositiveButton("确认支付", new DialogInterface.OnClickListener() {
@@ -216,14 +227,15 @@ public class AddRewardActivity extends Activity {
 
 	//支付打赏
 	void goPay(double money){
-		UUID uuid=UUID.randomUUID();
-
+		UUID uuid=UUID.randomUUID();              //支出流水号
+		UUID uuid1=UUID.randomUUID();			  //收入流水号
 		OkHttpClient client=Server.getSharedClient();
 		MultipartBody.Builder requestBody=new MultipartBody.Builder()
 				.addFormDataPart("money", money+"")
-				.addFormDataPart("uuid", uuid.toString());
+				.addFormDataPart("uuid", uuid.toString())
+				.addFormDataPart("uuid1", uuid1.toString());
 
-				Request request=Server.requestBuilderWithApi("article/reward")
+				Request request=Server.requestBuilderWithApi("article/reward/"+article.getId())
 						.method("post",null)
 						.post(requestBody.build())
 						.build();

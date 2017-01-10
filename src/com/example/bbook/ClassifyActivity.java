@@ -9,7 +9,7 @@ import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.Shop;
 import com.example.bbook.api.widgets.GoodsPicture;
-import com.example.bbook.fragments.pages.HomepageFragment;
+import com.example.bbook.fragments.pages.HomePageFragment;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;

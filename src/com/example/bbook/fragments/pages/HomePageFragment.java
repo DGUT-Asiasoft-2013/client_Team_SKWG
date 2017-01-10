@@ -17,6 +17,7 @@ import com.example.bbook.api.Server;
 import com.example.bbook.api.Shop;
 import com.example.bbook.api.widgets.AvatarView;
 import com.example.bbook.api.widgets.GoodsPicture;
+import com.example.bbook.fragments.MyGridView;
 import com.example.bbook.fragments.SlidingMenuFragment;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -75,7 +76,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import util.AutoLoadListener;
 
-public class HomepageFragment extends Fragment implements OnClickListener{
+public class HomePageFragment extends Fragment implements OnClickListener{
 	//书籍展示页面
 
 	SlidingMenuFragment slidingMenuFragment=new SlidingMenuFragment();
@@ -214,7 +215,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 
 
 
-		bookView=(GridView) view.findViewById(R.id.book_gridView);
+	bookView=(GridView) view.findViewById(R.id.book_gridView);
 		//bookView.setAdapter(bookAdapter);
 		listView=(ListView) view.findViewById(R.id.book_listview);
 
@@ -322,8 +323,8 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 							Page<Goods> data=new ObjectMapper()
 									.readValue(responseStr, new TypeReference<Page<Goods>>() {
 									});
-							HomepageFragment.this.data=data.getContent();
-							HomepageFragment.this.page=data.getNumber();
+							HomePageFragment.this.data=data.getContent();
+							HomePageFragment.this.page=data.getNumber();
 							bookAdapter.notifyDataSetInvalidated();
 							isSorted=true;
 						} catch (Exception e) {
@@ -471,8 +472,8 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 									.readValue(responseStr, new TypeReference<Page<Goods>>() {
 									});
 							//Log.d("aaa",data.toString());
-							HomepageFragment.this.data=data.getContent();
-							HomepageFragment.this.page=data.getNumber();
+							HomePageFragment.this.data=data.getContent();
+							HomePageFragment.this.page=data.getNumber();
 							bookAdapter.notifyDataSetInvalidated();
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
@@ -515,9 +516,9 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 									.readValue(responseStr, new TypeReference<Page<Goods>>() {
 									});
 							//Log.d("aaa",data.toString());
-							HomepageFragment.this.data=data.getContent();
+							HomePageFragment.this.data=data.getContent();
 
-							HomepageFragment.this.page=data.getNumber();
+							HomePageFragment.this.page=data.getNumber();
 							bookAdapter.notifyDataSetInvalidated();
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
@@ -612,9 +613,9 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 									.readValue(responseStr, new TypeReference<Page<Goods>>() {
 									});
 							//Log.d("aaa",data.toString());
-							HomepageFragment.this.data=data.getContent();
+							HomePageFragment.this.data=data.getContent();
 
-							HomepageFragment.this.page=data.getNumber();
+							HomePageFragment.this.page=data.getNumber();
 							bookAdapter.notifyDataSetInvalidated();
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
@@ -662,9 +663,9 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 									.readValue(responseStr, new TypeReference<Page<Goods>>() {
 									});
 							//Log.d("aaa",data.toString());
-							HomepageFragment.this.data=data.getContent();
+							HomePageFragment.this.data=data.getContent();
 
-							HomepageFragment.this.page=data.getNumber();
+							HomePageFragment.this.page=data.getNumber();
 							bookAdapter.notifyDataSetInvalidated();
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
@@ -854,7 +855,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 
 					@Override
 					public void run() {
-						HomepageFragment.this.onResponse(arg0, body);
+						HomePageFragment.this.onResponse(arg0, body);
 					}
 				});
 			}

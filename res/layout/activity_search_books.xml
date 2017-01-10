@@ -7,16 +7,12 @@
     android:layout_height="match_parent" >
 
     <!-- 主页内容 -->
-
-        
-       
-        
     <LinearLayout
        android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
-
+<!--搜索 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -44,17 +40,6 @@
                 android:src="@drawable/icon_search" />
         </LinearLayout>
 
-   
-
-        <fragment
-            android:id="@+id/fragment_viewpager_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            class="com.example.bbook.fragments.ViewPagerFragment"
-            tools:layout="@layout/fragment_viewpager" />
-
- 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,22 +47,6 @@
             android:layout_marginRight="20dp"
             android:orientation="horizontal" >
 
-            
-            <!--
-          <ImageView
-            android:id="@+id/pop_menu_classify"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:src="@drawable/icon_classify" />
-            -->
-
-<!--            <Button
-                android:id="@+id/btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="open" />
-  -->
             <ImageView
                 android:id="@+id/change_view"
                 android:layout_width="20dp"

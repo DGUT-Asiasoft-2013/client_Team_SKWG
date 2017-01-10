@@ -10,7 +10,7 @@
         />
     <item 
         android:id="@+id/c"
-        android:title="按商家排序"
+        android:title="按销量排序"
         />
 
 

@@ -180,7 +180,6 @@ public class SlidingMenuFragment extends Fragment  implements OnItemClickListene
 			gridView.setHorizontalSpacing(10);
 
 			LayoutParams lp = gridView.getLayoutParams();
-			//			lp.height = (int) ((childAdapter.getCount()/3+1) * (getResources().getDisplayMetrics().density * 20.0));
 			lp.height = (int) ((childAdapter.getCount()/3+1) * (getResources().getDisplayMetrics().density * 15.0));
 			gridView.setLayoutParams(lp);
 
