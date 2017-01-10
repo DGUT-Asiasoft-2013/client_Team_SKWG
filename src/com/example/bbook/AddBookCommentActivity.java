@@ -34,7 +34,6 @@ public class AddBookCommentActivity extends Activity {
 	TextView tvGoodsName, tvGoodsType;
 	EditText etComment;
 	Button btnSubmit;
-	RatingBar goodsDescribe,sellerAttitute,sendSpeed;
 	
 	Goods goods;
 	String ordersId;
@@ -44,6 +43,7 @@ public class AddBookCommentActivity extends Activity {
 		setContentView(R.layout.activity_addgoodscomment);
 		goods = (Goods) getIntent().getSerializableExtra("goods");
 		ordersId=getIntent().getStringExtra("ordersId");
+		Log.d("orderIdbb", ordersId);
 		init();
 		setEvent();
 	}
@@ -51,19 +51,16 @@ public class AddBookCommentActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		setInfo();
+//		setInfo();
 		
 	}
 	private void init() {
 		tvGoodsName = (TextView) findViewById(R.id.goods_name);
 		tvGoodsType = (TextView) findViewById(R.id.goods_type);
 		btnSubmit = (Button) findViewById(R.id.submit);
-		imgGoods = (GoodsPicture) findViewById(R.id.img_goods);
+//		imgGoods = (GoodsPicture) findViewById(R.id.img_goods);
 		etComment = (EditText) findViewById(R.id.comment);
 		
-		goodsDescribe=(RatingBar) findViewById(R.id.goods_describe);
-		sellerAttitute=(RatingBar) findViewById(R.id.seller_attitute);
-		sendSpeed=(RatingBar) findViewById(R.id.send_speed);
 		
 		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
 		fragTitleBar.setBtnNextState(false);
@@ -134,17 +131,13 @@ public class AddBookCommentActivity extends Activity {
 		int state=1;
 		MultipartBody.Builder body = new MultipartBody.Builder()
 				.addFormDataPart("commentText", commentText)
-				.addFormDataPart("goodsDescribe", goodsDescribe.getRating()+"")
-				.addFormDataPart("sellerAttitute", sellerAttitute.getRating()+"")
-				.addFormDataPart("sendSpeed", sendSpeed.getRating()+"")
 				.addFormDataPart("state", state+"")
-				.addFormDataPart("ordersId", ordersId);
+				.addFormDataPart("orderId", ordersId);
 		Log.d("orderId",ordersId);
-		Log.d("goodsDescribe",goodsDescribe.getRating()+"");
 		
 		Log.d("goodsId",goods.getId()+"");
 		
-		Request request = Server.requestBuilderWithApi("goods/" + goods.getId() + "/addcomments")
+		Request request = Server.requestBuilderWithApi("/goods/addcomments")
 				.method("post", null).post(body.build()).build();
 		
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
@@ -169,7 +162,7 @@ public class AddBookCommentActivity extends Activity {
 
 	//转到我的订单
 	public void goMyOrders(){
-		new AlertDialog.Builder(this).setMessage("支付成功").setPositiveButton("查看我的订单", new DialogInterface.OnClickListener() {
+		new AlertDialog.Builder(this).setMessage("评论成功").setPositiveButton("查看我的订单", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				Intent itnt = new Intent(AddBookCommentActivity.this,MyOrdersActivity.class);

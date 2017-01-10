@@ -126,6 +126,13 @@ public class MyRefundOrderActivity extends Activity{
 	@Override
 	protected void onResume() {
 		super.onResume();
+		reload();
+	}
+	
+	void reload() {
+		orderList = new ArrayList<>();
+		dataset = new HashMap<>();
+		orderContents = new ArrayList<>();
 		load();
 	}
 	

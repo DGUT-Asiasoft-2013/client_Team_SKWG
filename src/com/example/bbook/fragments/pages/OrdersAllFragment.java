@@ -28,6 +28,7 @@ import com.example.bbook.api.widgets.OrderBottomContent.OnPayClickedListener;
 import com.example.bbook.api.widgets.OrderBottomContent.OnRejectClickedListener;
 import com.example.bbook.api.widgets.OrderMiddleContent;
 import com.example.bbook.api.widgets.OrderTopContent;
+import com.example.bbook.api.widgets.OrderTopContent.OnTabClickedListener;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -188,6 +189,17 @@ public class OrdersAllFragment extends Fragment {
 		LayoutInflater inflater;
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
+			if(orderContents.get(position) instanceof OrderTopContent) {
+				OrderTopContent topContent = (OrderTopContent) orderContents.get(position);
+				final Orders order = topContent.getOrder();
+				topContent.setonTabClickedListener(new OnTabClickedListener() {
+					
+					@Override
+					public void onTabClicked() {
+						goOrderDetail(order.getOrdersID());
+					}
+				});
+			}
 			if(orderContents.get(position) instanceof OrderBottomContent) {
 				OrderBottomContent bottomContent = (OrderBottomContent) orderContents.get(position);
 				final Orders order = bottomContent.getOrder();
@@ -210,7 +222,7 @@ public class OrdersAllFragment extends Fragment {
 					
 					@Override
 					public void onCommentClicked() {
-						goComment(order.getOrdersID());
+						goComment(order);
 					}
 				});
 				bottomContent.setOnRejectClickedListener(new OnRejectClickedListener() {
@@ -250,6 +262,12 @@ public class OrdersAllFragment extends Fragment {
 			return orderContents.get(position).isClickable();
 		};
 	};
+	
+	public void goOrderDetail(String orderId) {
+		Intent itnt = new Intent(getActivity(), OrderDetailActivity.class);
+		itnt.putExtra("orderId", orderId);
+		startActivity(itnt);
+	}
 	
 	public void goDelete(final Orders order) {
 		new AlertDialog.Builder(getActivity()).setMessage("确认删除订单？")
@@ -454,9 +472,10 @@ public class OrdersAllFragment extends Fragment {
 	});
 }
 	// 商品评论跳转
-	public void goComment(String ordersId) {
+	public void goComment(Orders order) {
 		Intent itnt = new Intent(getActivity(), AddBookCommentActivity.class);
-		itnt.putExtra("ordersId", ordersId);
+		itnt.putExtra("ordersId", order.getOrdersID());
+		itnt.putExtra("goods", order.getGoods());
 		startActivity(itnt);
 	}
 	
