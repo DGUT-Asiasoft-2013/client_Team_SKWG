@@ -18,6 +18,7 @@ import android.R.color;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,7 +39,7 @@ import okhttp3.Response;
 
 public class MystoreActivity extends Activity {
 
-        AvatarView shopImageUseBg;
+        ImageView shopImageUseBg;
         TextView shopName, shopDescription, subscribeCount;
         GridView goodsView;
         List<Goods> data;
@@ -47,7 +49,7 @@ public class MystoreActivity extends Activity {
         Shop myshop;
 
         TextView tvShopName;
-        AvatarView avatarShop;
+        GoodsPicture avatarShop;
         ItemFragment itemOnSale, itemOffSale, itemSold, itemOrderManage, itemSetting;
         
         @Override
@@ -57,7 +59,7 @@ public class MystoreActivity extends Activity {
 
 //                shopName = (TextView) findViewById(R.id.show_stopName);
                 tvShopName = (TextView) findViewById(R.id.shop_name);
-                avatarShop = (AvatarView) findViewById(R.id.shop_avatar);
+                avatarShop = (GoodsPicture) findViewById(R.id.shop_avatar);
 //                shopImageUseBg = (AvatarView) findViewById(R.id.bgshow_img);
 //                shopDescription = (TextView) findViewById(R.id.show_stopDescription);
 
@@ -204,7 +206,7 @@ public class MystoreActivity extends Activity {
         void onResponse(Call arg0, Shop shop) {
                 myshop = shop;
                 tvShopName.setText("我的店铺:" + shop.getShopName());
-                avatarShop.load(shop);
+                avatarShop.load(Server.serverAdress + shop.getShopImage());
 //                reloadSubscribe();
         }
 

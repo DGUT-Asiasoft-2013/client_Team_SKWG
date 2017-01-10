@@ -30,7 +30,7 @@
             android:orientation="horizontal"
             android:padding="10dp" >
 
-            <com.example.bbook.api.widgets.AvatarView
+            <com.example.bbook.api.widgets.GoodsPicture
                 android:id="@+id/shop_avatar"
                 android:layout_width="50dp"
                 android:layout_height="50dp" />
