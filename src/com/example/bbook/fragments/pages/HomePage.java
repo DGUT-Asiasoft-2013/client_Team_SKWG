@@ -44,11 +44,11 @@ public class HomePage extends Fragment implements OnClickListener{
 	TextView goodsSales;
 	TextView moreBooks;
 	
-	int bookPage1=0,bookPage2,bookPage3;
-	TextView change1,change2,change3;
+	int bookPage1=0,bookPage2;
+	TextView change1,change2;
 	
-	MyGridView gridview1,gridview2,gridview3;
-	MyGridviewAdapter bookAdapter1,bookAdapter2,bookAdapter3;
+	MyGridView gridview1,gridview2;
+	MyGridviewAdapter bookAdapter1,bookAdapter2;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -211,76 +211,6 @@ public class HomePage extends Fragment implements OnClickListener{
 			}
 		});
 	}
-	public void loadBook3(){
-
-		Request request;
-		request=Server.requestBuilderWithApi("goods/s")
-				.get().build();
-
-		OkHttpClient client=Server.getSharedClient();
-		client.newCall(request).enqueue(new Callback() {
-
-			@Override
-			public void onResponse(Call arg0, final Response arg1) throws IOException {
-				final String responseStr=arg1.body().string();
-				getActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							Page<Goods> data=new ObjectMapper()
-									.readValue(responseStr, new TypeReference<Page<Goods>>() {
-									});							
-							bookPage3=data.getNumber();
-							bookAdapter3.setData(data.getContent(),bookPage3);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				});
-			}
-			@Override
-			public void onFailure(Call arg0, IOException arg1) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-	}
-	public void loadMoreBook3(){
-
-		Request request;
-		request=Server.requestBuilderWithApi("goods/s?page="+(bookPage3+1))
-				.get().build();
-
-		OkHttpClient client=Server.getSharedClient();
-		client.newCall(request).enqueue(new Callback() {
-
-			@Override
-			public void onResponse(Call arg0, final Response arg1) throws IOException {
-				final String responseStr=arg1.body().string();
-				getActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							Page<Goods> data=new ObjectMapper()
-									.readValue(responseStr, new TypeReference<Page<Goods>>() {
-									});							
-							bookPage3=data.getNumber();
-							bookAdapter3.setData(data.getContent(),bookPage3);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				});
-			}
-			@Override
-			public void onFailure(Call arg0, IOException arg1) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-	}
 	
 	@Override
 	public void onResume() {
@@ -288,7 +218,6 @@ public class HomePage extends Fragment implements OnClickListener{
 		super.onResume();
 		loadBook1();
 		loadBook2();
-		loadBook3();
 	}
 	
 	
@@ -296,15 +225,13 @@ public class HomePage extends Fragment implements OnClickListener{
 	void init(){
 		gridview1=(MyGridView) view.findViewById(R.id.book_gridView1);
 		gridview2=(MyGridView) view.findViewById(R.id.book_gridView2);
-		gridview3=(MyGridView) view.findViewById(R.id.book_gridView3);
 		
 		
 		change1=(TextView) view.findViewById(R.id.change1);
 		change1.setOnClickListener(this);
 		change2=(TextView) view.findViewById(R.id.change2);
 		change2.setOnClickListener(this);
-		change3=(TextView) view.findViewById(R.id.change3);
-		change3.setOnClickListener(this);
+	
 		moreBooks=(TextView) view.findViewById(R.id.more_book);
 		moreBooks.setOnClickListener(this);		
 		
@@ -312,8 +239,7 @@ public class HomePage extends Fragment implements OnClickListener{
 		gridview1.setAdapter(bookAdapter1);
 		bookAdapter2=new MyGridviewAdapter(getActivity());
 		gridview2.setAdapter(bookAdapter2);
-		bookAdapter3=new MyGridviewAdapter(getActivity());
-		gridview3.setAdapter(bookAdapter3);
+	
 		
 		
 		
@@ -331,9 +257,7 @@ public class HomePage extends Fragment implements OnClickListener{
 		case R.id.change2:
 			loadMoreBook2();
 			break;
-		case R.id.change3:
-			loadMoreBook3();
-			break;
+		
 		case R.id.more_book:
 			Intent intent=new Intent(getActivity(),SearchBooksActivity.class);
 			startActivity(intent);
