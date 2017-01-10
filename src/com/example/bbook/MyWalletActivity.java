@@ -79,12 +79,12 @@ public class MyWalletActivity extends Activity {
 			
 			@Override
 			public void onResponse(Call arg0, final Response arg1) throws IOException {
+				final String body = arg1.body().string();
 				runOnUiThread(new Runnable() {
-					
 					@Override
 					public void run() {
 						try {
-							Double remainMoney = new ObjectMapper().readValue(arg1.body().string(), Double.class);
+							Double remainMoney = new ObjectMapper().readValue(body, Double.class);
 							MyWalletActivity.this.setRemain(remainMoney);
 						} catch (JsonParseException e) {
 							// TODO Auto-generated catch block

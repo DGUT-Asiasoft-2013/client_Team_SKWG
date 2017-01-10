@@ -194,12 +194,14 @@ public class BuyActivity extends Activity {
 			}
 			checkPayPasswordIsExisted();
 		} else {
-			int quantity = selectedGoods.get(0).getQuantity();
-			String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + selectedGoods.get(0).getId() + quantity;
-			addOrder(selectedGoods.get(0), orderId);
-			checkPayPasswordIsExisted();
+			if(selectedGoods.get(0) != null) {
+				int quantity = selectedGoods.get(0).getQuantity();
+				String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + selectedGoods.get(0).getId() + quantity;
+				addOrder(selectedGoods.get(0), orderId);
+				checkPayPasswordIsExisted();
+			}
 		}
-		
+
 
 	}
 
@@ -207,7 +209,7 @@ public class BuyActivity extends Activity {
 		int orderState = 2;
 
 		quantity = goods.getQuantity();
-//		final String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + quantity;
+		//		final String orderId = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + goods.getId() + quantity;
 		if(toBePayOrders == null) {
 			toBePayOrders = new ArrayList();
 		}
@@ -215,17 +217,17 @@ public class BuyActivity extends Activity {
 			toBePayOrders.add(orderId);
 		}
 		for (int i = 0; i < toBePayOrders.size(); i++)  //外循环是循环的次数
-        {
-            for (int j = toBePayOrders.size() - 1 ; j > i; j--)  //内循环是 外循环一次比较的次数
-            {
+		{
+			for (int j = toBePayOrders.size() - 1 ; j > i; j--)  //内循环是 外循环一次比较的次数
+			{
 
-                if (toBePayOrders.get(i) == toBePayOrders.get(j))
-                {
-                	toBePayOrders.remove(j);
-                }
+				if (toBePayOrders.get(i) == toBePayOrders.get(j))
+				{
+					toBePayOrders.remove(j);
+				}
 
-            }
-        }
+			}
+		}
 		String name = selectedInfo.getName();
 		String address = selectedInfo.getAddress();
 		String tel = selectedInfo.getTel();
@@ -250,7 +252,7 @@ public class BuyActivity extends Activity {
 					public void run() {
 						try {
 							//							goPay();
-							
+
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -268,7 +270,7 @@ public class BuyActivity extends Activity {
 	void onResponse(Call arg0, String responseBody) {
 		new AlertDialog.Builder(this).setTitle("成功").setMessage(responseBody).show();
 	}
-//输入支付密码
+	//输入支付密码
 	public void  goInputPayPassword() {
 		Toast.makeText(this, "提交订单成功", Toast.LENGTH_SHORT).show();
 		AlertDialog.Builder builder=new Builder(this);
@@ -408,7 +410,7 @@ public class BuyActivity extends Activity {
 		btnSubmit = (Button) findViewById(R.id.submit);
 		info = (LinearLayout) findViewById(R.id.info);
 	}
-//检查支付密码是否存在
+	//检查支付密码是否存在
 	public void checkPayPasswordIsExisted(){
 		OkHttpClient client=Server.getSharedClient();
 		Request request=Server.requestBuilderWithApi("user/PayPasswordIsExist").get().build();
@@ -419,25 +421,25 @@ public class BuyActivity extends Activity {
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-					
-					try {
-						 Boolean isExisted = new ObjectMapper().readValue(responseStr,Boolean.class);
-						if(isExisted){
-							//	goCheckPayPassword();
-							goInputPayPassword();
-						}else{
-							goSetPayPassword();
+
+						try {
+							Boolean isExisted = new ObjectMapper().readValue(responseStr,Boolean.class);
+							if(isExisted){
+								//	goCheckPayPassword();
+								goInputPayPassword();
+							}else{
+								goSetPayPassword();
+							}
+						} catch (JsonParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-					} catch (JsonParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (JsonMappingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					}
 				});
 			}
@@ -446,10 +448,10 @@ public class BuyActivity extends Activity {
 			}
 		});
 	}
-//检查支付密码是否正确
+	//检查支付密码是否正确
 	public void goCheckPayPassword(String payPassword){
 
-	//String payPassword=fragPayPassword.getText();
+		//String payPassword=fragPayPassword.getText();
 		OkHttpClient client=Server.getSharedClient();
 		MultipartBody.Builder requestBody=new MultipartBody.Builder()
 				.addFormDataPart("payPassword", MD5.getMD5(payPassword));
@@ -490,7 +492,7 @@ public class BuyActivity extends Activity {
 			}
 		});
 	}
-	
+
 	//设置支付密码
 	public void goSetPayPassword(){
 		Intent intent=new Intent(BuyActivity.this,SetPayPasswordActivity.class);
@@ -504,7 +506,7 @@ public class BuyActivity extends Activity {
 		MultipartBody.Builder requestBody=new MultipartBody.Builder()
 				.addFormDataPart("state", state+"")
 				.addFormDataPart("uuid", uuid.toString());
-		
+
 		Request request=Server.requestBuilderWithApi("order/payfor/"+orderId)
 				.method("post",null)
 				.post(requestBody.build())
@@ -516,7 +518,7 @@ public class BuyActivity extends Activity {
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				String responseStr=arg1.body().string();
 				final Boolean checkPayState=new ObjectMapper().readValue(responseStr, Boolean.class);
-			//	Log.d("aaasss",  responseStr);
+				//	Log.d("aaasss",  responseStr);
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
@@ -547,7 +549,7 @@ public class BuyActivity extends Activity {
 			}
 		}).show();
 	}
-	
+
 	public void goonFailure() {
 		new AlertDialog.Builder(this).setMessage("余额不足").setPositiveButton("马上充值", new DialogInterface.OnClickListener() {
 			@Override

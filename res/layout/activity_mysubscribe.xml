@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#3ccc"
     android:orientation="vertical" >
 
     <fragment
@@ -16,7 +17,9 @@
         android:id="@+id/list_mysubscribe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp" >
+        android:layout_margin="5dp"
+        android:divider="#5ccc"
+        android:dividerHeight="3dp" >
     </ListView>
 
 </LinearLayout>

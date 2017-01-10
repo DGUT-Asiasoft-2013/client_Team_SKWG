@@ -5,17 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <FrameLayout
+    <fragment
+        android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="40dp" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="添加地址"
-            android:textSize="20sp" />
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar" />
 
     <View
         android:layout_width="match_parent"

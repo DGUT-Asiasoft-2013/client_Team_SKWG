@@ -63,7 +63,7 @@ public class MyArticleActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				finish();
-				overridePendingTransition(0, R.anim.slide_out_left);
+				overridePendingTransition(0, R.anim.slide_out_right);
 			}
 		});
 		listView.setOnItemClickListener(new  AdapterView.OnItemClickListener() {

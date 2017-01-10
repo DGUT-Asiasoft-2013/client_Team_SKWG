@@ -45,7 +45,7 @@ public class AddCommentActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				finish();
-				overridePendingTransition(0, R.anim.slide_out_left);
+				overridePendingTransition(0, R.anim.slide_out_right);
 			}
 		});
 		ibtn_next.setOnClickListener(new OnClickListener() {

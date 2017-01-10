@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -44,7 +45,7 @@ public class ManageCommomInfoActivity extends Activity{
 	final static int SELECTED_INFO_CODE = 1;
 	List<CommomInfo> dataList;
 	ListView infoList;
-	TextView infoName, infoAddress, infoTel;
+//	TextView infoName, infoAddress, infoTel;
 	CommomInfo defaultInfo;
 	CommomInfo selectedInfo;
 	int page = 0;
@@ -94,7 +95,7 @@ public class ManageCommomInfoActivity extends Activity{
 	protected void onResume() {
 		super.onResume();
 		
-		getDefault();
+//		getDefault();
 		reload();
 	}
 
@@ -115,7 +116,7 @@ public class ManageCommomInfoActivity extends Activity{
 
 								@Override
 								public void run() {
-									ManageCommomInfoActivity.this.setInfo();
+//									ManageCommomInfoActivity.this.setInfo();
 								}
 							});
 						} catch (JsonParseException e) {
@@ -216,7 +217,7 @@ public class ManageCommomInfoActivity extends Activity{
 
 				@Override
 				public void onClick(View v) {
-					onDelete(info);
+					goDelete(info);
 				}
 			});
 			infoHolder.tvEdit.setOnClickListener(new OnClickListener() {
@@ -233,7 +234,13 @@ public class ManageCommomInfoActivity extends Activity{
 					setDefault(info);
 				}
 			});
+				
 			infoHolder.cbSetDefault.setChecked(info.isDefaultInfo());
+			if(infoHolder.cbSetDefault.isChecked()) {
+				infoHolder.cbSetDefault.setText("默认地址");
+			} else {
+				infoHolder.cbSetDefault.setText("设为默认");
+			}
 			return view;
 		}
 
@@ -254,26 +261,33 @@ public class ManageCommomInfoActivity extends Activity{
 	};
 
 	void init() {
-		infoName = (TextView)findViewById(R.id.name);
-		infoAddress = (TextView) findViewById(R.id.address);
-		infoTel = (TextView) findViewById(R.id.tel);
 		infoList = (ListView) findViewById(R.id.list);
 		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
 	}
 
-	void setInfo() {
-		if(defaultInfo != null) {
-			infoName.setText("收货人： " + defaultInfo.getName());
-			infoAddress.setText("收货地址: " + defaultInfo.getAddress());
-			infoTel.setText("联系电话: " + defaultInfo.getTel());
-			Log.d("info", defaultInfo.getName() + "   " + defaultInfo.getAddress() + "    " + defaultInfo.getTel() + "   " + defaultInfo.getPostCode());
-		}
-	}
 	protected void goAdd() {
 		Intent itnt = new Intent(ManageCommomInfoActivity.this, AddCommomInfoActivity.class);
 		startActivity(itnt);
 	}
 
+	void goDelete(final CommomInfo info) {
+		new AlertDialog.Builder(ManageCommomInfoActivity.this).setMessage("确认删除地址？")
+		.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				onDelete(info);
+			}
+		})
+		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		}).show();
+	}
+	
 	void setDefault(CommomInfo info) {
 		Request request = Server.requestBuilderWithApi("/commominfo/setdefault/" + info.getId()).get().build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
@@ -320,6 +334,7 @@ public class ManageCommomInfoActivity extends Activity{
 
 	void onEdit(CommomInfo info) {
 		Intent itnt = new Intent(ManageCommomInfoActivity.this, EditCommomInfoActivity.class);
+		itnt.putExtra("info", info);
 		startActivity(itnt);
 	}
 }

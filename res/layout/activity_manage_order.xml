@@ -17,20 +17,33 @@
             class="com.example.bbook.api.widgets.TitleBarFragment"
             tools:layout="@layout/fragment_widget_titlebar" />
 
-        <fragment
-            android:id="@+id/tabbar"
+        <FrameLayout
+            android:id="@+id/layout_tabbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title_bar"
-            class="com.example.bbook.api.widgets.OrderStateTabbarFragment"
-            tools:layout="@layout/fragment_widget_order_select_bar" />
+            android:layout_below="@+id/title_bar" >
+
+            <fragment
+                android:id="@+id/tabbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_bar"
+                class="com.example.bbook.api.widgets.OrderStateTabbarFragment"
+                tools:layout="@layout/fragment_widget_order_select_bar" />
+
+            <View
+                android:id="@+id/more"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right" />
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/tabbar" >
+            android:layout_below="@+id/layout_tabbar" >
         </FrameLayout>
     </RelativeLayout>
 

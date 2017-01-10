@@ -476,6 +476,7 @@ public class PullToRefreshLayout extends RelativeLayout
 	{
 		// 初始化下拉布局
 		pullView = refreshView.findViewById(R.id.pull_icon);
+		if(isInEditMode()){return;}
 		refreshStateTextView = (TextView) refreshView
 				.findViewById(R.id.state_tv);
 		refreshingView = refreshView.findViewById(R.id.refreshing_icon);

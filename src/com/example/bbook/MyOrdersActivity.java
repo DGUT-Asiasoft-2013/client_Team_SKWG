@@ -14,10 +14,6 @@ import com.example.bbook.api.widgets.OrderStateTabbarFragment.OnTabSelectedListe
 import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.fragments.pages.OrdersAllFragment;
-import com.example.bbook.fragments.pages.OrdersToBeCommentFragment;
-import com.example.bbook.fragments.pages.OrdersToBePayFragment;
-import com.example.bbook.fragments.pages.OrdersToBeSendFragment;
-import com.example.bbook.fragments.pages.OrdersToBoCheckFragment;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -28,6 +24,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -53,13 +50,13 @@ public class MyOrdersActivity extends Activity {
 	TitleBarFragment titleBar;
 	OrderStateTabbarFragment tabbar;
 	OrdersAllFragment contentAll = new OrdersAllFragment();
-	OrdersToBePayFragment contentToBePay = new OrdersToBePayFragment();
-	OrdersToBeSendFragment contentToBeSend = new OrdersToBeSendFragment();
-	OrdersToBoCheckFragment contentToBeCheck = new OrdersToBoCheckFragment();
-	OrdersToBeCommentFragment contentToBeComment = new OrdersToBeCommentFragment();
-//	ListView ordersList;
+	OrdersAllFragment contentToBePay = new  OrdersAllFragment(2);
+	OrdersAllFragment contentToBeSend = new  OrdersAllFragment(3);
+	OrdersAllFragment contentToBeCheck = new  OrdersAllFragment(4);
+	OrdersAllFragment contentToBeComment = new  OrdersAllFragment(5);
 	List<Orders> ordersData;
 	int Page=0;
+	ListView list;
 	TextView orderState;
 	TextView shopName;
 	ImageView ordersDelete;
@@ -67,8 +64,12 @@ public class MyOrdersActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_orders);	
-//		ordersList=(ListView) findViewById(R.id.orders_list);
-		
+		init();
+		setEvent();
+
+	}
+
+	private void setEvent() {
 		titleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
 		titleBar.setTitleName("我的订单", 18);
 		titleBar.setBtnNextState(false);
@@ -80,23 +81,25 @@ public class MyOrdersActivity extends Activity {
 				finish();
 			}
 		});
-		tabbar = (OrderStateTabbarFragment) getFragmentManager().findFragmentById(R.id.frag_tabbar);
+
 		tabbar.setOnTabSelectedListener(new OnTabSelectedListener() {
-			
+
 			@Override
 			public void OnTabSelected(int index) {
 				changeContentFragment(index);
 			}
 		});
-//		ordersList.setAdapter(listAdapter);
-
-
-
 	}
 
-protected void changeContentFragment(int index) {
+	private void init() {
+		list = (ListView) findViewById(R.id.list);
+		tabbar = (OrderStateTabbarFragment) getFragmentManager().findFragmentById(R.id.frag_tabbar);
+		titleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);		
+	}
+
+	protected void changeContentFragment(int index) {
 		Fragment newFrag = null;
-		
+
 		switch(index) {
 		case 0 : newFrag = contentAll;break;
 		case 1 : newFrag = contentToBePay;break;
@@ -107,103 +110,16 @@ protected void changeContentFragment(int index) {
 			break;
 		}
 		if(newFrag == null) return;
-		
+
 		getFragmentManager()
 		.beginTransaction()
 		.replace(R.id.container, newFrag)
 		.commit();
 	}
 
-	BaseAdapter listAdapter=new BaseAdapter() {
-		@SuppressLint("InflateParams")
-		@Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
-			View view=null;
-			if(convertView==null){
-				LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-				view=inflater.inflate(R.layout.list_item_my_orders, null);
-			}else{
-				view =convertView;
-			}
-			Orders order=ordersData.get(position);
-			orderState=(TextView) view.findViewById(R.id.order_state);
-			ordersDelete=(ImageView) view.findViewById(R.id.orders_delete);
-			TextView goodsPrice=(TextView) view.findViewById(R.id.goods_price);
-			TextView goodsCount=(TextView) view.findViewById(R.id.goods_count);
-			TextView goodsSum=(TextView) view.findViewById(R.id.orders_sum);
-			GoodsPicture goodsPicture=(GoodsPicture) view.findViewById(R.id.goods_picture);
-			switch (order.getOrdersState()) {
-			case 0:
-				orderState.setText("订单取消");
-				break;
-			case 1:
-				orderState.setText("订单完成");
-				break;
-			case 2:
-				orderState.setText("待付款");
-				break;
-			case 3:
-				orderState.setText("已付款");
-				break;
-			case 4:
-				orderState.setText("已发货");
-				break;
-			case 5:
-				orderState.setText("已收货");
-				break;
-			default:
-				break;
-			}
-
-			goodsPrice.setText("￥"+order.getGoods().getGoodsPrice());
-			shopName.setText(order.getGoods().getShop().getShopName());
-			goodsCount.setText(order.getGoodsQTY());
-			goodsSum.setText("￥"+order.getGoodsSum()+"");
-			goodsPicture.load(Server.serverAdress+order.getGoods().getGoodsImage());
-			
-			if(order.getOrdersState()==1){
-				orderState.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						
-					}
-				});
-			}
-			shopName.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					goShopActivity(position);
-				}
-			});
-			ordersDelete.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					//删除订单
-					goOrderDelete(position);
-				}
-			});
-			
-			
-			return view;
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return ordersData.get(position);
-		}
-
-		@Override
-		public int getCount() {
-			return ordersData==null?0:ordersData.size();
-		}
-	};
-
+	static void text(Context context) {
+		Toast.makeText(context, "aaa", Toast.LENGTH_SHORT).show();
+	}
 
 	@Override
 	protected void onResume() {
@@ -211,7 +127,7 @@ protected void changeContentFragment(int index) {
 		if (tabbar.getSelectedIndex() < 0) {
 			tabbar.setSelectedItem(0);
 		}
-		LoadMyOrders();
+		//		LoadMyOrders();
 	}
 	public void LoadMyOrders(){
 		OkHttpClient client=Server.getSharedClient();
@@ -232,7 +148,7 @@ protected void changeContentFragment(int index) {
 									.readValue(responseStr, new TypeReference<Page<Orders>>() {});
 							ordersData=data.getContent();
 							Page=data.getNumber();
-							listAdapter.notifyDataSetInvalidated();
+//							listAdapter.notifyDataSetInvalidated();
 						} catch (JsonParseException e) {
 							e.printStackTrace();
 						} catch (JsonMappingException e) {
@@ -251,7 +167,7 @@ protected void changeContentFragment(int index) {
 			}
 		});
 	}
-	
+
 	public void goShopActivity(int position){
 		Intent intent=new Intent(MyOrdersActivity.this,ShopActivity.class);
 		intent.putExtra("shop",ordersData.get(position).getGoods().getShop());
@@ -269,13 +185,13 @@ protected void changeContentFragment(int index) {
 		});
 		builder.show();
 	}
-	
+
 	public void deleteOrder(int position){
 		OkHttpClient client=Server.getSharedClient();
 		Request request=Server.requestBuilderWithApi("orders/delete/"+ordersData.get(position).getOrdersID())
 				.get().build();
 		client.newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				String responseStr=arg1.body().string();
@@ -290,12 +206,12 @@ protected void changeContentFragment(int index) {
 					}
 				});
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
-				
+
 			}
 		});
 	}
-	
+
 }

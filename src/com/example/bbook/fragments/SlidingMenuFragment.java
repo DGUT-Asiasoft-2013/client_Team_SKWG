@@ -42,6 +42,8 @@ public class SlidingMenuFragment extends Fragment  implements OnItemClickListene
 	String typeStr,authorStr;
 	boolean isTypeSelected=false,isAuthorSelected=false;
 	int gPosition=-1;
+	//按金额搜索
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub

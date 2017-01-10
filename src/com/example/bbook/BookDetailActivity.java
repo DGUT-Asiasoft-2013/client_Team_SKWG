@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Server;
+import com.example.bbook.api.Shop;
 import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.fragments.NumberPlusAndMinusFrament;
@@ -98,9 +99,35 @@ public class BookDetailActivity extends Activity {
 		TextView bookCount=(TextView) findViewById(R.id.book_count);
 		bookCount.setText("库存:"+goods.getGoodsCount());
 		
+		TextView bookSales=(TextView) findViewById(R.id.goods_sales);
+		bookSales.setText("销量:"+goods.getGoodsSales());
+		
+		View connectSeller=findViewById(R.id.connect_seller);
+		View goStore=findViewById(R.id.go_store);		
+		
 		goodsPicture=(GoodsPicture) findViewById(R.id.picture);
 		goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
 
+		goStore.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				goShopActivity();
+			}
+		});
+		
+		connectSeller.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				   contactSeller();
+			}
+			
+		
+		});
+		
 		detailLabel.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -217,7 +244,7 @@ public class BookDetailActivity extends Activity {
 		changeFragmentContent(selectedIndex);
 
 	}
-
+//选择书本详情或者书本评论
 	public void changeFragmentContent(int selectedIndex){
 		Fragment newFrag=null;
 		switch (selectedIndex) {
@@ -235,6 +262,19 @@ public class BookDetailActivity extends Activity {
 		getFragmentManager().beginTransaction().replace(R.id.content, newFrag).commit();
 
 	}
-
-
+//进入卖家店铺
+	public void goShopActivity(){
+		Shop shop=goods.getShop();
+		Intent intent=new Intent(BookDetailActivity.this,ShopActivity.class);
+		intent.putExtra("shop", shop);
+		startActivity(intent);
+	}
+	
+	//联系卖家
+    public void contactSeller() {
+    	Shop shop=goods.getShop();
+        Intent itnt = new Intent(BookDetailActivity.this, ChatActivity.class);
+        itnt.putExtra("shop", shop);
+        startActivity(itnt);
+}
 }

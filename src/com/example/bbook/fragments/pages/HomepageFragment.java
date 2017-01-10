@@ -90,6 +90,8 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 	GoodsPicture goodsPicture;
 	TextView textview;
 	TextView goodsPrice;
+	TextView goodsName;
+	TextView goodsSales;
 
 	String sortStyle="createDate";
 	String typeStr="全部",authorStr="全部";
@@ -126,8 +128,8 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 	//侧拉菜单
 	private DrawerLayout mDrawerLayout = null;
 	private ImageView bt1;
-	private Button bt2;
-	private Button bt3;
+//	private Button bt2;
+//	private Button bt3;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -142,11 +144,11 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 		//侧拉菜单
 
 		bt1 = (ImageView) view.findViewById(R.id.more_choice);
-		bt2 = (Button) view.findViewById(R.id.btn1);
-		bt3 = (Button) view.findViewById(R.id.btn2);
+//		bt2 = (Button) view.findViewById(R.id.btn1);
+//		bt3 = (Button) view.findViewById(R.id.btn2);
 		bt1.setOnClickListener(this);
-		bt2.setOnClickListener(this);
-		bt3.setOnClickListener(this);
+//		bt2.setOnClickListener(this);
+//		bt3.setOnClickListener(this);
 		mDrawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
 		mDrawerLayout.setDrawerListener(new DrawerListener() {
 
@@ -178,11 +180,12 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				Log.d("typeStr", typeStr);
 				if(!typeStr.equals("全部")||!authorStr.equals("全部")){
 					isClassified=true;
+					bookLoad();
 				}
 				else {
 					isClassified=false;
+					
 				}
-				bookLoad();
 				//				goodsType=slidingMenuFragment.getGoodsType();
 				//				if(goodsType.equals("全部")){
 				//					isClassified=false;
@@ -358,12 +361,15 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			textview=(TextView) view.findViewById(R.id.id);
 			goodsPrice=(TextView) view.findViewById(R.id.price);
 			goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
-
+			goodsName=(TextView) view.findViewById(R.id.goods_name);
+			goodsSales=(TextView) view.findViewById(R.id.goods_sales);
+			
 			goods=data.get(position);
 			textview.setText("商家:"+goods.getShop().getShopName());
 			goodsPrice.setText("价格："+goods.getGoodsPrice());
 			goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
-
+			goodsName.setText("书名:"+goods.getGoodsName());
+			goodsSales.setText("销量:"+goods.getGoodsSales());
 			goodsPicture.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
@@ -376,7 +382,6 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Toast.makeText(getActivity(), "ID",Toast.LENGTH_SHORT).show();
-					textview.setTextColor(Color.RED);
 					goShopActivity(position);
 				}
 			});
@@ -553,7 +558,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				request=Server.requestBuilderWithApi("goods/classify/"+typeStr)
 						.get().build();
 			}
-			
+
 			else if(!(authorStr.equals("全部"))){
 				request=Server.requestBuilderWithApi("goods/search/"+authorStr)
 						.get().build();
@@ -561,7 +566,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				request=Server.requestBuilderWithApi("goods/classify/"+authorStr)
 						.get().build();
 			}
-			
+
 		}
 		if(isSorted){
 			request=Server.requestBuilderWithApi("goods/sort/"+sortStyle)
@@ -584,7 +589,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/classify/"+typeStr+"/sort/"+sortStyle)
 					.get().build();
 		}
-		
+
 		OkHttpClient client=Server.getSharedClient();
 
 
@@ -709,7 +714,7 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 				request=Server.requestBuilderWithApi("goods/classify/"+authorStr)
 						.get().build();
 			}
-			
+
 		}
 		if(isSearched&&isSorted){
 			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/sort/"+sortStyle+"?page="+(page+1))
@@ -877,8 +882,6 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 		.show();
 	}
 
-
-
 	@Override
 	public void onClick(View v) {
 
@@ -887,16 +890,16 @@ public class HomepageFragment extends Fragment implements OnClickListener{
 			mDrawerLayout.openDrawer(Gravity.RIGHT);
 			//	Toast.makeText(getActivity(), "bt1111111111", Toast.LENGTH_LONG).show();
 			break;
-		case R.id.btn1:
-			//		Toast.makeText(getActivity(), "bt2222222222", Toast.LENGTH_LONG).show();
-			break;
-		case R.id.btn2:
+//		case R.id.btn1:
+//			//		Toast.makeText(getActivity(), "bt2222222222", Toast.LENGTH_LONG).show();
+//			break;
+//		case R.id.btn2:
 			//	Toast.makeText(getActivity(), "bt33333333333", Toast.LENGTH_LONG).show();
-			break;
+//			break;
 		default:
 			break;
 		}
-
-
 	}
+
+
 }
