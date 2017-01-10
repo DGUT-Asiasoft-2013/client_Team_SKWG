@@ -11,6 +11,9 @@ import com.example.bbook.api.Shop;
 import com.example.bbook.api.entity.PublishInfo;
 import com.example.bbook.api.entity.Subscribe;
 import com.example.bbook.api.widgets.ItemFragment;
+import com.example.bbook.api.widgets.TitleBarFragment;
+import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
+import com.example.bbook.api.widgets.TitleBarFragment.OnGoNextListener;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,6 +50,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AddGoodsActivity extends Activity {
+	TitleBarFragment fragTitleBar;
 	Spinner spinner;
 	List<String> type_list;
 	ArrayAdapter<String> type_adapter;
@@ -77,6 +81,24 @@ public class AddGoodsActivity extends Activity {
 
 		fragGoodsImage = (PictureInputCellFragment) getFragmentManager()
 				.findFragmentById(R.id.input_goods_image);
+
+		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
+		fragTitleBar.setTitleName("发布商品", 16);
+		fragTitleBar.setOnGoBackListener(new OnGoBackListener() {
+			
+			@Override
+			public void onGoBack() {
+				finish();
+			}
+		});
+		fragTitleBar.setOnGoNextListener(new OnGoNextListener() {
+			
+			@Override
+			public void onGoNext() {
+				onSubmit();
+			}
+		});
+		fragTitleBar.setBtnNextText("发布", 12);
 
 		//初始化publishinfo、宝贝描述
 		publishinfo=new PublishInfo();
@@ -147,13 +169,6 @@ public class AddGoodsActivity extends Activity {
 			}
 		});
 
-		findViewById(R.id.submit).setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				onSubmit();
-			}
-		});
 	}
 
 	protected void onSubmit() {
