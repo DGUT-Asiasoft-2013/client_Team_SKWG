@@ -12,21 +12,22 @@ import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.entity.Orders;
 import com.example.bbook.api.widgets.GoodsPicture;
+import com.example.bbook.api.widgets.ManageOrderBottomContent;
+import com.example.bbook.api.widgets.ManageOrderBottomContent.OnDeleteClickedListener;
+import com.example.bbook.api.widgets.ManageOrderBottomContent.OnDeliverClickedListener;
+import com.example.bbook.api.widgets.ManageOrderBottomContent.OnRefundClickedListener;
 import com.example.bbook.api.widgets.OrderBottomContent;
 import com.example.bbook.api.widgets.OrderMiddleContent;
 import com.example.bbook.api.widgets.OrderTopContent;
-import com.example.bbook.api.widgets.OrderBottomContent.OnCommentClickedListener;
-import com.example.bbook.api.widgets.OrderBottomContent.OnConfirmClickedListener;
-import com.example.bbook.api.widgets.OrderBottomContent.OnDeleteClickedListener;
-import com.example.bbook.api.widgets.OrderBottomContent.OnPayClickedListener;
-import com.example.bbook.api.widgets.OrderBottomContent.OnRejectClickedListener;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -92,6 +93,7 @@ public class ManageOrderAllFragment extends Fragment {
 					goodsOfOrder.add(listData.get(j));
 				}
 			}
+			Log.d("goodsOfOrderSize", goodsOfOrder.size() + "");
 			dataset.put(orderList.get(i).getOrdersID(), goodsOfOrder);
 			Log.d("dataSetSize", dataset.size() + "");
 		}
@@ -108,7 +110,7 @@ public class ManageOrderAllFragment extends Fragment {
 				orderContents.add(middleContent);
 				sum += dataset.get(orderList.get(i).getOrdersID()).get(j).getGoodsSum();
 			}
-			OrderBottomContent bottomContent = new OrderBottomContent(orderList.get(i), sum);
+			ManageOrderBottomContent bottomContent = new ManageOrderBottomContent(orderList.get(i), sum);
 			orderContents.add(bottomContent);
 		}
 	}
@@ -122,21 +124,25 @@ public class ManageOrderAllFragment extends Fragment {
 		}
 		list.setAdapter(listAdapter);
 		list.setDivider(null);
-		list.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent itnt = new Intent(getActivity(), OrderDetailActivity.class);
-				itnt.putExtra("order", listData.get(position));
-				startActivity(itnt);
-			}
-		});
+//		list.setOnItemClickListener(new OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//				Intent itnt = new Intent(getActivity(), OrderDetailActivity.class);
+//				itnt.putExtra("order", listData.get(position));
+//				startActivity(itnt);
+//			}
+//		});
 		return view;
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
+		reload();
+	}
+	
+	void reload() {
 		orderList = new ArrayList<>();
 		dataset = new HashMap<>();
 		orderContents = new ArrayList<>();
@@ -146,49 +152,35 @@ public class ManageOrderAllFragment extends Fragment {
 			load(state);
 		}
 	}
-	
 
+	
+	
 	BaseAdapter listAdapter = new BaseAdapter() {
 		LayoutInflater inflater;
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if(orderContents.get(position) instanceof OrderBottomContent) {
-				OrderBottomContent bottomContent = (OrderBottomContent) orderContents.get(position);
+			if(orderContents.get(position) instanceof ManageOrderBottomContent) {
+				ManageOrderBottomContent bottomContent = (ManageOrderBottomContent) orderContents.get(position);
 				final Orders order = bottomContent.getOrder();
-				bottomContent.setOnConfirmClickedListener(new OnConfirmClickedListener() {
-					
-					@Override
-					public void onConfirmClicked() {
-						Toast.makeText(getActivity(), "aaa", Toast.LENGTH_SHORT).show();
-//						goConfirm(order);
-					}
-				});
-				bottomContent.setOnPayClickedListener(new OnPayClickedListener() {					
-					@Override
-					public void onPayClicked() {
-//						toBePayOrders.add(order);
-//						checkPayPasswordIsExisted();
-					}
-				});
-				bottomContent.setOnCommentClickedListener(new OnCommentClickedListener() {
-					
-					@Override
-					public void onCommentClicked() {
-//						goComment(order.getOrdersID());
-					}
-				});
-				bottomContent.setOnRejectClickedListener(new OnRejectClickedListener() {
-					
-					@Override
-					public void onRejectClicked() {
-//						goReject(order);
-					}
-				});
 				bottomContent.setOnDeleteClickedListener(new OnDeleteClickedListener() {
 					
 					@Override
 					public void onDeleteClicked() {
 //						goDelete(order);
+					}
+				});
+				bottomContent.setOnRefundClickedListener(new OnRefundClickedListener() {
+					
+					@Override
+					public void onRefundClicked() {
+//						goRefund();
+					}
+				});
+				bottomContent.setOnDeliverClickedListener(new OnDeliverClickedListener() {
+					
+					@Override
+					public void onDeliverClicked() {
+						goDeliver(order);
 					}
 				});
 			}
@@ -297,7 +289,32 @@ public class ManageOrderAllFragment extends Fragment {
 		});
 	}
 	
-	void onSend(Orders order) {
+	void goDeliver(final Orders order) {
+		if(order != null) {
+			new AlertDialog.Builder(getActivity()).setMessage("确认发货？")
+			.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+				
+			})
+			.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					onDeliver(order);
+				}
+			}).show();
+		}
+		
+	}
+	
+	
+	// 商家发货
+	void onDeliver(Orders order) {
+		Log.d("orderIdaaa", order.getOrdersID());
 		MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("state", 4 + "");
 		Request request = Server.requestBuilderWithApi("order/" + order.getOrdersID()).post(body.build()).build();
 
@@ -310,7 +327,7 @@ public class ManageOrderAllFragment extends Fragment {
 					@Override
 					public void run() {
 						Toast.makeText(getActivity(), "已发货，等待买家确认收货", Toast.LENGTH_SHORT).show();
-						ManageOrderAllFragment.this.load();
+						ManageOrderAllFragment.this.reload();
 					}
 				});
 			}

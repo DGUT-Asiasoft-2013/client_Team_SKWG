@@ -12,6 +12,7 @@ import com.example.bbook.api.widgets.GoodsPicture;
 import com.example.bbook.api.widgets.OrderStateTabbarFragment;
 import com.example.bbook.api.widgets.OrderStateTabbarFragment.OnTabSelectedListener;
 import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
+import com.example.bbook.api.widgets.TitleBarFragment.OnGoNextListener;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.fragments.pages.OrdersAllFragment;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -72,7 +73,15 @@ public class MyOrdersActivity extends Activity {
 	private void setEvent() {
 		titleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
 		titleBar.setTitleName("我的订单", 18);
-		titleBar.setBtnNextState(false);
+		titleBar.setBtnNextText("退货/售后", 13);
+		titleBar.setOnGoNextListener(new OnGoNextListener() {
+			
+			@Override
+			public void onGoNext() {
+				Intent itnt = new Intent(MyOrdersActivity.this, MyRefundOrderActivity.class);
+				startActivity(itnt);
+			}
+		});
 		// 返回
 		titleBar.setOnGoBackListener(new OnGoBackListener() {
 

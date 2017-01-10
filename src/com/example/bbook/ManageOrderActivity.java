@@ -3,6 +3,7 @@ package com.example.bbook;
 import com.example.bbook.api.widgets.OrderStateTabbarFragment;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
+import com.example.bbook.api.widgets.TitleBarFragment.OnGoNextListener;
 import com.example.bbook.api.widgets.OrderStateTabbarFragment.OnTabSelectedListener;
 import com.example.bbook.fragments.pages.ManageOrderAllFragment;
 import com.example.bbook.fragments.pages.OrdersAllFragment;
@@ -10,6 +11,7 @@ import com.example.bbook.fragments.pages.OrdersAllFragment;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -60,7 +62,15 @@ public class ManageOrderActivity extends Activity {
 				finish();
 			}
 		});
-		titleBar.setBtnNextState(false);
+		titleBar.setBtnNextText("退货/退款", 13);
+		titleBar.setOnGoNextListener(new OnGoNextListener() {
+			
+			@Override
+			public void onGoNext() {
+				Intent itnt = new Intent(ManageOrderActivity.this, ManageOrderRefundActivity.class);
+				startActivity(itnt);
+			}
+		});
 	}
 	private void init() {
 		titleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
@@ -76,7 +86,7 @@ public class ManageOrderActivity extends Activity {
 		case 1 : newFrag = contentToBePay;break;
 		case 2 : newFrag = contentToBeSend; break;
 		case 3 : newFrag = contentToBeCheck; break;
-		case 4 : showPopWindow(); break;
+		case 4 : newFrag = contentToBeComment; break;
 		default: 
 			break;
 		}

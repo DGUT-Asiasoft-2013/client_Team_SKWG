@@ -31,11 +31,6 @@
                 class="com.example.bbook.api.widgets.OrderStateTabbarFragment"
                 tools:layout="@layout/fragment_widget_order_select_bar" />
 
-            <View
-                android:id="@+id/more"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_gravity="right" />
         </FrameLayout>
 
         <FrameLayout
