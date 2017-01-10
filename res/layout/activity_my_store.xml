@@ -23,8 +23,7 @@
         <com.example.bbook.api.widgets.AvatarView
             android:id="@+id/shop_avatar"
             android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ic_launcher" />
+            android:layout_height="50dp" />
 
         <TextView
             android:id="@+id/shop_name"
@@ -47,29 +46,29 @@
             android:layout_height="wrap_content"
             class="com.example.bbook.api.widgets.ItemFragment"
             tools:layout="@layout/fragment_widget_item" />
-        
+
         <fragment
             android:id="@+id/offsale"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             class="com.example.bbook.api.widgets.ItemFragment"
             tools:layout="@layout/fragment_widget_item" />
-        
-         <fragment
+
+        <fragment
             android:id="@+id/sold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             class="com.example.bbook.api.widgets.ItemFragment"
             tools:layout="@layout/fragment_widget_item" />
-         
-         <fragment
+
+        <fragment
             android:id="@+id/order_manage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             class="com.example.bbook.api.widgets.ItemFragment"
             tools:layout="@layout/fragment_widget_item" />
-         
-         <fragment
+
+        <fragment
             android:id="@+id/setting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
