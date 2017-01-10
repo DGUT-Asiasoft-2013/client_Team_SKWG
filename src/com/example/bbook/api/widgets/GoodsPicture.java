@@ -120,7 +120,7 @@ public class GoodsPicture extends View{
 
 //			canvas.drawCircle(srcWidth/2, srcHeight/2, Math.min(srcWidth, srcHeight)/2, paint);
 			
-			canvas.drawRect(0,0,200,200, paint);
+			canvas.drawRect(0,0,srcWidth,srcHeight, paint);
 			canvas.restore();
 		}
 	}

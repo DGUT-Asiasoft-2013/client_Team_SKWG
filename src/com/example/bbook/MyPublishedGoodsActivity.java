@@ -34,13 +34,17 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import util.MyListener;
+import util.PullToRefreshLayout;
+import util.PullableListView;
 
 public class MyPublishedGoodsActivity extends Activity {
 	TitleBarFragment fragTitleBar;
-	ListView list;
+	PullableListView list;
 	List<Goods> listData;
 	Shop shop;
 	int page = 0;
+	PullToRefreshLayout pullToRefreshLayout;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,18 +54,18 @@ public class MyPublishedGoodsActivity extends Activity {
 		setEvent();
 
 	}
-	
+
 	private void setEvent() {
 		fragTitleBar.setTitleName("已发布的", 16);
 		fragTitleBar.setOnGoBackListener(new OnGoBackListener() {
-			
+
 			@Override
 			public void onGoBack() {
 				finish();
 			}
 		});
 		fragTitleBar.setOnGoNextListener(new OnGoNextListener() {
-			
+
 			@Override
 			public void onGoNext() {
 				goAddGoods();
@@ -69,6 +73,23 @@ public class MyPublishedGoodsActivity extends Activity {
 		});
 		fragTitleBar.setBtnNextText("添加", 12);
 		list.setAdapter(goodsAdapter);
+
+		//自定义布局上拉下拉操作监听
+		pullToRefreshLayout.setOnRefreshListener(new MyListener(){
+			//下拉刷新操作
+			@Override
+			public void onRefresh(final PullToRefreshLayout pullToRefreshLayout){
+				load();
+				pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+			}
+			//上拉加载更多操作
+			@Override
+			public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout)
+			{
+				loadmore();
+				pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+			}
+		});
 	}
 
 	protected void goAddGoods() {
@@ -82,10 +103,11 @@ public class MyPublishedGoodsActivity extends Activity {
 		super.onResume();
 		load();
 	}
-	
+
 	private void init() {
-		list = (ListView) findViewById(R.id.list);
+		list = (PullableListView) findViewById(R.id.list);
 		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
+		pullToRefreshLayout=(PullToRefreshLayout)findViewById(R.id.refresh_view);
 	}
 
 	public void load() {
@@ -124,6 +146,40 @@ public class MyPublishedGoodsActivity extends Activity {
 		});
 	}
 
+	//加载更多
+	public void loadmore(){
+		Request request = Server.requestBuilderWithApi("goods/mygoods/onsale?page="+(page+1)).get().build();
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				try{
+					final Page<Goods> goods = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Goods>>() {});
+					if(goods.getNumber()>page){
+
+						runOnUiThread(new Runnable() {
+							public void run() {
+								if(listData==null){
+									listData = goods.getContent();
+								}else{
+									listData.addAll(goods.getContent());
+								}
+								page = goods.getNumber();
+								goodsAdapter.notifyDataSetChanged();
+							}
+						});
+					}
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+
+			}
+		});
+	}
+
 	private void goOffSale(final Goods goods) {
 		new AlertDialog.Builder(MyPublishedGoodsActivity.this).setMessage("确定下架商品?")
 		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -131,7 +187,7 @@ public class MyPublishedGoodsActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				onOffSale(goods);
-				
+
 			}
 		})
 		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -140,18 +196,18 @@ public class MyPublishedGoodsActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 			}
-			
+
 		}).show();
 	};
-	
+
 	private void onOffSale(Goods goods) {
 		Request request = Server.requestBuilderWithApi("goods/setonsale/" + goods.getId() + "?state=" + "false").build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				runOnUiThread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						MyPublishedGoodsActivity.this.load();
@@ -159,24 +215,24 @@ public class MyPublishedGoodsActivity extends Activity {
 					}
 				});
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
 			}
 		});
 	}
-	
+
 	private void goEdit(Goods goods) {
 		Intent itnt = new Intent(this,ChangeGoodsInfoActivity.class);
 		itnt.putExtra("goods", goods);
 		startActivity(itnt);
 	}
-	
+
 	private static class GoodsHolder {
 		GoodsPicture imgGoods;
 		TextView tvGoodsName, tvGoodsPrice, tvGoodsType, tvGoodsCount, tvOffSale, tvEdit;
 	}
-	
+
 	BaseAdapter goodsAdapter = new BaseAdapter() {
 		@SuppressLint("InflateParams")
 		@Override
@@ -207,14 +263,14 @@ public class MyPublishedGoodsActivity extends Activity {
 				gHolder.tvGoodsPrice.setText("￥" + goods.getGoodsPrice());
 				gHolder.tvGoodsCount.setText("库存:" + goods.getGoodsCount());
 				gHolder.tvOffSale.setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
 						goOffSale(goods);
 					}
 				});
 				gHolder.tvEdit.setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
 						goEdit(goods);

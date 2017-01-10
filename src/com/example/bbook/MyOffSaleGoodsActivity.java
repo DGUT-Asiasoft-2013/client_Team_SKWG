@@ -32,13 +32,17 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import util.MyListener;
+import util.PullToRefreshLayout;
+import util.PullableListView;
 
 public class MyOffSaleGoodsActivity extends Activity {
 	TitleBarFragment fragTitleBar;
-	ListView list;
+	PullableListView list;
 	List<Goods> listData;
 
 	int page = 0;
+	PullToRefreshLayout pullToRefreshLayout;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,8 +59,10 @@ public class MyOffSaleGoodsActivity extends Activity {
 		load();
 	}
 	private void init() {
-		list = (ListView) findViewById(R.id.list);
+		list = (PullableListView) findViewById(R.id.list);
 		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
+		pullToRefreshLayout=(PullToRefreshLayout)findViewById(R.id.refresh_view);
+
 	}
 
 	private void setEvent() {
@@ -70,6 +76,23 @@ public class MyOffSaleGoodsActivity extends Activity {
 		});
 		fragTitleBar.setBtnNextState(false);
 		list.setAdapter(goodsAdapter);
+
+		//自定义布局上拉下拉操作监听
+		pullToRefreshLayout.setOnRefreshListener(new MyListener(){
+			//下拉刷新操作
+			@Override
+			public void onRefresh(final PullToRefreshLayout pullToRefreshLayout){
+				load();
+				pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+			}
+			//上拉加载更多操作
+			@Override
+			public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout)
+			{
+				loadmore();
+				pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+			}
+		});
 	}
 
 	public void load() {
@@ -108,6 +131,39 @@ public class MyOffSaleGoodsActivity extends Activity {
 		});
 	}
 
+	//加载更多
+	public void loadmore(){
+		Request request = Server.requestBuilderWithApi("goods/mygoods/offsale?page="+(page+1)).get().build();
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				try{
+					final Page<Goods> goods = new ObjectMapper().readValue(arg1.body().string(), new TypeReference<Page<Goods>>() {});
+					if(goods.getNumber()>page){
+
+						runOnUiThread(new Runnable() {
+							public void run() {
+								if(listData==null){
+									listData = goods.getContent();
+								}else{
+									listData.addAll(goods.getContent());
+								}
+								page = goods.getNumber();
+								goodsAdapter.notifyDataSetChanged();
+							}
+						});
+					}
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+
+			}
+		});
+	}
 
 	private void goOnSale(final Goods goods) {
 		new AlertDialog.Builder(MyOffSaleGoodsActivity.this).setMessage("确定上架商品?")

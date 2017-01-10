@@ -417,12 +417,12 @@ public class ChangeGoodsInfoActivity extends Activity {
 	}  
 
 
-
-	void pickFrmCamera() {
-		Intent itnt = new Intent(Intent.ACTION_GET_CONTENT);
-		itnt.setType("image/*");
-		startActivityForResult(itnt, REQUESTCODE_ALBUM);
-	}
+//
+//	void pickFrmCamera() {
+//		Intent itnt = new Intent(Intent.ACTION_GET_CONTENT);
+//		itnt.setType("image/*");
+//		startActivityForResult(itnt, REQUESTCODE_ALBUM);
+//	}
 
 	void takePhoto() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
