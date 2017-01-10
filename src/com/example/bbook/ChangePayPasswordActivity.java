@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class ChangePasswordActivity extends Activity {
+public class ChangePayPasswordActivity extends Activity {
 	SimpleTextInputcellFragment fragBeforePassword, fragNewPassword, fragNewPassowrdRepeat;
 	TitleBarFragment fragChangeTitleBar;
 
@@ -36,7 +37,7 @@ public class ChangePasswordActivity extends Activity {
 		
 		fragChangeTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.change_titlebar);
 		fragChangeTitleBar.setBtnNextState(false);
-		fragChangeTitleBar.setTitleName("修改密码", 16);
+		fragChangeTitleBar.setTitleName("修改支付密码", 16);
 		fragChangeTitleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
                 
                 @Override
@@ -63,14 +64,14 @@ public class ChangePasswordActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		fragBeforePassword.setLabelText("原密码");
-		fragBeforePassword.setHintText("请输入原密码");
+		fragBeforePassword.setLabelText("原支付密码");
+		fragBeforePassword.setHintText("请输入支付原密码");
 		fragBeforePassword.setEditText(true);
-		fragNewPassword.setLabelText("新密码");
-		fragNewPassword.setHintText("请输入新密码");
+		fragNewPassword.setLabelText("新支付密码");
+		fragNewPassword.setHintText("请输入支付新密码");
 		fragNewPassword.setEditText(true);
-		fragNewPassowrdRepeat.setLabelText("重复新密码");
-		fragNewPassowrdRepeat.setHintText("请重复输入新密码");
+		fragNewPassowrdRepeat.setLabelText("重复新支付密码");
+		fragNewPassowrdRepeat.setHintText("请重复输入新支付密码");
 		fragNewPassowrdRepeat.setEditText(true);
 	}
 
@@ -81,7 +82,7 @@ public class ChangePasswordActivity extends Activity {
 		String newPasswordRepeat = fragNewPassowrdRepeat.getText();
 		if (newPassword.equals(newPasswordRepeat)) {
 			if(newPassword.isEmpty()){
-				Toast toast = Toast.makeText(ChangePasswordActivity.this, "新密码不能为空", Toast.LENGTH_SHORT);
+				Toast toast = Toast.makeText(ChangePayPasswordActivity.this, "新支付密码不能为空", Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
 				return;
@@ -90,7 +91,7 @@ public class ChangePasswordActivity extends Activity {
 					.addFormDataPart("passwordHash", MD5.getMD5(beforePassword))
 					.addFormDataPart("newPasswordHash", MD5.getMD5(newPassword));
 
-			Request request = Server.requestBuilderWithApi("change").method("post", null).post(body.build()).build();
+			Request request = Server.requestBuilderWithApi("changepaypassword").method("post", null).post(body.build()).build();
 			Server.getSharedClient().newCall(request).enqueue(new Callback() {
 
 				@Override
@@ -104,7 +105,7 @@ public class ChangePasswordActivity extends Activity {
 								isChange = new ObjectMapper().readValue(arg1.body().string(), Boolean.class);
 								if (isChange) {
 
-									ChangePasswordActivity.this.onResponse(arg0, arg1);
+									ChangePayPasswordActivity.this.onResponse(arg0, arg1);
 
 								} else {
 									onFail();
@@ -135,20 +136,20 @@ public class ChangePasswordActivity extends Activity {
 		}else{
 			new AlertDialog.Builder(this)
 			.setTitle("温馨提示")
-			.setMessage("新密码输入不一致,请重新输入")
+			.setMessage("新支付密码输入不一致,请重新输入")
 			.setPositiveButton("好的", null)
 			.show();
 		}
 	}
 
 	void onResponse(Call arg0, Response arg1) {
-		new AlertDialog.Builder(this).setMessage("修改成功").setPositiveButton("返回登录界面", new DialogInterface.OnClickListener() {
+		new AlertDialog.Builder(this).setMessage("修改成功").setPositiveButton("返回", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
-				Intent itnt = new Intent(ChangePasswordActivity.this, LoginActivity.class);
-				startActivity(itnt);
+//				Intent itnt = new Intent(ChangePayPasswordActivity.this, LoginActivity.class);
+//				startActivity(itnt);
 				finish();
 			}
 		}).show();

@@ -57,7 +57,8 @@ public class SettingsActivity extends Activity {
                 itemPayPassword.setOnDetailedListener(new ItemFragment.OnDetailedListener() {
 
                         public void onDetailed() {
-                                // 待实现
+                        	Intent itnt = new Intent(SettingsActivity.this, ChangePayPasswordActivity.class);
+                            startActivity(itnt);
                         }
                 });
 
