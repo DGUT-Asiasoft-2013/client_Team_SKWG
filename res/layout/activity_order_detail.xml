@@ -115,76 +115,11 @@
                 android:layout_height="1px"
                 android:background="#ccc" />
 
-            <LinearLayout
+            <ListView
+                android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp" >
-
-                <com.example.bbook.api.widgets.GoodsPicture
-                    android:id="@+id/goods_image"
-                    android:layout_width="60dp"
-                    android:layout_height="70dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/ic_launcher" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="4dp" >
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" >
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_marginRight="50dp"
-                            android:orientation="vertical"
-                            android:padding="5dp" >
-
-                            <TextView
-                                android:id="@+id/goods_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="商品名称" />
-
-                            <TextView
-                                android:id="@+id/goods_type"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="类型"
-                                android:textColor="@android:color/darker_gray"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="4" >
-
-                        <TextView
-                            android:id="@+id/goods_price"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:layout_marginLeft="5dp"
-                            android:text="00.00" />
-
-                        <TextView
-                            android:id="@+id/goods_quantity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:text="x1" />
-                    </FrameLayout>
-                </LinearLayout>
-            </LinearLayout>
+                android:layout_height="200dp" >
+            </ListView>
 
             <View
                 android:layout_width="match_parent"
@@ -228,20 +163,17 @@
                 <TextView
                     android:id="@+id/pay_date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/delever_date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                     />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/complete_date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                     />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
