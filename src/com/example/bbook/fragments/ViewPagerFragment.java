@@ -6,10 +6,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.example.bbook.BookDetailActivity;
+import com.example.bbook.ClassifyActivity;
 import com.example.bbook.R;
 
 import android.R.raw;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
@@ -32,6 +35,7 @@ public class ViewPagerFragment extends Fragment {
 	ViewPager viewPager;
 	List<ImageView> imgList;
 	List<View>  matBar;
+	List<String> titleList;
 	int cursorIndex=0;
 	int dPosition=0;
 	
@@ -72,7 +76,16 @@ ImageView cursor;
 		matBar.add( view.findViewById(R.id.dot_2));
 		matBar.add( view.findViewById(R.id.dot_3));
 		matBar.add( view.findViewById(R.id.dot_4));
+//		for(int i=0;i<matBar.size();i++){
+//			matBar.get(i).setOnClickListener(this);
+//		}
 		
+//		titleList=new ArrayList<>();
+//		titleList.add("人生的8400可能种");
+//		titleList.add("1");
+//		titleList.add("2");
+//		titleList.add("3");
+//		titleList.add("4");
 		
 		viewPager.setAdapter(pagerAdapter);
 		
@@ -105,7 +118,6 @@ ImageView cursor;
 
 			}
 		});
-
 		return view;
 	}
       
@@ -113,6 +125,11 @@ ImageView cursor;
 
 	 
 	PagerAdapter pagerAdapter=new PagerAdapter() {
+		
+//		@Override
+//		public CharSequence getPageTitle(int position) {
+//			return titleList.get(position);
+//		};
 
 		@Override
 		public boolean isViewFromObject(View arg0, Object arg1) {
@@ -127,7 +144,17 @@ ImageView cursor;
 		}
 
 		@Override
-		public Object instantiateItem(ViewGroup container, int position) {
+		public Object instantiateItem(ViewGroup container, final int position) {
+			
+			View view =imgList.get(position);
+			view.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub					
+					goActivity(position);
+				}
+			});
+			
 			container.addView(imgList.get(position));
 			return imgList.get(position);
 		}
@@ -176,9 +203,42 @@ ImageView cursor;
 		}
 
 	}
+	
 	private Handler handler=new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			viewPager.setCurrentItem(cursorIndex);
 		};
 	};
+	
+	
+	//viewPager监听器，进入分类页面
+	public void goActivity(int position){
+		Intent intent=new Intent(getActivity(),ClassifyActivity.class);
+		switch (position) {
+		case 0:
+			intent.putExtra("title", "小说");
+			startActivity(intent);
+			
+			break;
+		case 1:
+			intent.putExtra("title", "哲学");
+			startActivity(intent);
+			break;
+		case 2:
+			intent.putExtra("title", "文学");
+			startActivity(intent);
+			break;
+		case 3:
+			intent.putExtra("title", "青春文学");
+			startActivity(intent);
+			break;
+		case 4:
+			intent.putExtra("title", "成功励志");
+			startActivity(intent);
+			break;
+
+		default:
+			break;
+		}
+	}
 }

@@ -70,8 +70,6 @@ public class HomePage extends Fragment implements OnClickListener{
 
 		OkHttpClient client=Server.getSharedClient();
 
-
-
 		client.newCall(request).enqueue(new Callback() {
 
 			@Override
@@ -122,7 +120,7 @@ public class HomePage extends Fragment implements OnClickListener{
 						try {
 							Page<Goods> data=new ObjectMapper()
 									.readValue(responseStr, new TypeReference<Page<Goods>>() {
-									});					
+									});		
 							bookPage1=data.getNumber();
 							bookAdapter1.setData(data.getContent(),bookPage1);
 						} catch (Exception e) {
