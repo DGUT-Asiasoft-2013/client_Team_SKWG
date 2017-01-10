@@ -199,14 +199,11 @@ public class OpenStoreActivity extends Activity {
 
 				@Override
 				public void onResponse(Call arg0, Response arg1) throws IOException {
-					Intent itnt = new Intent(OpenStoreActivity.this, HelloWorldActivity.class);
-					startActivity(itnt);
 					finish();
 				}
 
 				@Override
 				public void onFailure(Call arg0, IOException arg1) {
-					// TODO Auto-generated method stub
 
 				}
 			});
