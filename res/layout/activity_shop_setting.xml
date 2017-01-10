@@ -16,9 +16,9 @@
     <FrameLayout
         android:id="@+id/chang_shop_avatar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginBottom="20dp"
-        android:background="@android:color/white"
+        android:background="@drawable/topbg"
         android:orientation="horizontal" >
 
         <TextView

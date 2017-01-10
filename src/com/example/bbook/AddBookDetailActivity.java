@@ -16,6 +16,8 @@ public class AddBookDetailActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_addbookdetail);
 		edt_detail=(EditText)findViewById(R.id.editText1);
+		String bookdetail=(String)getIntent().getStringExtra("bookdetail");
+		edt_detail.setText(bookdetail);  //初始赋值
 		
 		findViewById(R.id.btn_back).setOnClickListener(new OnClickListener() {
 			@Override

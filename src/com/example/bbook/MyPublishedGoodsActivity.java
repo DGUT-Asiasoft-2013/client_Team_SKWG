@@ -167,7 +167,9 @@ public class MyPublishedGoodsActivity extends Activity {
 	}
 	
 	private void goEdit(Goods goods) {
-		
+		Intent itnt = new Intent(this,ChangeGoodsInfoActivity.class);
+		itnt.putExtra("goods", goods);
+		startActivity(itnt);
 	}
 	
 	private static class GoodsHolder {

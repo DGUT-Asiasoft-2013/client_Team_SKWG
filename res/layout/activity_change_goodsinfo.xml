@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical" >
 
     <fragment
@@ -11,6 +12,7 @@
         android:layout_height="wrap_content"
         class="com.example.bbook.api.widgets.TitleBarFragment"
         tools:layout="@layout/fragment_widget_titlebar" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -20,12 +22,37 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <fragment
-                android:id="@+id/input_goods_image"
+            <FrameLayout
+                android:id="@+id/chang_picture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                class="inputcells.PictureInputCellFragment"
-                tools:layout="@layout/fragment_inputcell_picture" />
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:text="商品图片" />
+
+                <com.example.bbook.api.widgets.GoodsPicture
+                    android:id="@+id/goodsimg"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_marginLeft="100dp" />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginRight="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_next" />
+            </FrameLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -46,6 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:background="@android:color/white"
                 android:orientation="horizontal"
                 android:padding="8dp" >
 
