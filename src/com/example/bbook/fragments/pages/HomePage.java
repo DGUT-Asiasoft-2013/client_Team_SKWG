@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.example.bbook.R;
+import com.example.bbook.SearchBooksActivity;
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
@@ -16,6 +17,7 @@ import Adapter.MyGridviewAdapter;
 import android.R.raw;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,6 +42,7 @@ public class HomePage extends Fragment implements OnClickListener{
 	TextView goodsPrice;
 	TextView goodsName;
 	TextView goodsSales;
+	TextView moreBooks;
 	
 	int bookPage1=0,bookPage2,bookPage3;
 	TextView change1,change2,change3;
@@ -297,13 +300,15 @@ public class HomePage extends Fragment implements OnClickListener{
 		gridview2=(MyGridView) view.findViewById(R.id.book_gridView2);
 		gridview3=(MyGridView) view.findViewById(R.id.book_gridView3);
 		
+		
 		change1=(TextView) view.findViewById(R.id.change1);
 		change1.setOnClickListener(this);
 		change2=(TextView) view.findViewById(R.id.change2);
 		change2.setOnClickListener(this);
 		change3=(TextView) view.findViewById(R.id.change3);
 		change3.setOnClickListener(this);
-		
+		moreBooks=(TextView) view.findViewById(R.id.more_book);
+		moreBooks.setOnClickListener(this);		
 		
 		bookAdapter1=new MyGridviewAdapter(getActivity());
 		gridview1.setAdapter(bookAdapter1);
@@ -311,6 +316,8 @@ public class HomePage extends Fragment implements OnClickListener{
 		gridview2.setAdapter(bookAdapter2);
 		bookAdapter3=new MyGridviewAdapter(getActivity());
 		gridview3.setAdapter(bookAdapter3);
+		
+		
 		
 	}
 
@@ -329,7 +336,10 @@ public class HomePage extends Fragment implements OnClickListener{
 		case R.id.change3:
 			loadMoreBook3();
 			break;
-
+		case R.id.more_book:
+			Intent intent=new Intent(getActivity(),SearchBooksActivity.class);
+			startActivity(intent);
+				
 		default:
 			break;
 		}

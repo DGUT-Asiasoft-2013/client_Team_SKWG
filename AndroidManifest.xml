@@ -86,6 +86,7 @@
         <activity android:name="com.example.bbook.AddBookDetailActivity" />
         <activity android:name="com.example.bbook.SettingsActivity" />
         <activity android:name="com.example.bbook.ChangeGoodsInfoActivity" />
+        <activity android:name="com.example.bbook.SearchBooksActivity" />
     </application>
 
 </manifest>

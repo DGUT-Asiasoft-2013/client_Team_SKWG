@@ -21,7 +21,16 @@
                 android:layout_height="wrap_content"
                 class="com.example.bbook.fragments.ViewPagerFragment"
                 tools:layout="@layout/fragment_viewpager" />
-
+  <TextView
+            android:id="@+id/more_book"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/orange"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="更多"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -4,7 +4,8 @@ package com.example.bbook;
 import com.example.bbook.api.widgets.MainTabbarFragment;
 import com.example.bbook.api.widgets.MainTabbarFragment.OnTabSelectedListener;
 import com.example.bbook.fragments.pages.ForumFragment;
-import com.example.bbook.fragments.pages.HomepageFragment;
+import com.example.bbook.fragments.pages.HomePage;
+import com.example.bbook.fragments.pages.HomePageFragment;
 import com.example.bbook.fragments.pages.MyProfileFragment;
 import com.example.bbook.fragments.pages.ShoppingCartFragment;
 import com.example.bbook.fragments.pages.SortFragment;
@@ -20,7 +21,8 @@ import android.view.KeyEvent;
 
 public class HelloWorldActivity extends Activity {
 
-	HomepageFragment contentHomepage = new HomepageFragment();
+	//HomepageFragment contentHomepage = new HomepageFragment();
+	HomePage contentHomepage = new HomePage();
 	ClassifyFragment classifyFragment=new ClassifyFragment();
 //	SortFragment contentSort = new SortFragment();
 	ForumFragment contentForum= new ForumFragment();
