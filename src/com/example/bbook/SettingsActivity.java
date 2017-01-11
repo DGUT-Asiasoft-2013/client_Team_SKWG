@@ -48,6 +48,7 @@ public class SettingsActivity extends Activity {
                         public void onDetailed() {
                                 Intent itnt = new Intent(SettingsActivity.this, ChangePasswordActivity.class);
                                 startActivity(itnt);
+                                overridePendingTransition(R.anim.slide_in_right, R.anim.none);
                         }
                 });
 
@@ -60,6 +61,7 @@ public class SettingsActivity extends Activity {
                         public void onDetailed() {
                         	Intent itnt = new Intent(SettingsActivity.this, ChangePayPasswordActivity.class);
                             startActivity(itnt);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.none);
                         }
                 });
 
@@ -73,6 +75,7 @@ public class SettingsActivity extends Activity {
                         public void onDetailed() {
                                 Intent intent = new Intent(SettingsActivity.this, ManageCommomInfoActivity.class);
                                 startActivity(intent);
+                                overridePendingTransition(R.anim.slide_in_right, R.anim.none);
                         }
                 });
 

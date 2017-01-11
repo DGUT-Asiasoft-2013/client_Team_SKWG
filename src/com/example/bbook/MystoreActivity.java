@@ -145,33 +145,39 @@ public class MystoreActivity extends Activity {
         	Intent itnt = new Intent(MystoreActivity.this, ShopSettingActivity.class);
         	itnt.putExtra("shop", myshop);
         	startActivity(itnt);			
+        	overridePendingTransition(R.anim.slide_in_right, R.anim.none);
 		}
 
 		protected void goMySoldGoods() {
         	Intent itnt = new Intent(MystoreActivity.this, MySoldGoodsActivity.class);
         	startActivity(itnt);
+        	overridePendingTransition(R.anim.slide_in_right, R.anim.none);
 		}
 
 		protected void goMyOffSaleGoods() {
         	Intent itnt = new Intent(MystoreActivity.this, MyOffSaleGoodsActivity.class);
         	startActivity(itnt);
+        	overridePendingTransition(R.anim.slide_in_right, R.anim.none);
 		}
 
 		protected void goMyPublishedGoods() {
         	Intent itnt = new Intent(MystoreActivity.this, MyPublishedGoodsActivity.class);
         	itnt.putExtra("shop", myshop);
         	startActivity(itnt);
+        	overridePendingTransition(R.anim.slide_in_right, R.anim.none);
 		}
 
 		protected void goOrderManage() {
         	Intent itnt = new Intent(MystoreActivity.this, ManageOrderActivity.class);
         	startActivity(itnt);
+        	overridePendingTransition(R.anim.slide_in_right, R.anim.none);
 		}
 
 		protected void goAdd() {
                 Intent itnt = new Intent(MystoreActivity.this, AddGoodsActivity.class);
                 itnt.putExtra("shop", myshop);
                 startActivity(itnt);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.none);
         }
 
         @Override

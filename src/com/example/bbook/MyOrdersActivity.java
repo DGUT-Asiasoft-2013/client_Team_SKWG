@@ -80,6 +80,7 @@ public class MyOrdersActivity extends Activity {
 			public void onGoNext() {
 				Intent itnt = new Intent(MyOrdersActivity.this, MyRefundOrderActivity.class);
 				startActivity(itnt);
+				overridePendingTransition(R.anim.slide_in_right, R.anim.none);
 			}
 		});
 		// 返回

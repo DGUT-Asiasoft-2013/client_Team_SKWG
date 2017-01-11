@@ -62,6 +62,7 @@ public class MyPublishedGoodsActivity extends Activity {
 			@Override
 			public void onGoBack() {
 				finish();
+				overridePendingTransition(R.anim.none, R.anim.slide_out_right);
 			}
 		});
 		fragTitleBar.setOnGoNextListener(new OnGoNextListener() {
@@ -96,6 +97,7 @@ public class MyPublishedGoodsActivity extends Activity {
 		Intent itnt = new Intent(MyPublishedGoodsActivity.this, AddGoodsActivity.class);
 		itnt.putExtra("shop", shop);
 		startActivity(itnt);
+		overridePendingTransition(R.anim.slide_in_right, R.anim.none);
 	}
 
 	@Override

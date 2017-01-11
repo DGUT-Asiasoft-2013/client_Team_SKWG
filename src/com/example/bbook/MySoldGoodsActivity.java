@@ -71,6 +71,7 @@ public class MySoldGoodsActivity extends Activity {
 			@Override
 			public void onGoBack() {
 				finish();
+				overridePendingTransition(R.anim.none, R.anim.slide_out_right);
 			}
 		});
 		fragTitleBar.setTitleName("已卖出的", 16);

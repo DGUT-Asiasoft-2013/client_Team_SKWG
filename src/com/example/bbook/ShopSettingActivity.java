@@ -112,6 +112,7 @@ public class ShopSettingActivity extends Activity {
 			@Override
 			public void onGoBack() {
 				finish();
+				overridePendingTransition(R.anim.none, R.anim.slide_out_right);
 			}
 		});
 		fragTitleBar.setBtnNextState(false);

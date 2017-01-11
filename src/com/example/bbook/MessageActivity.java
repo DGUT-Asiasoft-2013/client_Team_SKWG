@@ -299,6 +299,7 @@ public class MessageActivity extends Activity {
         void goPushMessage() {
                 Intent itnt = new Intent(MessageActivity.this, PushMessageActivity.class);
                 startActivity(itnt);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.none);
         }
         
 //        void goMySubscribe(){

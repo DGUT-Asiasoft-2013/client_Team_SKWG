@@ -60,6 +60,7 @@ public class ManageOrderActivity extends Activity {
 			@Override
 			public void onGoBack() {
 				finish();
+				overridePendingTransition(R.anim.none, R.anim.slide_out_right);
 			}
 		});
 		titleBar.setBtnNextText("退货/退款", 13);
@@ -69,6 +70,7 @@ public class ManageOrderActivity extends Activity {
 			public void onGoNext() {
 				Intent itnt = new Intent(ManageOrderActivity.this, ManageOrderRefundActivity.class);
 				startActivity(itnt);
+				overridePendingTransition(R.anim.slide_in_right, R.anim.none);
 			}
 		});
 	}
