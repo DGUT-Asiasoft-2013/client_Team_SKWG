@@ -207,7 +207,6 @@ public class OrdersAllFragment extends Fragment {
 					
 					@Override
 					public void onConfirmClicked() {
-						Toast.makeText(getActivity(), "aaa", Toast.LENGTH_SHORT).show();
 						goConfirm(order);
 					}
 				});

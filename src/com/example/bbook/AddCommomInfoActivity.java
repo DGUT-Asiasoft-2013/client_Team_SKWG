@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 import inputcells.SimpleTextInputcellFragment;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -77,8 +78,8 @@ public class AddCommomInfoActivity extends Activity {
 	}
 
 	void onResponse(Call arg0, String responseBody){
-		new AlertDialog.Builder(this).setTitle("成功")
-		.setMessage(responseBody).show();
+		Toast.makeText(AddCommomInfoActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+		finish();
 	}
 
 	void onFailure(Call arg0, Exception arg1) {

@@ -212,7 +212,7 @@ public class MystoreActivity extends Activity {
 
         void onResponse(Call arg0, Shop shop) {
                 myshop = shop;
-                tvShopName.setText("我的店铺:" + shop.getShopName());
+                tvShopName.setText(shop.getShopName());
                 avatarShop.load(Server.serverAdress + shop.getShopImage());
 //                reloadSubscribe();
         }
