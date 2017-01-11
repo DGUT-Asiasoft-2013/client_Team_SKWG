@@ -32,6 +32,7 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import util.AutoLoadListener;
 
 //商家页面
 public class ShopActivity extends Activity {
@@ -64,6 +65,9 @@ public class ShopActivity extends Activity {
                 goodsView = (GridView) findViewById(R.id.goods_gridview);
                 goodsView.setAdapter(goodsAdapter);
 
+            	//向下滚动加载更多
+        		AutoLoadListener autoLoadListener = new AutoLoadListener(callBack);  
+        		goodsView.setOnScrollListener(autoLoadListener);  
         	
                 // 联系卖家
                 findViewById(R.id.contact_seller).setOnClickListener(new View.OnClickListener() {
@@ -376,5 +380,69 @@ public class ShopActivity extends Activity {
     		.setTitle("失败")
     		.setMessage(arg1.getLocalizedMessage())
     		.show();
+    	}
+    	
+    	
+    
+    	
+    	//向下滚动加载
+    	AutoLoadListener.AutoLoadCallBack callBack = new AutoLoadListener.AutoLoadCallBack() {  
+
+    		public void execute() {  
+    			//            Utils.showToast("已经拖动至底部");  
+    			LoadMore();//这段代码是用来请求下一页数据的  
+    		}  
+
+    	}; 
+    	public void LoadMore(){
+             Request request = Server.requestBuilderWithApi("goods/get/" + shop.getId()+"?page="+(page+1)).get().build();
+    		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+
+    			@Override
+    			public void onResponse(Call arg0, final Response arg1) throws IOException {
+    				runOnUiThread(new Runnable() {
+
+    					@Override
+    					public void run() {
+    						try {
+    							Page<Goods> feeds=new ObjectMapper()
+    									.readValue(arg1.body().string(),
+    											new TypeReference<Page<Goods>>() {
+    									});
+
+    							if(feeds.getNumber()>page){
+    								if(data==null){
+    									data=feeds.getContent();
+    								}else{
+    									data.addAll(feeds.getContent());
+    								}
+    								page=feeds.getNumber();
+    								runOnUiThread(new Runnable() {
+
+    									@Override
+    									public void run() {
+    										// TODO Auto-generated method stub
+    										goodsAdapter.notifyDataSetChanged();	
+    									}
+    								});
+    							}
+    						} catch (Exception e) {
+    							// TODO Auto-generated catch block
+    							e.printStackTrace();
+    						}
+    					}
+    				});
+    			}
+
+    			@Override
+    			public void onFailure(Call arg0, IOException arg1) {
+    				// TODO Auto-generated method stub
+    				runOnUiThread(new Runnable() {
+    					@Override
+    					public void run() {
+    					}
+    				});
+    			}
+    		});
     	}
 }
