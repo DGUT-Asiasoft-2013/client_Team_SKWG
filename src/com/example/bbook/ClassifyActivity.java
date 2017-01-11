@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -41,8 +43,8 @@ public class ClassifyActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_classify);
-//		getGoodsType(getIntent().getStringExtra("title"));
-		
+		//		getGoodsType(getIntent().getStringExtra("title"));
+
 		goodsType=getIntent().getStringExtra("title");
 		goodsView=(GridView) findViewById(R.id.classify_gridview);
 		goodsView.setAdapter(goodsAdapter);
@@ -55,18 +57,18 @@ public class ClassifyActivity extends Activity {
 		classifyGoods();
 	}
 
-//	public String getGoodsType(String typeStr){
-//		String goodsType;
-//		
-//		switch (typeStr) {
-//		case "小说":
-//			goodsType="novel";
-//			break;
-//
-//		default:
-//			break;
-//		}
-//	}
+	//	public String getGoodsType(String typeStr){
+	//		String goodsType;
+	//		
+	//		switch (typeStr) {
+	//		case "小说":
+	//			goodsType="novel";
+	//			break;
+	//
+	//		default:
+	//			break;
+	//		}
+	//	}
 
 	BaseAdapter goodsAdapter=new BaseAdapter() {
 
@@ -76,26 +78,26 @@ public class ClassifyActivity extends Activity {
 			View view=null;
 			if(convertView==null){
 				LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-//				view=inflater.inflate(R.layout.fragment_picture_name, null);
+				//				view=inflater.inflate(R.layout.fragment_picture_name, null);
 				view=inflater.inflate(R.layout.goods_grid_item, null);
 			}else {
 				view=convertView;
 			}
-//			TextView textview=(TextView) view.findViewById(R.id.id);
-//			TextView goodsPrice=(TextView) view.findViewById(R.id.price);
-//			GoodsPicture	 goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
-//
+			//			TextView textview=(TextView) view.findViewById(R.id.id);
+			//			TextView goodsPrice=(TextView) view.findViewById(R.id.price);
+			//			GoodsPicture	 goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
+			//
 			goods=goodsList.get(position);
-//			textview.setText("商家:"+goods.getShop().getShopName());
-//			goodsPrice.setText("价格："+goods.getGoodsPrice());
-//			goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
+			//			textview.setText("商家:"+goods.getShop().getShopName());
+			//			goodsPrice.setText("价格："+goods.getGoodsPrice());
+			//			goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
 
-			
+
 			TextView shopName=(TextView) view.findViewById(R.id.id);
 			TextView goodsPrice=(TextView) view.findViewById(R.id.price);
 			GoodsPicture goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
-		TextView	goodsName=(TextView) view.findViewById(R.id.goods_name);
-		TextView	goodsSales=(TextView) view.findViewById(R.id.goods_sales);
+			TextView	goodsName=(TextView) view.findViewById(R.id.goods_name);
+			TextView	goodsSales=(TextView) view.findViewById(R.id.goods_sales);
 
 			shopName.setText("商家:"+goods.getShop().getShopName());
 			goodsPrice.setText("￥："+goods.getGoodsPrice());
@@ -105,7 +107,7 @@ public class ClassifyActivity extends Activity {
 			goodsPicture.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
-						goBookDetailActivity( position);
+					goBookDetailActivity( position);
 				}
 			});
 			shopName.setOnClickListener(new OnClickListener() {
@@ -113,11 +115,18 @@ public class ClassifyActivity extends Activity {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-				//	Toast.makeText(ClassifyActivity.this, "ID",Toast.LENGTH_SHORT).show();
-						goShopActivity(position);
+					//	Toast.makeText(ClassifyActivity.this, "ID",Toast.LENGTH_SHORT).show();
+					goShopActivity(position);
 				}
 			});
 
+			view.findViewById(R.id.shopping_car).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					//chooseNum(position);
+					addToShopCar(position);
+				}
+			});
 			return view;
 		}
 
@@ -194,11 +203,56 @@ public class ClassifyActivity extends Activity {
 		intent.putExtra("goods", goods);
 		startActivity(intent);
 	}
-	
+
 	public void goShopActivity(int position){
 		Shop shop=goodsList.get(position).getShop();
 		Intent intent=new Intent(ClassifyActivity.this,ShopActivity.class);
 		intent.putExtra("shop", shop);
 		startActivity(intent);
+	}
+	
+	public void addToShopCar(int position){
+		int quantity=1;
+		goods=goodsList.get(position);
+		MultipartBody body = new MultipartBody.Builder()
+				.addFormDataPart("quantity", quantity + "").build();
+
+		Request request = Server.requestBuilderWithApi("shoppingcart/add/" + goods.getId())
+				.method("post", null).post(body).build();
+
+		Server.getSharedClient().newCall(request).enqueue(new Callback() {
+			@Override
+			public void onResponse(final Call arg0, final Response arg1) throws IOException {
+				final String body = arg1.body().string();
+				runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						ClassifyActivity.this.onResponse(arg0, body);
+					}
+				});
+			}
+
+			@Override
+			public void onFailure(final Call arg0, final IOException arg1) {
+				runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						onFailture(arg0, arg1);
+					}
+				});
+			}
+		});
+	}
+	
+	void onResponse(Call arg0, String responseBody){
+		Toast.makeText(ClassifyActivity.this, "加入购物车成功", Toast.LENGTH_SHORT).show();;
+	}
+	void onFailture(Call arg0, Exception arg1) {
+		new AlertDialog.Builder(this)
+		.setTitle("失败")
+		.setMessage(arg1.getLocalizedMessage())
+		.show();
 	}
 }
