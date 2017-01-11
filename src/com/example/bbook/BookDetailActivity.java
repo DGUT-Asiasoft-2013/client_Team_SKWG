@@ -102,7 +102,7 @@ public class BookDetailActivity extends Activity {
 		TextView bookSales=(TextView) findViewById(R.id.goods_sales);
 		bookSales.setText("销量:"+goods.getGoodsSales());
 		
-		View connectSeller=findViewById(R.id.connect_seller);
+		View connectSeller=findViewById(R.id.contact_seller);
 		View goStore=findViewById(R.id.go_store);		
 		
 		goodsPicture=(GoodsPicture) findViewById(R.id.picture);

@@ -1,49 +1,49 @@
 package com.example.bbook.fragments;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.example.bbook.R;
 
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.ExpandableListView;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class SlidingMenuFragment extends Fragment  implements OnItemClickListener,OnClickListener{
+public class SlidingMenuFragment extends Fragment{
 	View view;
-	GridView classifyView,authorView;
-	String[] goodsType,authorArray,parent;
-	List<String> typeList,authorList,groupList;
-	String selectType;
+
+
 	ExpandableListView list;
-	Map<String ,List<String>> listMap;
-	List<String> childList;
+	
+	String[] goodsType = {
+			"全部","青春文学","历史","计算机","小说","建筑","自然科学","哲学","运动","文学","成功励志","保健养生","传记"
+	};
+	
+	String[] authorArray = {
+			"全部","a","b","c","d","e","f","g","h","i"	
+	};
+	
+	String[] groups = {
+			"类型","作者"	
+	};
+	
 	//	List<String> childList;
 	boolean isTypeShow=false;
 	TextView typeView;
 
 	String typeStr,authorStr;
 	boolean isTypeSelected=false,isAuthorSelected=false;
-	int gPosition=-1;
+	boolean isSelected=false;
 	//按金额搜索
-	
+	private int sign = -1;// 控制列表的展开
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -55,48 +55,34 @@ public class SlidingMenuFragment extends Fragment  implements OnItemClickListene
 
 
 		list=(ExpandableListView) view.findViewById(R.id.expandableListView);
-		listMap=new HashMap<String ,List<String>>();
+		list.setAdapter(groupsAdapter);
 
-
-		goodsType=new String[]{
-				"全部","青春文学","历史","计算机","小说","建筑","自然科学","哲学","运动","文学","成功励志","保健养生","传记"
-		};
-		authorArray=new String[]{
-				"全部","a","b","c","d","e","f","g","h","i"	
-		};
-		parent=new String[]{
-				"类型","作者"	
-		};
-
-		typeList=new ArrayList<>();
-		for (int i = 0; i < goodsType.length; i++) {
-
-			typeList.add(goodsType[i]);
-		}
-		authorList=new ArrayList<>();
-		for (int i = 0; i < authorArray.length; i++) {
-			authorList.add(authorArray[i]);
-		}
-		groupList=new ArrayList<>();
-		for (int i = 0; i < parent.length; i++) {
-			groupList.add(parent[i]);
-		}
-
-		listMap.put(groupList.get(0),typeList);
-		listMap.put(groupList.get(1), authorList);
-		typeList=new ArrayList<String>();
-
-
-		for(int i=0;i<goodsType.length;i++){
-			typeList.add(goodsType[i]);
-		}
-		list.setAdapter(listAdapter);
-
+//		list.setOnGroupClickListener(new OnGroupClickListener() {
+//
+//			@Override
+//			public boolean onGroupClick(ExpandableListView parent, View v,
+//					int groupPosition, long id) {
+//				if (sign == -1) {
+//					// 展开被选的group
+//					list.expandGroup(groupPosition);
+//					sign = groupPosition;
+//				} else if (sign == groupPosition) {
+//					list.collapseGroup(sign);
+//					sign = -1;
+//				} else {
+//					list.collapseGroup(sign);
+//					// 展开被选的group
+//					list.expandGroup(groupPosition);
+//					sign = groupPosition;
+//				}
+//				return true;
+//			}
+//		});
 
 		return view;	
 	}
 
-	BaseExpandableListAdapter listAdapter=new BaseExpandableListAdapter() {
+	BaseExpandableListAdapter groupsAdapter=new BaseExpandableListAdapter() {
 		@Override
 		public boolean isChildSelectable(int groupPosition, int childPosition) {
 			// TODO Auto-generated method stub
@@ -106,7 +92,7 @@ public class SlidingMenuFragment extends Fragment  implements OnItemClickListene
 		@Override
 		public boolean hasStableIds() {
 			// TODO Auto-generated method stub
-			return false;
+			return true;
 		}
 
 		@Override
@@ -121,7 +107,7 @@ public class SlidingMenuFragment extends Fragment  implements OnItemClickListene
 				view=convertView;
 			}
 			TextView textView=(TextView) view.findViewById(android.R.id.text1);
-			textView.setText(groupList.get(groupPosition));
+			textView.setText(groups[groupPosition]);
 			return view;
 		}
 
@@ -132,12 +118,12 @@ public class SlidingMenuFragment extends Fragment  implements OnItemClickListene
 
 		@Override
 		public int getGroupCount() {
-			return groupList.size();
+			return groups.length;
 		}
 
 		@Override
 		public Object getGroup(int groupPosition) {
-			return groupList.get(groupPosition);
+			return groups[groupPosition];
 		}
 
 		@Override
@@ -151,7 +137,16 @@ public class SlidingMenuFragment extends Fragment  implements OnItemClickListene
 
 		@Override
 		public Object getChild(int groupPosition, int childPosition) {
-			return listMap.get(groupList.get(groupPosition)).get(childPosition);
+			switch (groupPosition) {
+			case 0:
+				return goodsType[childPosition];
+
+			case 1:
+				return authorArray[childPosition];
+				
+			default:
+				return null;
+			}
 		}
 
 		@Override
@@ -165,16 +160,33 @@ public class SlidingMenuFragment extends Fragment  implements OnItemClickListene
 			else{
 				view=convertView;
 			}
-			int size =listMap.get(groupList.get(groupPosition)).size();
-			childList= new ArrayList<String>();
-			for (int i = 0; i < size; i++) {
-				childList.add(listMap.get(groupList.get(groupPosition)).get(i));
-				Log.d("child", childList.get(i));
+
+
+			int size = 0;
+			BaseAdapter childAdapter = null;
+			
+			switch (groupPosition) {
+			case 0:
+				size = goodsType.length;
+				childAdapter = goodsAdapter;
+				break;
+			
+			case 1:
+				size = authorArray.length;
+				childAdapter = authorAdapter;
+				break;
+
+			default:
+				size = 0;
+				break;
 			}
-			gPosition=groupPosition;
+
+			final int gPosition = groupPosition;
 			//Log.d("group", groupPosition+"");
 			//	Log.d("child", childPosition+"");
 
+			
+			
 			GridView gridView=(GridView) view.findViewById(R.id.child_view);
 			//gridView.setNumColumns(10);
 			gridView.setHorizontalSpacing(10);
@@ -184,14 +196,19 @@ public class SlidingMenuFragment extends Fragment  implements OnItemClickListene
 			gridView.setLayoutParams(lp);
 
 			gridView.setAdapter(childAdapter);
-			gridView.setOnItemClickListener(SlidingMenuFragment.this);
+			gridView.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					SlidingMenuFragment.this.onItemClick(gPosition, position);
+				}
+			});
 			return view;
 		}
 
 
 	};
-	BaseAdapter childAdapter=new BaseAdapter() {
 
+	BaseAdapter goodsAdapter=new BaseAdapter() {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if(convertView==null){
@@ -199,7 +216,7 @@ public class SlidingMenuFragment extends Fragment  implements OnItemClickListene
 				convertView = inflater.inflate(R.layout.goodstype_item, null);
 			}
 			TextView textView=(TextView) convertView.findViewById(R.id.goods_type);
-			textView.setText(childList.get(position));
+			textView.setText(goodsType[position]);
 			return convertView;
 		}
 
@@ -210,37 +227,77 @@ public class SlidingMenuFragment extends Fragment  implements OnItemClickListene
 
 		@Override
 		public Object getItem(int position) {
-			// TODO Auto-generated method stub
-			return childList.get(position);
+			return goodsType[position];
 		}
 
 		@Override
 		public int getCount() {
-			Log.d("count",childList.size()+"");
-			return childList.size();
+			return goodsType.length;
 		}
 	};
 
+	BaseAdapter authorAdapter=new BaseAdapter() {
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if(convertView==null){
+				LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+				convertView = inflater.inflate(R.layout.goodstype_item, null);
+			}
+			TextView textView=(TextView) convertView.findViewById(R.id.goods_type);
+			textView.setText(authorArray[position]);
+			return convertView;
+		}
 
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
 
-public void cleanBackColor(int position){
-	
-}
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		@Override
+		public Object getItem(int position) {
+			return authorArray[position];
+		}
+
+		@Override
+		public int getCount() {
+			return authorArray.length;
+		}
+	};
+
+	public void cleanBackColor(int position){
+
+	}
+
+	public void onItemClick(int gPosition, int position) {
 		// TODO Auto-generated method stub
-	
-		
+
+
 		switch (gPosition) {
 		case 0:
-			typeStr=childList.get(position);
+			typeStr=goodsType[position];
+			getActivity().runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Toast.makeText(getActivity(), typeStr, Toast.LENGTH_SHORT).show();
+				}
+			});
+			isSelected=true;
 			isTypeSelected=true;
-			isAuthorSelected=false;
 			break;
 		case 1:
-			authorStr=childList.get(position);
+			authorStr=authorArray[position];
+			getActivity().runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Toast.makeText(getActivity(), authorStr, Toast.LENGTH_SHORT).show();
+				}
+			});
+			isSelected=true;
 			isAuthorSelected=true;
-			isTypeSelected=false;
 		default:
 			break;
 		}
@@ -251,18 +308,13 @@ public void cleanBackColor(int position){
 	public boolean getAuthorSelected(){
 		return isAuthorSelected;
 	}
-	
+	public boolean getIsSelected(){
+		return isSelected;
+	}
 	public String getTypeStr(){
 		return typeStr;
 	}
 	public String getAuthorStr(){
 		return authorStr;
-	}
-
-	@Override
-	public void onClick(View v) {
-	
-		// TODO Auto-generated method stub
-		
 	}
 }

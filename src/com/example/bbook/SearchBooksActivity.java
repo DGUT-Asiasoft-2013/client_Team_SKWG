@@ -66,6 +66,7 @@ public class SearchBooksActivity extends Activity  implements OnClickListener{
 	String typeStr="全部",authorStr="全部";
 	String keyword;
 	boolean isSearched=false,isSorted=false,isClassified=false;
+	boolean isTypeSelected=false,isAuthorSelected=false;
 
 
 	EditText editKeyword;
@@ -138,21 +139,38 @@ public class SearchBooksActivity extends Activity  implements OnClickListener{
 			public void onDrawerClosed(View arg0) {
 				Log.d("David", "onDrawerClosed");
 
-				if(slidingMenuFragment.getTypeSelected()){
-					typeStr=slidingMenuFragment.getTypeStr();
-				}
-				if (slidingMenuFragment.getAuthorSelected()) {
-					authorStr=slidingMenuFragment.getAuthorStr();
-				}				
-				Log.d("typeStr", typeStr);
-				if(!typeStr.equals("全部")||!authorStr.equals("全部")){
-					isClassified=true;
+				if(slidingMenuFragment.getIsSelected()){
+					if (slidingMenuFragment.getAuthorSelected()) {
+						authorStr=slidingMenuFragment.getAuthorStr();
+						
+						if(authorStr.equals("全部")){
+							isAuthorSelected=false;
+						}else{
+							isAuthorSelected=true;
+							isClassified=true;
+						}
+					}
+					if (slidingMenuFragment.getTypeSelected()) {
+						typeStr=slidingMenuFragment.getTypeStr();
+						if(typeStr.equals("全部")){
+							isTypeSelected=false;
+						}else {
+							isTypeSelected=true;
+							isClassified=true;
+						}
+					}
 					bookLoad();
 				}
-				else {
-					isClassified=false;
-
-				}
+				//				if(slidingMenuFragment.getTypeSelected()&&slidingMenuFragment.getAuthorSelected()){
+				//					typeStr=slidingMenuFragment.getTypeStr();
+				//					authorStr=slidingMenuFragment.getAuthorStr();
+				//				}
+				//				if (slidingMenuFragment.getAuthorSelected()) {
+				//					authorStr=slidingMenuFragment.getAuthorStr();
+				//					
+				//				}else if (slidingMenuFragment.getTypeSelected()) {
+				//					typeStr=slidingMenuFragment.getTypeStr();
+				//				}
 
 			}
 		});
@@ -166,7 +184,7 @@ public class SearchBooksActivity extends Activity  implements OnClickListener{
 
 		changeView=(ImageView) findViewById(R.id.change_view);
 		changeView.setOnClickListener(this);
-
+		
 		popupMenuSort=new PopupMenu(this,findViewById(R.id.pop_menu_sort));
 		menuSort=popupMenuSort.getMenu();
 		findViewById(R.id.pop_menu_sort).setOnClickListener(this);
@@ -433,19 +451,18 @@ public class SearchBooksActivity extends Activity  implements OnClickListener{
 					.get().build();
 		}
 		if(isClassified){
-			if(!(typeStr.equals("全部"))){
+			if(isAuthorSelected&&isTypeSelected){
+				request=Server.requestBuilderWithApi("goods/search/"+ authorStr+"/classify/"+typeStr)
+						.get().build();
+			}
+			else if(isTypeSelected){
 				request=Server.requestBuilderWithApi("goods/classify/"+typeStr)
 						.get().build();
-			}
-
-			else if(!(authorStr.equals("全部"))){
+			}else if(isAuthorSelected){
 				request=Server.requestBuilderWithApi("goods/search/"+authorStr)
 						.get().build();
-			}else{
-				request=Server.requestBuilderWithApi("goods/classify/"+authorStr)
-						.get().build();
 			}
-
+			
 		}
 		if(isSorted){
 			request=Server.requestBuilderWithApi("goods/sort/"+sortStyle)
@@ -533,19 +550,33 @@ public class SearchBooksActivity extends Activity  implements OnClickListener{
 			request=Server.requestBuilderWithApi("goods/sort/"+sortStyle+"?page="+(page+1))
 					.get().build();
 		}
+//		if(isClassified){
+//			if(!(typeStr.equals("全部"))){
+//				request=Server.requestBuilderWithApi("goods/classify/"+typeStr)
+//						.get().build();
+//			}
+//			else	if(!(authorStr.equals("全部"))){
+//				request=Server.requestBuilderWithApi("goods/search/"+authorStr)
+//						.get().build();
+//			}else{
+//				request=Server.requestBuilderWithApi("goods/classify/"+authorStr)
+//						.get().build();
+//			}
+//
+//		}
 		if(isClassified){
-			if(!(typeStr.equals("全部"))){
+			if(isAuthorSelected&&isTypeSelected){
+				request=Server.requestBuilderWithApi("goods/search/"+ authorStr+"/classify/"+typeStr)
+						.get().build();
+			}
+			else if(isTypeSelected){
 				request=Server.requestBuilderWithApi("goods/classify/"+typeStr)
 						.get().build();
-			}
-			else	if(!(authorStr.equals("全部"))){
+			}else if(isAuthorSelected){
 				request=Server.requestBuilderWithApi("goods/search/"+authorStr)
 						.get().build();
-			}else{
-				request=Server.requestBuilderWithApi("goods/classify/"+authorStr)
-						.get().build();
 			}
-
+			
 		}
 		if(isSearched&&isSorted){
 			request=Server.requestBuilderWithApi("goods/search/"+keyword+"/sort/"+sortStyle+"?page="+(page+1))

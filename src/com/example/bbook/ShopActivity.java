@@ -59,8 +59,8 @@ public class ShopActivity extends Activity {
                 shopPicture = (GoodsPicture) findViewById(R.id.shop_picture);
                 shopPicture.load(Server.serverAdress + shop.getShopImage());
                 // 店名、店主
-                ((TextView) findViewById(R.id.shop_name)).setText("店名:" + shop.getShopName());
-                ((TextView) findViewById(R.id.shop_owner)).setText("店主:" + shop.getOwner().getName());
+              //  ((TextView) findViewById(R.id.shop_name)).setText("店名:" + shop.getShopName());
+          //      ((TextView) findViewById(R.id.shop_owner)).setText("店主:" + shop.getOwner().getName());
                 // 商品列表
                 goodsView = (GridView) findViewById(R.id.goods_gridview);
                 goodsView.setAdapter(goodsAdapter);
