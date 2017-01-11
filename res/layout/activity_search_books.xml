@@ -111,7 +111,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
-            <include layout="@layout/minprice_and_maxpricce" />
+            <include layout="@layout/minprice_and_maxpricce"
+                />
         </LinearLayout>
 
   <fragment
