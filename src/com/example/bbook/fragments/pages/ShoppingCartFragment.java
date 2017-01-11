@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.bbook.BuyActivity;
+import com.example.bbook.MyOffSaleGoodsActivity;
 import com.example.bbook.R;
 import com.example.bbook.api.Goods;
 import com.example.bbook.api.Page;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -417,7 +419,7 @@ public class ShoppingCartFragment extends Fragment {
 
 				@Override
 				public void onClick(View v) {
-
+					goDelete(cart.getId().getGoods().getId());
 				}
 			});
 
@@ -489,6 +491,25 @@ public class ShoppingCartFragment extends Fragment {
 		calculate();
 	}
 
+	void goDelete(final int goodsId) {
+		new AlertDialog.Builder(getActivity()).setMessage("确定移除商品?")
+		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				onDelete(goodsId);
+			}
+		})
+		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+
+		}).show();
+	}
+	
 	protected void onDelete(int goodsId) {
 		Request request = Server.requestBuilderWithApi("shoppingcart/delete/" + goodsId).get().build();
 		Server.getSharedClient().newCall(request).enqueue(new Callback() {
