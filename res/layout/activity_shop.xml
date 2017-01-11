@@ -17,6 +17,7 @@
         android:layout_height="120dp"
         android:layout_marginTop="10dp"
         android:gravity="bottom"
+        android:background="@drawable/bg2"
         android:orientation="horizontal" >
 
         <com.example.bbook.api.widgets.GoodsPicture

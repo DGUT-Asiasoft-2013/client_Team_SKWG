@@ -28,7 +28,7 @@ public class SlidingMenuFragment extends Fragment{
 	};
 	
 	String[] authorArray = {
-			"全部","a","b","c","d","e","f","g","h","i"	
+			"全部","欧几里得","史铁生","林夕","司马迁","常书欣","木浮生","左小翎","艾力 ","东野圭吾"	
 	};
 	
 	String[] groups = {
