@@ -12,7 +12,6 @@ import com.example.bbook.fragments.NumberPlusAndMinusFrament.OnMinusClickListene
 import com.example.bbook.fragments.NumberPlusAndMinusFrament.OnPlusClickListener;
 import com.example.bbook.fragments.pages.BookCommentFragment;
 import com.example.bbook.fragments.pages.BookDetailFragment;
-import com.example.bbook.fragments.pages.HomePageFragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,7 +36,7 @@ public class BookDetailActivity extends Activity {
 	NumberPlusAndMinusFrament fragNumberPlusAndMinus;
 	BookDetailFragment bookDetailFragment=new BookDetailFragment();
 	BookCommentFragment bookCommentFragment=new BookCommentFragment();
-	HomePageFragment mainPageFragment=new HomePageFragment();
+
 	Goods goods;
 	GoodsPicture goodsPicture;
 	TitleBarFragment fragBookDetail;

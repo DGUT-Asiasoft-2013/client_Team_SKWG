@@ -5,7 +5,6 @@ import com.example.bbook.api.widgets.MainTabbarFragment;
 import com.example.bbook.api.widgets.MainTabbarFragment.OnTabSelectedListener;
 import com.example.bbook.fragments.pages.ForumFragment;
 import com.example.bbook.fragments.pages.HomePage;
-import com.example.bbook.fragments.pages.HomePageFragment;
 import com.example.bbook.fragments.pages.MyProfileFragment;
 import com.example.bbook.fragments.pages.ShoppingCartFragment;
 import com.example.bbook.fragments.pages.SortFragment;
