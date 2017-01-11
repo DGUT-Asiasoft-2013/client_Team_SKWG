@@ -34,7 +34,7 @@ import okhttp3.Response;
 
 public class HomePage extends Fragment implements OnClickListener{
 	View view=null;
-	
+
 	Goods goods;
 	//商品图片、店铺名、价格、商品名、销量
 	GoodsPicture goodsPicture;
@@ -43,13 +43,13 @@ public class HomePage extends Fragment implements OnClickListener{
 	TextView goodsName;
 	TextView goodsSales;
 	TextView moreBooks;
-	
-	int bookPage1=0,bookPage2;
+
+	int bookPage1=0,bookPage2=0;
 	TextView change1,change2;
-	
+
 	MyGridView gridview1,gridview2;
 	MyGridviewAdapter bookAdapter1,bookAdapter2;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -60,9 +60,9 @@ public class HomePage extends Fragment implements OnClickListener{
 		init();
 		return view;
 	}
-	
-	
-	
+
+
+	//显示上架商品
 	public void loadBook1(){
 		Request request;
 		request=Server.requestBuilderWithApi("goods/s")
@@ -100,14 +100,14 @@ public class HomePage extends Fragment implements OnClickListener{
 		});
 
 	}
+	
+	//循环跳转上架商品一二页
 	public void loadMoreBook1(){
 		Request request;
 		request=Server.requestBuilderWithApi("goods/s?page="+(bookPage1+1))
 				.get().build();
 
 		OkHttpClient client=Server.getSharedClient();
-
-
 
 		client.newCall(request).enqueue(new Callback() {
 
@@ -123,6 +123,9 @@ public class HomePage extends Fragment implements OnClickListener{
 									});		
 							bookPage1=data.getNumber();
 							bookAdapter1.setData(data.getContent(),bookPage1);
+							if (bookPage1==1) {
+								bookPage1=-1;
+							}
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -139,11 +142,12 @@ public class HomePage extends Fragment implements OnClickListener{
 		});
 
 	}
-	
+
+	//按销量排
 	public void loadBook2(){
 
 		Request request;
-		request=Server.requestBuilderWithApi("goods/s")
+		request=Server.requestBuilderWithApi("goods/sort/goodsSales")
 				.get().build();
 
 		OkHttpClient client=Server.getSharedClient();
@@ -175,11 +179,11 @@ public class HomePage extends Fragment implements OnClickListener{
 			}
 		});
 	}
-	
+
+	//循环跳转销量排行第一二页
 	public void loadMoreBook2(){
-
 		Request request;
-		request=Server.requestBuilderWithApi("goods/s?page="+(bookPage2+1))
+		request=Server.requestBuilderWithApi("goods/sort/goodsSales?page="+(bookPage2+1))
 				.get().build();
 
 		OkHttpClient client=Server.getSharedClient();
@@ -195,7 +199,11 @@ public class HomePage extends Fragment implements OnClickListener{
 									.readValue(responseStr, new TypeReference<Page<Goods>>() {
 									});							
 							bookPage2=data.getNumber();
+
 							bookAdapter2.setData(data.getContent(),bookPage2);
+							if(bookPage2==1){
+								bookPage2=-1;
+							}
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -211,7 +219,7 @@ public class HomePage extends Fragment implements OnClickListener{
 			}
 		});
 	}
-	
+
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
@@ -219,30 +227,30 @@ public class HomePage extends Fragment implements OnClickListener{
 		loadBook1();
 		loadBook2();
 	}
-	
-	
+
+
 	//初始化函数
 	void init(){
 		gridview1=(MyGridView) view.findViewById(R.id.book_gridView1);
 		gridview2=(MyGridView) view.findViewById(R.id.book_gridView2);
-		
-		
+
+
 		change1=(TextView) view.findViewById(R.id.change1);
 		change1.setOnClickListener(this);
 		change2=(TextView) view.findViewById(R.id.change2);
 		change2.setOnClickListener(this);
-	
+
 		moreBooks=(TextView) view.findViewById(R.id.more_book);
 		moreBooks.setOnClickListener(this);		
-		
+
 		bookAdapter1=new MyGridviewAdapter(getActivity());
 		gridview1.setAdapter(bookAdapter1);
 		bookAdapter2=new MyGridviewAdapter(getActivity());
 		gridview2.setAdapter(bookAdapter2);
-	
-		
-		
-		
+
+
+
+
 	}
 
 
@@ -257,11 +265,11 @@ public class HomePage extends Fragment implements OnClickListener{
 		case R.id.change2:
 			loadMoreBook2();
 			break;
-		
+
 		case R.id.more_book:
 			Intent intent=new Intent(getActivity(),SearchBooksActivity.class);
 			startActivity(intent);
-				
+
 		default:
 			break;
 		}

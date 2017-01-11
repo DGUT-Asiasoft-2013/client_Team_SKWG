@@ -40,6 +40,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingLeft="5dp"
                     android:text="新书上架"
                     android:textSize="12sp" />
 
@@ -48,6 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="换一换"
+                    android:layout_marginRight="5dp"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -58,6 +60,10 @@
                 android:numColumns="3" >
             </com.example.bbook.fragments.MyGridView>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="7dp"
+                android:background="@color/gray"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,6 +73,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingLeft="5dp"
                     android:text="热搜书单"
                     android:textSize="12sp" />
 
@@ -75,6 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="换一换"
+                    android:layout_marginRight="5dp"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -89,20 +97,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="独家提供"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/change3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="换一换"
-                    android:textSize="12sp" />
             </LinearLayout>
 
             <com.example.bbook.fragments.MyGridView
