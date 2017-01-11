@@ -72,7 +72,7 @@
         <GridView
             android:id="@+id/book_gridView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:numColumns="2" >
         </GridView>
 
@@ -80,7 +80,7 @@
         <ListView
             android:id="@+id/book_listview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="match_parent" >
         </ListView>
     </LinearLayout>
     <!-- 侧拉菜单 -->

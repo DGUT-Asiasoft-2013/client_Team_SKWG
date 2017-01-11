@@ -76,31 +76,44 @@ public class ClassifyActivity extends Activity {
 			View view=null;
 			if(convertView==null){
 				LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-				view=inflater.inflate(R.layout.fragment_picture_name, null);
+//				view=inflater.inflate(R.layout.fragment_picture_name, null);
+				view=inflater.inflate(R.layout.goods_grid_item, null);
 			}else {
 				view=convertView;
 			}
-			TextView textview=(TextView) view.findViewById(R.id.id);
-			TextView goodsPrice=(TextView) view.findViewById(R.id.price);
-			GoodsPicture	 goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
-
+//			TextView textview=(TextView) view.findViewById(R.id.id);
+//			TextView goodsPrice=(TextView) view.findViewById(R.id.price);
+//			GoodsPicture	 goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
+//
 			goods=goodsList.get(position);
-			textview.setText("商家:"+goods.getShop().getShopName());
-			goodsPrice.setText("价格："+goods.getGoodsPrice());
-			goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
+//			textview.setText("商家:"+goods.getShop().getShopName());
+//			goodsPrice.setText("价格："+goods.getGoodsPrice());
+//			goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
 
+			
+			TextView shopName=(TextView) view.findViewById(R.id.id);
+			TextView goodsPrice=(TextView) view.findViewById(R.id.price);
+			GoodsPicture goodsPicture=(GoodsPicture) view.findViewById(R.id.picture);
+		TextView	goodsName=(TextView) view.findViewById(R.id.goods_name);
+		TextView	goodsSales=(TextView) view.findViewById(R.id.goods_sales);
+
+			shopName.setText("商家:"+goods.getShop().getShopName());
+			goodsPrice.setText("￥："+goods.getGoodsPrice());
+			goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
+			goodsName.setText(goods.getGoodsName());
+			goodsSales.setText("销量:"+goods.getGoodsSales());
 			goodsPicture.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
 						goBookDetailActivity( position);
 				}
 			});
-			textview.setOnClickListener(new OnClickListener() {
+			shopName.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					Toast.makeText(ClassifyActivity.this, "ID",Toast.LENGTH_SHORT).show();
+				//	Toast.makeText(ClassifyActivity.this, "ID",Toast.LENGTH_SHORT).show();
 						goShopActivity(position);
 				}
 			});
