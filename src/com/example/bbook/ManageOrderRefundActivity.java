@@ -42,7 +42,7 @@ import okhttp3.Response;
 import util.OrderContent;
 
 public class ManageOrderRefundActivity extends Activity {
-	
+
 	TitleBarFragment fragTitleBar;
 	ListView list;
 	List<Orders> listData;
@@ -107,13 +107,13 @@ public class ManageOrderRefundActivity extends Activity {
 	private void init() {
 		fragTitleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
 		list = (ListView) findViewById(R.id.list);
-		
+
 	}
-	
+
 	private void setEvent() {
 		list.setAdapter(listAdapter);
 		fragTitleBar.setOnGoBackListener(new OnGoBackListener() {
-			
+
 			@Override
 			public void onGoBack() {
 				finish();
@@ -126,9 +126,16 @@ public class ManageOrderRefundActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		reload();
+	}
+
+	void reload() {
+		orderList = new ArrayList<>();
+		dataset = new HashMap<>();
+		orderContents = new ArrayList<>();
 		load();
 	}
-	
+
 	private void load() {
 
 		OkHttpClient client=Server.getSharedClient();
@@ -169,7 +176,7 @@ public class ManageOrderRefundActivity extends Activity {
 			}
 		});
 	}
-	
+
 	BaseAdapter listAdapter = new BaseAdapter() {
 		LayoutInflater inflater;
 		@Override
@@ -178,7 +185,7 @@ public class ManageOrderRefundActivity extends Activity {
 				ManageOrderRefundBottom bottomContent = (ManageOrderRefundBottom) orderContents.get(position);
 				final Orders order = bottomContent.getOrder();
 				bottomContent.setOnRefundClickedListener(new OnRefundClickedListener() {
-					
+
 					@Override
 					public void onRefundClicked() {
 						goRefund(order);
@@ -187,27 +194,27 @@ public class ManageOrderRefundActivity extends Activity {
 			}
 			return orderContents.get(position).getView(ManageOrderRefundActivity.this, convertView, inflater);
 		}
-		
+
 		@Override
 		public long getItemId(int position) {
 			return position;
 		}
-		
+
 		@Override
 		public Object getItem(int position) {
 			return orderContents.get(position);
 		}
-		
+
 		@Override
 		public int getCount() {
 			return orderContents.size();
 		}
-		
+
 		public boolean isEnabled(int position) {
 			return orderContents.get(position).isClickable();
 		};
 	};
-	
+
 	void goRefund(final Orders order) {
 		if(order != null) {
 			new AlertDialog.Builder(ManageOrderRefundActivity.this).setMessage("确认退款？")
@@ -217,10 +224,10 @@ public class ManageOrderRefundActivity extends Activity {
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();
 				}
-				
+
 			})
 			.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-				
+
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					onRefund(order);
@@ -228,7 +235,7 @@ public class ManageOrderRefundActivity extends Activity {
 			}).show();
 		}
 	}
-	
+
 	// 退款
 	void onRefund(Orders order) {
 		MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("state", 7 + "");
