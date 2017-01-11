@@ -160,10 +160,13 @@ public class ShopActivity extends Activity {
                         goods = data.get(position);
                         TextView goodsPrice = (TextView) view.findViewById(R.id.price);
                         goodsPrice.setText("价格：" + goods.getGoodsPrice());
-                        TextView goodsName = (TextView) view.findViewById(R.id.id);
+                        TextView goodsName = (TextView) view.findViewById(R.id.goods_name);
                         goodsName.setText(goods.getGoodsName());
                         TextView goodsSales=(TextView) view.findViewById(R.id.goods_sales);
                         goodsSales.setText("销量:"+goods.getGoodsSales());
+                        
+                        TextView shopName=(TextView) view.findViewById(R.id.id);
+                        shopName.setVisibility(View.GONE);
                         // 商品图片、点击事件
                         goodsPicture = (GoodsPicture) view.findViewById(R.id.picture);
                         goodsPicture.load(Server.serverAdress + goods.getGoodsImage());

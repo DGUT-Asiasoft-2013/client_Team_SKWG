@@ -323,9 +323,9 @@ public class SearchBooksActivity extends Activity  implements OnClickListener{
 
 			goods=data.get(position);
 			shopName.setText("商家:"+goods.getShop().getShopName());
-			goodsPrice.setText("价格："+goods.getGoodsPrice());
+			goodsPrice.setText("￥："+goods.getGoodsPrice());
 			goodsPicture.load(Server.serverAdress+goods.getGoodsImage());
-			goodsName.setText("书名:"+goods.getGoodsName());
+			goodsName.setText(goods.getGoodsName());
 			goodsSales.setText("销量:"+goods.getGoodsSales());
 			goodsPicture.setOnClickListener(new OnClickListener() {				
 				@Override
