@@ -25,8 +25,11 @@
                 android:id="@+id/state"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:background="@android:color/darker_gray"
+                android:padding="10dp"
+                android:textSize="18sp"
+                android:background="#39e"
                 android:gravity="center_vertical"
+                android:textColor="@android:color/white"
                 android:text="state" />
 
             <LinearLayout
@@ -118,7 +121,7 @@
             <ListView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="200dp" >
+                android:layout_height="160dp" >
             </ListView>
 
             <View

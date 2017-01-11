@@ -65,10 +65,35 @@ public class OrderDetailActivity extends Activity {
 	
 	void setText() {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		tvState.setText(listData.get(0).getOrdersState() + "");
-		tvName.setText(listData.get(0).getBuyerName());
-		tvTel.setText(listData.get(0).getBuyerPhoneNum());
-		tvAddress.setText(listData.get(0).getBuyerAddress());
+		
+		switch (listData.get(0).getOrdersState()) {
+		case 1:
+			tvState.setText("已评价");
+			break;
+		case 2:
+			tvState.setText("待付款");
+			break;
+		case 3:
+			tvState.setText("待发货");
+			break;
+		case 4:
+			tvState.setText("待收货");
+			break;
+		case 5:
+			tvState.setText("待评价");
+			break;
+		case 6:
+			tvState.setText("待退款");
+			break;
+		case 7:
+			tvState.setText("已退款");
+			break;
+		default:
+			break;
+		}
+		tvName.setText("收货人：" + listData.get(0).getBuyerName());
+		tvTel.setText("" + listData.get(0).getBuyerPhoneNum());
+		tvAddress.setText("收货地址:" + listData.get(0).getBuyerAddress());
 		tvShopName.setText(listData.get(0).getGoods().getShop().getShopName());
 		Double sum = 0.0;
 		for(int i = 0; i < listData.size(); i++) {
@@ -125,13 +150,10 @@ public class OrderDetailActivity extends Activity {
 							OrderDetailActivity.this.setText();
 							listAdapter.notifyDataSetChanged();
 						} catch (JsonParseException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (JsonMappingException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 							
@@ -142,7 +164,6 @@ public class OrderDetailActivity extends Activity {
 			
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
