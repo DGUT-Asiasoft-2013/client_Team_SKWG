@@ -2,10 +2,7 @@ package com.example.bbook.fragments.pages;
 
 import java.io.IOException;
 
-import com.example.bbook.ChangePasswordActivity;
 import com.example.bbook.ChangeUserMessageActivity;
-import com.example.bbook.LoginActivity;
-import com.example.bbook.ManageCommomInfoActivity;
 import com.example.bbook.MessageActivity;
 import com.example.bbook.MyBillActivity;
 import com.example.bbook.MyOrdersActivity;
@@ -21,27 +18,20 @@ import com.example.bbook.api.widgets.AvatarView;
 import com.example.bbook.api.widgets.ItemFragment;
 import com.example.bbook.api.widgets.ItemFragment.OnDetailedListener;
 import com.example.bbook.api.widgets.TitleBarFragment;
-import com.example.bbook.fragments.pages.PasswordRecoverStep1Fragment.OnGoNextListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.R.color;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -94,6 +84,7 @@ public class MyProfileFragment extends Fragment {
                                 public void onDetailed() {
                                         Intent itnt = new Intent(getActivity(), OpenStoreActivity.class);
                                         startActivity(itnt);
+                                        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.none);
                                 }
                         });
 
@@ -107,6 +98,7 @@ public class MyProfileFragment extends Fragment {
                                 public void onDetailed() {
                                         Intent itnt = new Intent(getActivity(), MystoreActivity.class);
                                         startActivity(itnt);
+                                        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.none);
                                 }
                         });
 
@@ -121,6 +113,7 @@ public class MyProfileFragment extends Fragment {
                                 public void onDetailed() {
                                         Intent intent = new Intent(getActivity(), MyBillActivity.class);
                                         startActivity(intent);
+                                        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.none);
                                 }
                         });
 
@@ -134,6 +127,7 @@ public class MyProfileFragment extends Fragment {
                                 public void onDetailed() {
                                         Intent itnt = new Intent(getActivity(), MyWalletActivity.class);
                                         startActivity(itnt);
+                                        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.none);
                                 }
                         });
 
@@ -147,6 +141,7 @@ public class MyProfileFragment extends Fragment {
                                 public void onDetailed() {
                                         Intent intent = new Intent(getActivity(), MyOrdersActivity.class);
                                         startActivity(intent);
+                                        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.none);
                                 }
                         });
 
@@ -171,6 +166,7 @@ public class MyProfileFragment extends Fragment {
                                 public void onDetailed() {
                                         Intent itnt = new Intent(getActivity(), SettingsActivity.class);
                                         startActivity(itnt);
+                                        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.none);
                                 }
                         });
                 }
@@ -240,11 +236,13 @@ public class MyProfileFragment extends Fragment {
                 Intent itnt = new Intent(getActivity(), MessageActivity.class);
                 itnt.putExtra("user", me);
                 startActivity(itnt);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.none);
         }
 
         void goMySubscribe() {
                 Intent itnt = new Intent(getActivity(), MySubscribeActivity.class);
                 startActivity(itnt);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.none);
         }
 
 }

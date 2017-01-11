@@ -191,6 +191,7 @@ public class MyBillActivity extends Activity {
 			public void onGoBack() {
 				// TODO Auto-generated method stub
 				finish();
+				overridePendingTransition(R.anim.none, R.anim.slide_out_right);
 			}
 		});
 		Request request = Server

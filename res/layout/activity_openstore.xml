@@ -3,8 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEEEEE"
+    android:background="#3ccc"
     android:orientation="vertical" >
+
+    <fragment
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.example.bbook.api.widgets.TitleBarFragment"
+        tools:layout="@layout/fragment_widget_titlebar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,6 +30,24 @@
                 class="inputcells.SimpleTextInputcellFragment"
                 tools:layout="@layout/fragment_inputcell_simpleted" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="店铺详情："
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/input_storeintroduce"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@android:color/white"
+                android:gravity="start"
+                android:hint="来介绍一下你的店铺吧"
+                tools:layout="@layout/fragment_inputcell_simpleted" />
+
             <fragment
                 android:id="@+id/input_storeimg"
                 android:layout_width="match_parent"
@@ -30,27 +55,6 @@
                 class="inputcells.PictureInputCellFragment"
                 android:background="@android:color/white"
                 tools:layout="@layout/fragment_inputcell_picture" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="店铺详情:" />
-
-            <EditText
-                android:id="@+id/input_storeintroduce"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="8dp"
-                android:background="@android:color/white"
-                android:gravity="start"
-                android:hint="来介绍一下你的店铺吧"
-                tools:layout="@layout/fragment_inputcell_simpleted" />
-
-            <Button
-                android:id="@+id/createstore"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="开店!" />
         </LinearLayout>
     </ScrollView>
 

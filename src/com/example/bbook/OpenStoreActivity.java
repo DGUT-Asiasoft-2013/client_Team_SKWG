@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.example.bbook.api.Server;
 import com.example.bbook.api.Shop;
+import com.example.bbook.api.widgets.TitleBarFragment;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,183 +32,196 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class OpenStoreActivity extends Activity {
-	int isCreate = 0;
+        int isCreate = 0;
+        TitleBarFragment titleBar;
+        SimpleTextInputcellFragment fragInputStoreName;
+        PictureInputCellFragment fragStoreImg;
+        EditText storeIntroduce;
 
-	SimpleTextInputcellFragment fragInputStoreName;
-	PictureInputCellFragment fragStoreImg;
-	EditText storeIntroduce;
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+                // TODO Auto-generated method stub
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.activity_openstore);
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_openstore);
+                fragInputStoreName = (SimpleTextInputcellFragment) getFragmentManager()
+                                .findFragmentById(R.id.input_storename);
+                fragStoreImg = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_storeimg);
+                storeIntroduce = (EditText) findViewById(R.id.input_storeintroduce);
 
-		fragInputStoreName = (SimpleTextInputcellFragment) getFragmentManager().findFragmentById(R.id.input_storename);
-		fragStoreImg = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_storeimg);
-		storeIntroduce = (EditText) findViewById(R.id.input_storeintroduce);
+                titleBar = (TitleBarFragment) getFragmentManager().findFragmentById(R.id.title_bar);
+                titleBar.setTitleName("我要开店", 16);
+                titleBar.setBtnNextText("开店！", 15);
+                titleBar.setOnGoNextListener(new TitleBarFragment.OnGoNextListener() {
 
-		findViewById(R.id.createstore).setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onGoNext() {
+                                createStore();
+                        }
+                });
+                titleBar.setOnGoBackListener(new TitleBarFragment.OnGoBackListener() {
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				createStore();
-			}
-		});
-	}
+                        @Override
+                        public void onGoBack() {
+                                finish();
+                                overridePendingTransition(R.anim.none, R.anim.slide_out_right);
+                        }
+                });
 
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		fragInputStoreName.setLabelText("店名");
-		fragInputStoreName.setHintText("为你的新店起个名字吧");
-		fragInputStoreName.setBackGround(true);
-		fragStoreImg.setLabelText("店铺头像");
-		fragStoreImg.setHintText("选择图片");
-	}
+        }
 
-	void createStore() {
-		String shopName = fragInputStoreName.getText();
-		String description = storeIntroduce.getText().toString();
-		if (shopName.isEmpty()) {
-			Toast.makeText(OpenStoreActivity.this, "店名不能为空", Toast.LENGTH_LONG).show();
-			return;
-		}
-		if(description.isEmpty()){
-			Toast.makeText(OpenStoreActivity.this, "总要写点什么介绍一下吧", Toast.LENGTH_LONG).show();
-			return;
-		}
-		OkHttpClient client = Server.getSharedClient();
-		MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("shopName", shopName)
-				.addFormDataPart("description", description);
+        @Override
+        protected void onResume() {
+                // TODO Auto-generated method stub
+                super.onResume();
+                fragInputStoreName.setLabelText("店名");
+                fragInputStoreName.setHintText("为你的新店起个名字吧");
+                fragInputStoreName.setBackGround(true);
+                fragStoreImg.setLabelText("店铺头像");
+                fragStoreImg.setHintText("选择图片");
+        }
 
-		
-		if (fragStoreImg.getPngData() != null) {
-			body.addFormDataPart("shopImage", "shopImage",
-					RequestBody.create(MediaType.parse("image/png"), fragStoreImg.getPngData()));
-		} else {
-			Toast.makeText(OpenStoreActivity.this, "头像不能为空", Toast.LENGTH_LONG).show();
-			return;
-		}
+        void createStore() {
+                String shopName = fragInputStoreName.getText();
+                String description = storeIntroduce.getText().toString();
+                if (shopName.isEmpty()) {
+                        Toast.makeText(OpenStoreActivity.this, "店名不能为空", Toast.LENGTH_LONG).show();
+                        return;
+                }
+                if (description.isEmpty()) {
+                        Toast.makeText(OpenStoreActivity.this, "总要写点什么介绍一下吧", Toast.LENGTH_LONG).show();
+                        return;
+                }
+                OkHttpClient client = Server.getSharedClient();
+                MultipartBody.Builder body = new MultipartBody.Builder().addFormDataPart("shopName", shopName)
+                                .addFormDataPart("description", description);
 
-		Request request = Server.requestBuilderWithApi("openshop").method("post", null).post(body.build()).build();
-		client.newCall(request).enqueue(new Callback() {
+                if (fragStoreImg.getPngData() != null) {
+                        body.addFormDataPart("shopImage", "shopImage",
+                                        RequestBody.create(MediaType.parse("image/png"), fragStoreImg.getPngData()));
+                } else {
+                        Toast.makeText(OpenStoreActivity.this, "头像不能为空", Toast.LENGTH_LONG).show();
+                        return;
+                }
 
-			@Override
-			public void onResponse(final Call arg0, final Response arg1) throws IOException {
-				try {
-					final String responseBody = arg1.body().string();
-					Log.d("open store result", responseBody);
+                Request request = Server.requestBuilderWithApi("openshop").method("post", null).post(body.build())
+                                .build();
+                client.newCall(request).enqueue(new Callback() {
 
-					final Shop shop = new ObjectMapper().readValue(responseBody, Shop.class);
-					if (!shop.getDescription().equals(storeIntroduce.getText().toString())) {
-						runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								OpenStoreActivity.this.onFailure(arg0, shop.getDescription());
-							}
-						});
-					} else{
+                        @Override
+                        public void onResponse(final Call arg0, final Response arg1) throws IOException {
+                                try {
+                                        final String responseBody = arg1.body().string();
+                                        Log.d("open store result", responseBody);
 
-						runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								OpenStoreActivity.this.onResponse(arg0, shop.getOwner().getAccount());
-							}
-						});
-					}
-				}
-				catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							OpenStoreActivity.this.onFailure(arg0, e);
-						}
-					});
-				}
-				
-				
-			}
-				
+                                        final Shop shop = new ObjectMapper().readValue(responseBody, Shop.class);
+                                        if (!shop.getDescription().equals(storeIntroduce.getText().toString())) {
+                                                runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                                OpenStoreActivity.this.onFailure(arg0,
+                                                                                shop.getDescription());
+                                                        }
+                                                });
+                                        } else {
 
-			@Override
-			public void onFailure(final Call arg0, final IOException arg1) {
+                                                runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                                OpenStoreActivity.this.onResponse(arg0,
+                                                                                shop.getOwner().getAccount());
+                                                        }
+                                                });
+                                        }
+                                } catch (final Exception e) {
+                                        runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                        OpenStoreActivity.this.onFailure(arg0, e);
+                                                }
+                                        });
+                                }
 
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						OpenStoreActivity.this.onFailure(arg0, arg1);
-					}
-				});
-			}
-		});
-	}
+                        }
 
-	void onResponse(Call arg0, String response) {
-		new AlertDialog.Builder(this).setTitle("开店成功!").setMessage(response + ",恭喜您成功的开了一家新店!祝您财源滚进!")
-				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onFailure(final Call arg0, final IOException arg1) {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
+                                runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                                OpenStoreActivity.this.onFailure(arg0, arg1);
+                                        }
+                                });
+                        }
+                });
+        }
 
-						isCreate = 1;
-						becomeSeller();
-					}
-				}).show();
-	}
+        void onResponse(Call arg0, String response) {
+                new AlertDialog.Builder(this).setTitle("开店成功!").setMessage(response + ",恭喜您成功的开了一家新店!祝您财源滚进!")
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
-	void onFailure(Call arg0, final Exception e1) {
-		runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                                // TODO Auto-generated method
+                                                // stub
 
-			@Override
-			public void run() {
-				new AlertDialog.Builder(OpenStoreActivity.this).setTitle("开店失败").setMessage(e1.getMessage())
-						.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								finish();
-							}
-						}).show();
-			}
-		});
-	}
+                                                isCreate = 1;
+                                                becomeSeller();
+                                        }
+                                }).show();
+        }
 
-	void onFailure(Call arg0, final String response) {
-		runOnUiThread(new Runnable() {
+        void onFailure(Call arg0, final Exception e1) {
+                runOnUiThread(new Runnable() {
 
-			@Override
-			public void run() {
-				new AlertDialog.Builder(OpenStoreActivity.this).setTitle("开店失败").setMessage(response)
-						.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								finish();
-							}
-						}).show();
-			}
-		});
-	}
+                        @Override
+                        public void run() {
+                                new AlertDialog.Builder(OpenStoreActivity.this).setTitle("开店失败")
+                                                .setMessage(e1.getMessage())
+                                                .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                finish();
+                                                        }
+                                                }).show();
+                        }
+                });
+        }
 
-	void becomeSeller() {
-		OkHttpClient client = Server.getSharedClient();
-		if (isCreate == 1) {
-			Request request = Server.requestBuilderWithApi("becomeshop").method("post", null).build();
-			client.newCall(request).enqueue(new Callback() {
+        void onFailure(Call arg0, final String response) {
+                runOnUiThread(new Runnable() {
 
-				@Override
-				public void onResponse(Call arg0, Response arg1) throws IOException {
-					finish();
-				}
+                        @Override
+                        public void run() {
+                                new AlertDialog.Builder(OpenStoreActivity.this).setTitle("开店失败").setMessage(response)
+                                                .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                finish();
+                                                        }
+                                                }).show();
+                        }
+                });
+        }
 
-				@Override
-				public void onFailure(Call arg0, IOException arg1) {
+        void becomeSeller() {
+                OkHttpClient client = Server.getSharedClient();
+                if (isCreate == 1) {
+                        Request request = Server.requestBuilderWithApi("becomeshop").method("post", null).build();
+                        client.newCall(request).enqueue(new Callback() {
 
-				}
-			});
+                                @Override
+                                public void onResponse(Call arg0, Response arg1) throws IOException {
+                                        finish();
+                                }
 
-		}
-	}
+                                @Override
+                                public void onFailure(Call arg0, IOException arg1) {
+
+                                }
+                        });
+
+                }
+        }
 }
