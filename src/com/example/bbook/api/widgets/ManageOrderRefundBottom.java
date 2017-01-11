@@ -61,6 +61,14 @@ public class ManageOrderRefundBottom implements OrderContent{
 					onRefundClicked();
 				}
 			});
+			
+			tvCheck.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					onCheckClicked();
+				}
+			});
 		}
 		return convertView;
 	}
@@ -81,6 +89,21 @@ public class ManageOrderRefundBottom implements OrderContent{
 		}
 	}
 	
+	public static interface OnCheckClickedListener {
+		void onCheckClicked();
+	}
+	
+	OnCheckClickedListener onCheckClickedListener;
+	
+	public void setOnCheckClickedListener(OnCheckClickedListener onCheckClickedListener) {
+		this.onCheckClickedListener = onCheckClickedListener;
+	}
+	
+	void onCheckClicked() {
+		if(onCheckClickedListener != null) {
+			onCheckClickedListener.onCheckClicked();
+		}
+	}
 
 
 }

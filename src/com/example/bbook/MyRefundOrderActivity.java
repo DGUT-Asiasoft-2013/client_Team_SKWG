@@ -12,6 +12,7 @@ import com.example.bbook.api.entity.Orders;
 import com.example.bbook.api.widgets.OrderBottomContent;
 import com.example.bbook.api.widgets.OrderMiddleContent;
 import com.example.bbook.api.widgets.OrderRefundBottomContent;
+import com.example.bbook.api.widgets.OrderRefundBottomContent.OnCheckClickedListener;
 import com.example.bbook.api.widgets.OrderTopContent;
 import com.example.bbook.api.widgets.TitleBarFragment;
 import com.example.bbook.api.widgets.TitleBarFragment.OnGoBackListener;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -178,6 +180,11 @@ public class MyRefundOrderActivity extends Activity{
 		});
 	}
 	
+	void goCheckBill() {
+		Intent itnt = new Intent(MyRefundOrderActivity.this, MyBillActivity.class);
+		startActivity(itnt);
+	}
+	
 	BaseAdapter listAdapter = new BaseAdapter() {
 		LayoutInflater inflater;
 		@Override
@@ -185,14 +192,13 @@ public class MyRefundOrderActivity extends Activity{
 			if(orderContents.get(position) instanceof OrderRefundBottomContent) {
 				OrderRefundBottomContent bottomContent = (OrderRefundBottomContent) orderContents.get(position);
 				final Orders order = bottomContent.getOrder();
-//				bottomContent.setOnConfirmClickedListener(new OnConfirmClickedListener() {
-//					
-//					@Override
-//					public void onConfirmClicked() {
-//						Toast.makeText(getActivity(), "aaa", Toast.LENGTH_SHORT).show();
-//						goConfirm(order);
-//					}
-//				});
+				bottomContent.setOnCheckClickedListener(new OnCheckClickedListener() {
+					
+					@Override
+					public void onCheckClicked() {
+						goCheckBill();
+					}
+				});
 			}
 			return orderContents.get(position).getView(MyRefundOrderActivity.this, convertView, inflater);
 		}

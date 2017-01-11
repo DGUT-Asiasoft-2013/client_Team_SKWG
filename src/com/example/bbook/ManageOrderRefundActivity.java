@@ -10,6 +10,7 @@ import com.example.bbook.api.Page;
 import com.example.bbook.api.Server;
 import com.example.bbook.api.entity.Orders;
 import com.example.bbook.api.widgets.ManageOrderRefundBottom;
+import com.example.bbook.api.widgets.ManageOrderRefundBottom.OnCheckClickedListener;
 import com.example.bbook.api.widgets.ManageOrderRefundBottom.OnRefundClickedListener;
 import com.example.bbook.api.widgets.OrderMiddleContent;
 import com.example.bbook.api.widgets.OrderRefundBottomContent;
@@ -25,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -156,9 +158,13 @@ public class ManageOrderRefundActivity extends Activity {
 									.readValue(responseStr, new TypeReference<Page<Orders>>() {});
 							listData=data.getContent();
 							page=data.getNumber();
+							{
 							ManageOrderRefundActivity.this.initDate();
 							ManageOrderRefundActivity.this.initOrderContents();
+							}
+							{
 							listAdapter.notifyDataSetChanged();
+							}
 						} catch (JsonParseException e) {
 							e.printStackTrace();
 						} catch (JsonMappingException e) {
@@ -192,6 +198,13 @@ public class ManageOrderRefundActivity extends Activity {
 						goRefund(order);
 					}
 				});
+				bottomContent.setOnCheckClickedListener(new OnCheckClickedListener() {
+					
+					@Override
+					public void onCheckClicked() {
+						goCheckBill();
+					}
+				});
 			}
 			return orderContents.get(position).getView(ManageOrderRefundActivity.this, convertView, inflater);
 		}
@@ -216,6 +229,11 @@ public class ManageOrderRefundActivity extends Activity {
 		};
 	};
 
+	void goCheckBill() {
+		Intent itnt = new Intent(ManageOrderRefundActivity.this, MyBillActivity.class);
+		startActivity(itnt);
+	}
+	
 	void goRefund(final Orders order) {
 		if(order != null) {
 			new AlertDialog.Builder(ManageOrderRefundActivity.this).setMessage("确认退款？")
@@ -250,8 +268,8 @@ public class ManageOrderRefundActivity extends Activity {
 
 					@Override
 					public void run() {
+						ManageOrderRefundActivity.this.onResume();
 						Toast.makeText(ManageOrderRefundActivity.this, "退款成功", Toast.LENGTH_SHORT).show();
-						ManageOrderRefundActivity.this.load();
 					}
 				});
 			}

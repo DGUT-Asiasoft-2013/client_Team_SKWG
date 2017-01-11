@@ -2,6 +2,7 @@ package com.example.bbook.api.widgets;
 
 import com.example.bbook.R;
 import com.example.bbook.api.entity.Orders;
+import com.example.bbook.api.widgets.ManageOrderRefundBottom.OnCheckClickedListener;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -50,10 +51,31 @@ public class OrderRefundBottomContent implements OrderContent {
 			default:
 				break;
 			}
+			tvCheck.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					onCheckClicked();
+				}
+			});
 		}
 		return convertView;
 	}
 	
-
+	public static interface OnCheckClickedListener {
+		void onCheckClicked();
+	}
+	
+	OnCheckClickedListener onCheckClickedListener;
+	
+	public void setOnCheckClickedListener(OnCheckClickedListener onCheckClickedListener) {
+		this.onCheckClickedListener = onCheckClickedListener;
+	}
+	
+	void onCheckClicked() {
+		if(onCheckClickedListener != null) {
+			onCheckClickedListener.onCheckClicked();
+		}
+	}
 
 }

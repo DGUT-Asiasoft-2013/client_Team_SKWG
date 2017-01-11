@@ -63,7 +63,7 @@ public class ManageOrderActivity extends Activity {
 				overridePendingTransition(R.anim.none, R.anim.slide_out_right);
 			}
 		});
-		titleBar.setBtnNextText("退货/退款", 13);
+		titleBar.setBtnNextText("退货/售后", 13);
 		titleBar.setOnGoNextListener(new OnGoNextListener() {
 			
 			@Override
