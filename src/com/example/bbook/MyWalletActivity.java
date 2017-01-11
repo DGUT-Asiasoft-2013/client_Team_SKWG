@@ -117,11 +117,11 @@ public class MyWalletActivity extends Activity {
 		AlertDialog.Builder builder=new Builder(this);
 		builder.setTitle("请输入充值金额");
 		//把布局文件先填充成View对象
-		View view = View.inflate(MyWalletActivity.this, R.layout.dialog_password, null);
+		View view = View.inflate(MyWalletActivity.this, R.layout.dialog_number, null);
 		final EditText tvChargeCount=(EditText)view.findViewById(R.id.edit_pwd);
 		//把填充得来的view对象设置为对话框显示内容
 		builder.setView(view);
-		builder.setPositiveButton("确认支付", new DialogInterface.OnClickListener() {
+		builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				chargeCount= tvChargeCount.getText().toString();
 //				goPay();
