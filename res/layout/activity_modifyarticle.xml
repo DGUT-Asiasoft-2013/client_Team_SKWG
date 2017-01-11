@@ -93,6 +93,7 @@
         android:id="@+id/btn_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="直接删除帖子" />
+        android:text="直接删除帖子"
+        android:background="@drawable/selector_button" />
 
 </LinearLayout>
